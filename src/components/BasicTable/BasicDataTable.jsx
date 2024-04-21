@@ -6,9 +6,6 @@ import "./BasicDataTable.css";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
-import "datatables.net-dt/js/dataTables.dataTables.js";
-import "datatables.net-dt/css/jquery.dataTables.min.css";
-import "datatables.net/js/jquery.dataTables.min.js";
 import { ApiInterface } from "../../API";
 
 const BasicTable = ({ columns, indextable, title }) => {
