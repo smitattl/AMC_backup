@@ -93,28 +93,18 @@
   box-shadow: 5px 10px 18px #888888;
 }
 
-/* div .view-box {
-  width: 100%;
-  border: 1px solid #476188;
-  border-radius: 1px;
-  margin-bottom: 0;
-  margin-top: 0.5%;
-  background-color: white;
-  box-shadow: 5px 10px 18px #888888;
-} */
-
 div .view-box {
   width: 100%;
-  /* box-shadow: 0 0 0 1px rgb(71 97 136 / 64%); */
-  /* background-color: rgb(71 97 136); */
-  /* border: 1px solid #d6e5f9; */
+  /*box-shadow: 0 0 0 1px rgb(71 97 136 / 64%);*/
+  /*background-color: rgb(71 97 136);*/
+  border: 1px solid #476188;
   /* border-radius: 15px; */
   border-radius: 1px;
   /* margin-bottom: 75px !important; */
   margin-bottom: 0;
   margin-top: 0.5%;
   background-color: white;
-  box-shadow: rgba(116, 116, 165, 0.2) 0px 7px 29px 0px;
+  box-shadow: 5px 10px 18px #888888;
 }
 
 .box-head {
@@ -858,7 +848,7 @@ label[for="nav-footer-toggle"] {
   box-shadow: 2px 12px 25px #00000026;
 }
 .main_content {
-  padding-top: 120px;
+  padding-top: 100px;
 }
 .accordion-button {
   background: rgb(214, 229, 249) !important;
@@ -918,13 +908,9 @@ td {
   padding-bottom: 20px;
 }
 .cnt {
-  /* font-weight: 700;
-  font-size: 15px;
-  opacity: 0.7; */
   font-weight: 700;
   font-size: 15px;
   opacity: 0.7;
-  color: #004aaf;
 }
 /* .tile_sec {
   border-radius: 8px;
@@ -942,7 +928,7 @@ td {
   border-radius: 8px;
   background-color: #ffffff;
   background-color: #ffffff30;
-  /* cursor: pointer; */
+  cursor: pointer;
   padding: 24px 16px;
   aspect-ratio: 1;
   color: #004aaf;
@@ -963,12 +949,6 @@ td {
 .cnt_img {
   width: 100px !important;
   height: 80px !important;
-}
-.gen_sub_title {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: "#000000";
-  border-bottom: 1px solid #00000030;
 }
 
 .dropdown-menu.show {
@@ -1074,7 +1054,7 @@ span {
 }
 .footer[_ngcontent-serverApp-c80] .footer-top[_ngcontent-serverApp-c80] {
   background: #d6e5f9;
-  background-image: url("./images/city-landscape.webp");
+  background-image: url(https://d3bslevwxw022c.cloudfront.net/buytrucknbus-dev-home-tatamotors/cv/cv_online/assets/images/city-landscape.webp);
   background-position: center bottom;
   background-size: 100%;
   background-repeat: no-repeat;
@@ -1236,167 +1216,4 @@ a {
 }
 .footer[_ngcontent-serverApp-c80] .footer-bottom[_ngcontent-serverApp-c80] {
   position: relative;
-}
-
-/* ####################### New add Aditi ###################### */
-body {
-  font-family: "Lucida Sans Regular";
-}
-
-.header[_ngcontent-serverApp-c79]
-  .navbar[_ngcontent-serverApp-c79]
-  .navbar-brand[_ngcontent-serverApp-c79]
-  .logo[_ngcontent-serverApp-c79]:before {
-  position: absolute;
-  content: "";
-  height: 100%;
-  width: 1px;
-  background-color: var(--cv-color-grey);
-  right: 24px;
-}
-
-.search_label {
-  font-weight: 800;
-}
-
-.insight_wrapper {
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: rgba(116, 116, 165, 0.2) 0px 7px 29px 0px;
-}
-.icon_and_table {
-  display: flex;
-  gap: 10px;
-  padding: 12px;
-}
-.card_heading {
-  background: rgb(214, 229, 249);
-  width: 100%;
-  padding: 10px 20px;
-}
-.insight_wrapper h4 {
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: 0.7px;
-  margin-bottom: 25px;
-}
-.insight_table_wrapper {
-  border-radius: 11px;
-  overflow: hidden;
-  border: 1px solid rgba(205, 205, 205, 0.471);
-  width: 70%;
-}
-.image_section {
-  width: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.image_section img {
-  width: 100px;
-  height: 100px;
-}
-.insight_table_wrapper table {
-  border-collapse: collapse;
-  width: 100%;
-  overflow: hidden;
-  margin-bottom: 0;
-  table-layout: fixed;
-  height: 100%;
-}
-
-.insight_table th,
-.insight_table td {
-  text-align: center;
-  padding: 19px 8px;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid rgba(205, 205, 205, 0.471);
-}
-
-.insight_table td {
-  font-family: monospace;
-  background: rgb(255, 255, 255);
-}
-.insight_table th {
-  font-family: monospace;
-  background-color: #1f77b4;
-  font-size: 14px;
-  font-weight: 800;
-  color: #faf8f8 !important;
-  border: 1px solid white;
-}
-
-/* Applying border-radius to specific cells */
-.insight_table thead th:first-child {
-  border-top-left-radius: 10px;
-}
-.insight_table thead th:last-child {
-  border-top-right-radius: 10px;
-}
-
-.insight_table tbody tr:last-child td:first-child {
-  border-bottom-left-radius: 10px;
-}
-.insight_table tbody tr:last-child td:last-child {
-  border-bottom-right-radius: 10px;
-}
-.new_table_class {
-  display: flex !important;
-}
-.form_group {
-  width: 30%;
-}
-.form_group label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.loading_wrapper {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #01012f69;
-  backdrop-filter: blur(2px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-
-.fleet_link {
-  cursor: pointer !important;
-  text-decoration: underline;
-}
-.fleet_link:hover {
-  font-weight: 700 !important;
-  color: #1f77b4 !important;
-}
-.recharts-default-legend {
-  position: absolute;
-  right: -220px;
-  display: flex;
-  flex-direction: column;
-  text-align: left !important;
-  top: -200px;
-}
-.recharts-legend-wrapper {
-  width: 200px !important;
-  word-wrap: break-word;
-}
-@media (min-width: 768px) {
-  .recharts-legend-wrapper {
-    width: 280px !important;
-  }
-}
-.renewal_link {
-  text-decoration: none !important;
-  color: black !important;
-  font-size: 1.25rem;
-}
-.tile:hover {
-  color: #004aaf;
-  cursor: pointer;
 }

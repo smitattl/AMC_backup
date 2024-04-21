@@ -1,0 +1,79 @@
+.insight_wrapper {
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: rgba(116, 116, 165, 0.2) 0px 7px 29px 0px;
+}
+.icon_and_table {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+}
+.card_heading {
+  background: rgb(214, 229, 249);
+  width: 100%;
+  padding: 10px 20px;
+}
+.insight_wrapper h4 {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  margin-bottom: 25px;
+}
+.insight_table_wrapper {
+  border-radius: 11px;
+  overflow: hidden;
+  border: 1px solid rgba(205, 205, 205, 0.471);
+  width: 70%;
+}
+.image_section {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.image_section img {
+  width: 100px;
+  height: 100px;
+}
+.insight_table_wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 0;
+  table-layout: fixed;
+  height: 100%;
+}
+
+.insight_table th,
+.insight_table td {
+  text-align: center;
+  padding: 21px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(205, 205, 205, 0.471);
+}
+
+.insight_table td {
+  background: rgb(255, 255, 255);
+}
+.insight_table th {
+  background-color: #ececec;
+  font-size: 15px;
+  font-weight: 800;
+  color: black;
+}
+
+/* Applying border-radius to specific cells */
+.insight_table thead th:first-child {
+  border-top-left-radius: 10px;
+}
+.insight_table thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.insight_table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.insight_table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}

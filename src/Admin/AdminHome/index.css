@@ -1,0 +1,87 @@
+.form-control {
+  padding: 6px 5px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.form-select:focus,
+.form-control:focus,
+.form-select:focus-visible,
+.form-control:focus-visible {
+  border-color: transparent;
+  box-shadow: none;
+  outline: 1px solid rgba(0, 0, 0, 0.39);
+}
+.css-1u9des2-indicatorSeparator {
+  background-color: transparent !important;
+}
+
+.react-select {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
+}
+.css-13cymwt-control {
+  box-shadow: none !important;
+  border-color: transparent;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+h2 {
+  font-size: 25px;
+}
+h5 {
+  font-size: 18px;
+}
+
+h5,
+h2 {
+  font-weight: 700;
+}
+.card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.119);
+  padding: 20px;
+  width: 21%;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  text-align: center;
+  box-shadow: rgba(116, 116, 165, 0.2) 0px 7px 29px 0px;
+  transition: 0.3s;
+}
+.card_img {
+  width: 80px;
+  height: 80px;
+}
+.font_weight_700 {
+  font-weight: 700;
+  font-size: 16px;
+}
+.card_second {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.119);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  width: 45%;
+  text-align: center;
+  box-shadow: rgba(116, 116, 165, 0.2) 0px 7px 29px 0px;
+  transition: 0.3s;
+}
+.quick_action img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+.filter_wrapper {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.142);
+  padding-bottom: 40px;
+}
+.filter {
+  width: 90%;
+  margin: 0 auto;
+}

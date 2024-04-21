@@ -1,0 +1,154 @@
+.popupcontainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popupcontent {
+  width: 62%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.popupcontainer:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+.close {
+  /* position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #888; */
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #858383;
+}
+
+.required {
+  color: red;
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0d6efd;
+  --bs-btn-border-color: #0d6efd;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0b5ed7;
+  --bs-btn-hover-border-color: #0a58ca;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #0a58ca;
+  --bs-btn-active-border-color: #0a53be;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #0d6efd;
+  --bs-btn-disabled-border-color: #0d6efd;
+  --cv-grad-primary: linear-gradient(99.61deg, #1c429e 1.46%, #0a0a5f 101.08%);
+}
+
+:root {
+  --cv-color-grey: #cdced5;
+  --cv-color-cryan: #d6e5f9;
+  --cv-color-black-30: rgba(0, 0, 0, 0.3);
+
+  --cv-grad-primary-invert: linear-gradient(
+    99.61deg,
+    #0a0a5f 1.46%,
+    #1c429e 101.08%
+  );
+  --cv-color-dark: #27292f;
+  --cv-color-dark-gray: #666c84;
+  --cv-color-light-gray: #f3f4f6;
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #0d6efd;
+  --bs-btn-border-color: #0d6efd;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #0b5ed7;
+  --bs-btn-hover-border-color: #0a58ca;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #0a58ca;
+  --bs-btn-active-border-color: #0a53be;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #0d6efd;
+  --bs-btn-disabled-border-color: #0d6efd;
+}
+
+.button {
+  background-color: #0c1066;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.DataCell {
+  text-align: center;
+}
+
+.tile_sec {
+  border-radius: 8px;
+  background-color: #ffffff;
+  background-color: #ffffff30;
+  /* cursor: pointer; */
+  padding: 24px 16px;
+  aspect-ratio: 1;
+  color: #004aaf;
+  box-shadow: rgba(116, 116, 165, 0.2) 0px 7px 29px 0px;
+  transition: 0.3s;
+  height: 80%;
+}
+.tile_sec:hover {
+  box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
+.tile_sec img {
+  width: 65px;
+  height: 60px;
+}
+.tile_sec_head {
+  font-size: 12px;
+}
+
+.rowData {
+  width: 100%;
+}
+
+.daat {
+  background-color: #000000;
+  background-color: #ffcd5633;
+  background-color: #4bc0c033;
+  background-color: #36a2eb33;
+  background-color: #9966ff33;
+}
