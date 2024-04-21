@@ -9,8 +9,6 @@ import "bootstrap/dist/js/bootstrap.bundle.js";
 import "datatables.net-dt/js/dataTables.dataTables.js";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import "datatables.net/js/jquery.dataTables.min.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { ApiInterface } from "../../API";
 
 const BasicTable = ({ columns, indextable, title }) => {
