@@ -8,7 +8,6 @@ import "./index.css";
 function Admin() {
   return (
     <div>
-      {/* <Header /> */}
       <div className="layout_wrapper">
         <Routes>
           <Route exact path="/" element={<AdminHome />} />

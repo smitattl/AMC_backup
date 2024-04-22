@@ -1,8 +1,8 @@
 import React from "react";
 import "./index.css";
-import LogoIcon from "../Assets/svgs/Logo.svg";
-import HomeIcon from "../Assets/images/download.png";
-import BackIcon from "../Assets/images/backarrow.png";
+import LogoIcon from "../../images/svgs/Logo.svg";
+import HomeIcon from "../../images/download.png";
+import BackIcon from "../../images/backarrow.png";
 import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";

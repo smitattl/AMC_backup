@@ -11,8 +11,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Watermark from "./components/WaterMark/WaterMark";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
