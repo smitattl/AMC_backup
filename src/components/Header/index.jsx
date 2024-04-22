@@ -1,18 +1,25 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import "./index.css";
 import LogoIcon from "../../images/svgs/Logo.svg";
+import TataIcon from "../../images/svgs/TataLogo.svg";
 import HomeIcon from "../../images/download.png";
 import BackIcon from "../../images/backarrow.png";
-import { Link } from "react-router-dom";
-import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import { LogoutSession } from "../../utils";
 
 function Header() {
+  const { arnList } = useSelector((state) => state.arn);
+  const location = LogoutSession;
+
   return (
     <div className="header_wrapper">
       <div className="header_contaier d-flex justify-content-between align-items-center">
         <div className="d-flex gap-5 align-items-center">
-          <img src={LogoIcon} alt="/" />
+          <Link to="/admin">
+            <img src={LogoIcon} alt="/" />
+          </Link>
           <div className="vas_title">VAS Digital Dashboard</div>
         </div>
         <div className="d-flex gap-4 align-items-center">
@@ -21,7 +28,7 @@ function Header() {
           <Link to="/">
             <img src={HomeIcon} alt="/home" className="home_icon" />
           </Link>
-          <div
+          {/* <div
             className="user_name"
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Hello world!"
@@ -29,7 +36,9 @@ function Header() {
           >
             SS
           </div>
-          <Tooltip id="my-tooltip" />
+          <Tooltip id="my-tooltip" /> */}
+
+          <img src={TataIcon} alt="/home" />
         </div>
       </div>
       <div className="border_bottom" />
@@ -39,7 +48,7 @@ function Header() {
           &nbsp; Online Sales Platform
         </Link>
         <div className="arn_no_text">
-          ARN Number : <span>AR02-22-1179667930196</span>
+          ARN Number : <span>{arnList[0]}</span>
         </div>
       </div>
     </div>

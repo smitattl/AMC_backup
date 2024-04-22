@@ -49,7 +49,7 @@ function FilterSection() {
   const [mobileNo, setMobileNo] = useState(null);
   const [panCardNo, setPanCardNo] = useState(null);
   return (
-    <Form className="filter_wrapper pt-2 pb-3">
+    <Form className="filter_wrapper">
       <div className="d-flex justify-content-between gap-3 filter flex-wrap">
         <Form.Group className="form_group">
           <Form.Label>Search Type</Form.Label>

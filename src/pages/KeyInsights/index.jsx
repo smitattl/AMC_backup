@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Accordion } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.css";
-// import "datatables.net-dt/css/jquery.dataTables.min.css";
 import Speedometer from "../../images/speedometer.png";
 import ScheduleIcon from "../../images/shipping-schedule.png";
 import HoursIcon from "../../images/working-hours.png";

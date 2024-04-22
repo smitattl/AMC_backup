@@ -17,6 +17,7 @@ const IndexRoute = () => {
         <Route path="/Home/Key-insights" element={<KeyInsights />} />
         <Route path="/thank-you" element={<Logout />} />
       </Route>
+      <Route path="*" element={<Logout />} />
     </Routes>
   );
 };

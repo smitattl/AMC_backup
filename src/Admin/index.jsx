@@ -7,20 +7,12 @@ import "./index.css";
 
 function Admin() {
   return (
-    <div>
-      <div className="layout_wrapper">
-        <Routes>
-          <Route exact path="/" element={<AdminHome />} />
-          <Route
-            path="/admin/admin-key-insight"
-            element={<AdminKeyInsight />}
-          />
-          <Route
-            path="/admin/admin-fleet-details"
-            element={<AdminFleetDetails />}
-          />
-        </Routes>
-      </div>
+    <div className="layout_wrapper">
+      <Routes>
+        <Route exact path="/" element={<AdminHome />} />
+        <Route path="/admin-fleet-details" element={<AdminFleetDetails />} />
+        <Route path="/admin-key-insight" element={<AdminKeyInsight />} />
+      </Routes>
     </div>
   );
 }

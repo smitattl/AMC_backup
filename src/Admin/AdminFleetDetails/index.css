@@ -1,0 +1,8 @@
+.graph_wrapper {
+  width: 49%;
+}
+@media screen and (max-width: 700px) {
+  .graph_wrapper {
+    width: 100%;
+  }
+}
