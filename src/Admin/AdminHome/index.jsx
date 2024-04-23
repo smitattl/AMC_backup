@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import FilterSection from "./FilterSection";
 import FleetOverView from "./FleetOverView";
-import QuickActions from "./QuickActions";
 import "./index.css";
 import AccordionTable from "./AccordionTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +19,7 @@ function AdminHome() {
     <div className="">
       <FilterSection />
       <FleetOverView />
-      <QuickActions handleClickActive={handleClickActive} />
+      {/* <QuickActions handleClickActive={handleClickActive} /> */}
       <AccordionTable
         Rowdata={rowData}
         activeAccordionItem={activeAccordionItem}

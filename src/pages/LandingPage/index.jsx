@@ -14,7 +14,7 @@ import product from "../../images/product.png";
 import "./HomePage.css";
 import Loading from "../../components/Loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { setArnList } from "../../store/Slices/arnSlice";
+import { setArnList, setUserData } from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
 import QuickActionModal from "./QuickActionModal";
 
@@ -116,6 +116,7 @@ const LandingPage = () => {
         localStorage.setItem("ARN-Name", response.data.NameList);
         localStorage.setItem("ARN-Contact", response.data.MobNo);
         setLoading(false);
+        dispatch(setUserData(response.data ?? null));
       }
     } catch (error) {
       console.log(error);

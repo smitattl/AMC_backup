@@ -13,7 +13,6 @@ function TableAccordion({
   serviceScheduleData = [],
   Rowdata = [],
 }) {
-  console.log(Rowdata.length, serviceScheduleData.length);
   return (
     <div className="row py-5">
       <div className="col-md-12">

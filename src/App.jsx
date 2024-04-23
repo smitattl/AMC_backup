@@ -14,6 +14,9 @@ import Watermark from "./components/WaterMark/WaterMark";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import CustomerHeader from "./components/CustomerHeader";
+import { ApiInterface } from "./API";
+import { useSelector } from "react-redux";
+import UserLoggedIn from "./components/UserLoggedIn";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
@@ -22,6 +25,10 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+  const [userEntryCount, setUserEntryCount] = useState(null);
+
+  const { userData } = useSelector((state) => state.arn);
+  console.log(userEntryCount);
 
   const LogoutSession = () => {
     setIsLoggedIn(false);
@@ -68,12 +75,50 @@ function App() {
     setIsLoggedIn(!!storedToken);
   }, []);
 
+  const updateLoginEntriesHandler = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("mobile_no", userData.MobNo);
+      formData.append("Pan_no", userData.pan);
+      const response = await ApiInterface.checkLoginEntries(formData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getLoginEntryCounthandler = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("mobile_no", userData.MobNo);
+      formData.append("Pan_no", userData.pan);
+      const response = await ApiInterface.getLoginEntryCount(formData);
+      if (response.status === 200) {
+        setUserEntryCount(response?.data?.count ?? 0);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    updateLoginEntriesHandler();
+    getLoginEntryCounthandler();
+  }, []);
+
   return (
     <React.Fragment>
-      {location.pathname.includes("Home") ? <CustomerHeader /> : <Header />}
-      <Watermark />
-      <IndexRoute />
-      <Footer />
+      {userEntryCount > 5 ? (
+        <div>
+          <UserLoggedIn />
+        </div>
+      ) : (
+        <React.Fragment>
+          {location.pathname.includes("Home") ? <CustomerHeader /> : <Header />}
+          <Watermark />
+          <IndexRoute />
+          <Footer />
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 }

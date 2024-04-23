@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   arnList: [],
   activeAccordionItem: null,
+  userData: [],
 };
 
 const arnSlice = createSlice({
@@ -15,8 +16,12 @@ const arnSlice = createSlice({
     setActiveAccordionItem(state, action) {
       state.activeAccordionItem = action.payload;
     },
+    setUserData(state, action) {
+      state.userData = action.payload;
+    },
   },
 });
 
-export const { setArnList, setActiveAccordionItem } = arnSlice.actions;
+export const { setArnList, setActiveAccordionItem, setUserData } =
+  arnSlice.actions;
 export default arnSlice.reducer;

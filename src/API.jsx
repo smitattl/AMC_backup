@@ -174,4 +174,19 @@ export const ApiInterface = {
       data: formData,
       content_type: "multipart/form-data",
     }),
+
+  checkLoginEntries: (formData) =>
+    apiCall({
+      method: "POST",
+      url: "/LoginEntry",
+      data: formData,
+      content_type: "multipart/form-data",
+    }),
+  getLoginEntryCount: (formData) =>
+    apiCall({
+      method: "POST",
+      url: "checkLoginUserCountData",
+      data: formData,
+      content_type: "multipart/form-data",
+    }),
 };
