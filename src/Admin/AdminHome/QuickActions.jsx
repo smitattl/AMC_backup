@@ -2,8 +2,11 @@ import React from "react";
 import TransportIcon from "../../images/transportation.png";
 import RenewableIcon from "../../images/renewalTwo.png";
 import { Link as ScrollLink } from "react-scroll";
+import { useHandleClickActive } from "../../utils";
 
-function QuickActions({ handleClickActive = () => {} }) {
+function QuickActions() {
+  const handleClickActive = useHandleClickActive();
+
   return (
     <div className="mb-3 quick_action container_wrapper">
       <h2 className="text-center">Quick Actions</h2>
@@ -16,7 +19,7 @@ function QuickActions({ handleClickActive = () => {} }) {
             spy={true}
             exact="true"
             offset={-370}
-            onClick={() => handleClickActive("section2")}
+            onClick={() => handleClickActive("section1")}
           >
             <div>
               <img src={TransportIcon} alt="/" />

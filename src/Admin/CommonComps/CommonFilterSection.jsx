@@ -7,6 +7,10 @@ function CommonFilterSection() {
   const { arnList } = useSelector((state) => state.arn);
   const [selectArnType, setSelectArnType] = useState("");
   const [vasType, setVasType] = useState("");
+  const arnNumberOptions = arnList.map((arn) => ({
+    value: arn,
+    label: arn,
+  }));
 
   return (
     <div className="filter_wrapper">
@@ -14,7 +18,7 @@ function CommonFilterSection() {
         <Form.Group className="form_group">
           <Form.Label>Account number</Form.Label>
           <Select
-            options={arnList}
+            options={arnNumberOptions}
             value={selectArnType}
             onChange={(option) => setSelectArnType(option)}
             isSearchable

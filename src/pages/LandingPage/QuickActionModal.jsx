@@ -2,15 +2,16 @@ import React from "react";
 import "./quickactionmodal.css";
 import { Link as ReactLink } from "react-scroll";
 import transportIcon from "../../images/transportation.png";
+import { useHandleClickActive } from "../../utils";
 
 function QuickActionModal({
   setIsOpen = () => {},
-  handleClickActive = () => {},
   isOpen = false,
   ServiceSchedule,
   renewable,
   Renewal,
 }) {
+  const handleClickActive = useHandleClickActive();
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };

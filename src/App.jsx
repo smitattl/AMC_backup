@@ -9,16 +9,18 @@ import {
   faCaretSquareDown,
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Watermark from "./components/WaterMark/WaterMark";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import CustomerHeader from "./components/CustomerHeader";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
 function App() {
   const token = localStorage.getItem("Token");
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
   const LogoutSession = () => {
@@ -68,7 +70,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <Header />
+      {location.pathname.includes("Home") ? <CustomerHeader /> : <Header />}
       <Watermark />
       <IndexRoute />
       <Footer />

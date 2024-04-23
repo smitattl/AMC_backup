@@ -50,7 +50,7 @@ function FilterSection() {
   const [panCardNo, setPanCardNo] = useState(null);
   return (
     <Form className="filter_wrapper">
-      <div className="d-flex justify-content-between gap-3 filter flex-wrap">
+      <div className="d-flex justify-content-between gap-3 filter">
         <Form.Group className="form_group">
           <Form.Label>Search Type</Form.Label>
           <Select

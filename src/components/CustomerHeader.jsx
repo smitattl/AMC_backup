@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import styles from "./layout.module.css";
-import logo from "../images/logo.svg";
-import logo_sec from "../images/logo_sec.svg";
-import heart from "../images/house.png";
-import user from "../images/user.svg";
+import LogoIcon from "../images/svgs/Logo.svg";
+import TataIcon from "../images/svgs/TataLogo.svg";
+import HomeIcon from "../images/download.png";
+import BackIcon from "../images/backarrow.png";
 import backButton from "../images/back-button.png";
+import user from "../images/user.svg";
 
-const Header = ({ sendDataToParent }) => {
+const CustomerHeader = ({ sendDataToParent }) => {
   const [isOpenNotifiction, setisOpenNotifiction] = useState(false);
 
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const Header = ({ sendDataToParent }) => {
               }}
               target="_blank"
             >
-              <img loading="lazy" src={logo} className={styles.img} />
+              <img loading="lazy" src={LogoIcon} className={styles.img} />
             </a>
             <div className={styles.div_4}>VAS Digital Dashboard</div>
           </div>
@@ -86,7 +87,7 @@ const Header = ({ sendDataToParent }) => {
             <img loading="lazy" src={notification} className={styles.img_6} />
           </span> */}
             <span onClick={redirectToApplicationLandingPage}>
-              <img loading="lazy" src={heart} className={styles.img_7} />
+              <img loading="lazy" src={HomeIcon} className={styles.img_7} />
             </span>
             {/* <img loading="lazy" src={heart} className={styles.img_7} /> */}
             <Dropdown id="dropdown_profile">
@@ -115,7 +116,7 @@ const Header = ({ sendDataToParent }) => {
               </Dropdown.Menu>
             </Dropdown>
 
-            <img loading="lazy" src={logo_sec} className={styles.img_9} />
+            <img loading="lazy" src={TataIcon} className={styles.img_9} />
           </div>
         </div>
         <div className={styles.div_16}>
@@ -140,4 +141,4 @@ const Header = ({ sendDataToParent }) => {
   );
 };
 
-export default Header;
+export default CustomerHeader;
