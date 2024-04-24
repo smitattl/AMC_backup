@@ -100,10 +100,18 @@ export const ApiInterface = {
       url: "/Fleet-uptime",
       data: body,
     }),
+
   getFleetUpTatDetails: (body) =>
     apiCall({
       method: "POST",
       url: "/fleet-TAT-detailed",
+      data: body,
+    }),
+
+  getuserNameData: (body) =>
+    apiCall({
+      method: "POST",
+      url: "/get-account-name",
       data: body,
     }),
 

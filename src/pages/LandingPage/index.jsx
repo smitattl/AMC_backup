@@ -21,7 +21,7 @@ import QuickActionModal from "./QuickActionModal";
 const LandingPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { arnList } = useSelector((state) => state.arn);
+  const { arnList, userEntryCount } = useSelector((state) => state.arn);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -30,7 +30,6 @@ const LandingPage = () => {
 
   const { param1 } = useParams();
   const { param2 } = useParams();
-  const [arnValue, setArnValue] = useState("");
 
   const [ARNName, setARNName] = useState();
   const [ARNContact, setARNContact] = useState();
@@ -170,8 +169,8 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    getDecryptedDataHandler();
-  }, []);
+    if (userEntryCount < 1000) getDecryptedDataHandler();
+  }, [userEntryCount]);
 
   useEffect(() => {
     if (arnNumber) {

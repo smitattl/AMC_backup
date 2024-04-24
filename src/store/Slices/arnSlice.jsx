@@ -4,6 +4,7 @@ const initialState = {
   arnList: [],
   activeAccordionItem: null,
   userData: [],
+  userEntryCount: null,
 };
 
 const arnSlice = createSlice({
@@ -19,9 +20,16 @@ const arnSlice = createSlice({
     setUserData(state, action) {
       state.userData = action.payload;
     },
+    setUserEntryCount(state, action) {
+      state.userEntryCount = action.payload;
+    },
   },
 });
 
-export const { setArnList, setActiveAccordionItem, setUserData } =
-  arnSlice.actions;
+export const {
+  setArnList,
+  setActiveAccordionItem,
+  setUserData,
+  setUserEntryCount,
+} = arnSlice.actions;
 export default arnSlice.reducer;

@@ -15,20 +15,20 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import CustomerHeader from "./components/CustomerHeader";
 import { ApiInterface } from "./API";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserLoggedIn from "./components/UserLoggedIn";
+import { setUserEntryCount } from "./store/Slices/arnSlice";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
 function App() {
+  const dispacth = useDispatch();
   const token = localStorage.getItem("Token");
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
-  const [userEntryCount, setUserEntryCount] = useState(null);
 
-  const { userData } = useSelector((state) => state.arn);
-  console.log(userEntryCount);
+  const { userData, userEntryCount } = useSelector((state) => state.arn);
 
   const LogoutSession = () => {
     setIsLoggedIn(false);
@@ -93,7 +93,7 @@ function App() {
       formData.append("Pan_no", userData.pan);
       const response = await ApiInterface.getLoginEntryCount(formData);
       if (response.status === 200) {
-        setUserEntryCount(response?.data?.count ?? 0);
+        dispacth(setUserEntryCount(response?.data?.count ?? 0));
       }
     } catch (error) {
       console.log(error);
@@ -101,16 +101,19 @@ function App() {
   };
 
   useEffect(() => {
-    updateLoginEntriesHandler();
     getLoginEntryCounthandler();
+  }, []);
+
+  useEffect(() => {
+    if (userEntryCount <= 1000) {
+      updateLoginEntriesHandler();
+    }
   }, []);
 
   return (
     <React.Fragment>
-      {userEntryCount > 5 ? (
-        <div>
-          <UserLoggedIn />
-        </div>
+      {userEntryCount > 1000 ? (
+        <UserLoggedIn />
       ) : (
         <React.Fragment>
           {location.pathname.includes("Home") ? <CustomerHeader /> : <Header />}

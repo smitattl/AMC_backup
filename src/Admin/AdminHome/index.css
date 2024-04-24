@@ -77,3 +77,12 @@ h2 {
   height: 60px;
   object-fit: contain;
 }
+.left_line {
+  background: #042998;
+  height: 30px;
+  width: 5px;
+  border-radius: 0 5px 5px 0;
+}
+.text_blue {
+  color: #042998;
+}

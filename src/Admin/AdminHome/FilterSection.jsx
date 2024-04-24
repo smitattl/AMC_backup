@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
+import { ApiInterface } from "../../API";
 
 const searchOptions = [
   {
@@ -25,29 +26,38 @@ const searchOptions = [
 function FilterSection() {
   const [searchType, setSearchType] = useState(searchOptions[0]);
   const [selectTypeValue, setSelectTypeValue] = useState("");
-  const [accountNameList, setAccountNameList] = useState([
-    {
-      label: "Account Name",
-      value: "account_name",
-    },
-    {
-      label: "ARN Number",
-      value: "arn_number",
-    },
-    {
-      label: "Vehicle Registration Number",
-      value: "vehicle_registration_no",
-    },
-    {
-      label: "Mobile Number",
-      value: "mobile_no",
-    },
-  ]);
   const [accountName, setAccountName] = useState(null);
+  const [searchUserName, setSearchUserName] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [accountNameList, setAccountNameList] = useState([]);
   const [arnNumber, setArnNumber] = useState(null);
   const [vehicleRegiValue, setValueRegiValue] = useState(null);
   const [mobileNo, setMobileNo] = useState(null);
   const [panCardNo, setPanCardNo] = useState(null);
+
+  const handleInputChange = async () => {
+    try {
+      const body = {
+        ac_name: searchUserName,
+      };
+      const response = await ApiInterface.getuserNameData(body);
+
+      if (response.status === 200) {
+        const names = response.data.account_names.map((name) => ({
+          value: name,
+          label: name,
+        }));
+        setAccountNameList(names);
+      }
+    } catch (error) {
+      console.error("Error fetching account names:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleInputChange();
+  }, [searchUserName]);
+
   return (
     <Form className="filter_wrapper">
       <div className="d-flex justify-content-between gap-3 filter">
@@ -64,15 +74,16 @@ function FilterSection() {
         </Form.Group>
         {searchType?.value === "account_name" ? (
           <Form.Group className="form_group">
-            <Form.Label>Account number</Form.Label>
+            <Form.Label>Account Name</Form.Label>
             <Select
+              value={selectedUser}
               options={accountNameList}
-              value={selectTypeValue}
-              onChange={(option) => setSelectTypeValue(option)}
+              onChange={(option) => setSelectedUser(option)}
+              onInputChange={setSearchUserName}
+              inputValue={searchUserName}
               isSearchable
-              placeholder="Select or enter a value..."
-              noOptionsMessage={() => "Type to create a new value"}
-              className="react-select"
+              placeholder="Type to search..."
+              noOptionsMessage={() => "No options found"}
             />
           </Form.Group>
         ) : searchType?.value === "mobile_no" ? (

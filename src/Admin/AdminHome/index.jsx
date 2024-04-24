@@ -11,7 +11,6 @@ function AdminHome() {
   const dispatch = useDispatch();
   const [rowData, setRowData] = useState([]);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
-  const handleClickActive = useHandleClickActive();
 
   const { activeAccordionItem } = useSelector((state) => state.arn);
 
@@ -19,7 +18,6 @@ function AdminHome() {
     <div className="">
       <FilterSection />
       <FleetOverView />
-      {/* <QuickActions handleClickActive={handleClickActive} /> */}
       <AccordionTable
         Rowdata={rowData}
         activeAccordionItem={activeAccordionItem}
