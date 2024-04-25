@@ -373,3 +373,22 @@ export const monthNames = [
   "Nov",
   "Dec",
 ];
+
+export const searchOptions = [
+  {
+    label: "Account Name",
+    value: "account_name",
+  },
+  {
+    label: "ARN Number",
+    value: "arn_number",
+  },
+  {
+    label: "Vehicle Registration Number",
+    value: "vehicle_registration_no",
+  },
+  {
+    label: "Mobile Number",
+    value: "mobile_no",
+  },
+];

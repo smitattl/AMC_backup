@@ -7,7 +7,9 @@ function UserLoggedIn() {
     <div className="user_logged_in_wrapper">
       <BubbleBackground />
       <div className="warning_wrapper">
-        <h3>Warning: Excessive Login Attempts Detected !</h3>
+        <h3 className="text_red">
+          Warning: Excessive Login Attempts Detected !
+        </h3>
         <p>
           Our system has detected that you have exceeded the allowed number of
           login attempts within a short period of time. To protect your

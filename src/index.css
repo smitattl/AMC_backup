@@ -15,7 +15,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2162ac;
+  background: #dfdfdf;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -1399,4 +1400,7 @@ body {
 .tile:hover {
   color: #004aaf;
   cursor: pointer;
+}
+.text_red {
+  color: red;
 }

@@ -74,6 +74,6 @@ a {
 }
 .bottom_header {
   backdrop-filter: blur(4px);
-  background-color: rgba(0, 0, 0, 0.045);
+  background-color: rgba(0, 0, 0, 0.086);
   width: 100%;
 }

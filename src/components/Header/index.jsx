@@ -12,6 +12,7 @@ import { Link as ScrollLink } from "react-scroll";
 
 function Header() {
   const { arnList } = useSelector((state) => state.arn);
+  const { fleetData } = useSelector((state) => state.homeApi);
   const location = LogoutSession;
 
   const handleClickActive = useHandleClickActive();
@@ -32,16 +33,6 @@ function Header() {
             <Link to="/">
               <img src={HomeIcon} alt="/home" className="home_icon" />
             </Link>
-            {/* <div
-            className="user_name"
-            data-tooltip-id="my-tooltip"
-            data-tooltip-content="Hello world!"
-            data-tooltip-place="top"
-          >
-            SS
-          </div>
-          <Tooltip id="my-tooltip" /> */}
-
             <img src={TataIcon} alt="/home" />
           </div>
         </div>
@@ -64,7 +55,8 @@ function Header() {
               onClick={() => handleClickActive("section1")}
               className="scroll_link"
             >
-              Due for Schedule Service <span>(0)</span>
+              Due for Schedule Service{" "}
+              <span>({fleetData.ServiceSchedule})</span>
             </ScrollLink>
             <ScrollLink
               to="section2"
@@ -76,7 +68,7 @@ function Header() {
               onClick={() => handleClickActive("section2")}
               className="scroll_link"
             >
-              Due for Renewal<span>(0)</span>
+              Due for Renewal<span>({fleetData.Renewal})</span>
             </ScrollLink>
           </div>
 

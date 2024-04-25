@@ -115,6 +115,20 @@ export const ApiInterface = {
       data: body,
     }),
 
+  getARNByuserName: (body) =>
+    apiCall({
+      method: "POST",
+      url: "/get-arnFrom-AccountName",
+      data: body,
+    }),
+
+  getARNbyVehicleNumber: (body) =>
+    apiCall({
+      method: "POST",
+      url: "/get_arn_by_vehicle_no",
+      data: body,
+    }),
+
   // form data applications
   // homee pageapi
   getVehicleDetails: (formData) =>

@@ -52,6 +52,7 @@ const LandingPage = () => {
   const [AMCTypeCount, setAMCTypeCount] = useState();
   const [AppTypeCount, setAppTypeCount] = useState();
   const [VasProdFms, setVasProdFms] = useState();
+  const [fleetData, setFleetData] = useState({});
 
   const getDecryptedDataHandler = async () => {
     setLoading(true);
@@ -83,14 +84,7 @@ const LandingPage = () => {
       formData.append("ARN-Number", arnNumber);
       const response = await ApiInterface.getGenericInformation(formData);
       if (response.status === 200) {
-        const responseData = response.data;
-        setServiceSchedule(responseData?.ServiceSchedule);
-        setRenewal(responseData?.Renewal);
-        setVehCount(responseData?.VehCount);
-        setVasProdAmc(responseData?.VasProdAmc);
-        setAMCTypeCount(responseData?.AmcTypeCount);
-        setAppTypeCount(responseData?.AppTypeCount);
-        setVasProdFms(responseData?.FMSCount);
+        setFleetData(response.data);
         setLoading(false);
       }
     } catch (error) {
@@ -251,7 +245,7 @@ const LandingPage = () => {
                     />
                     <h6>Total Fleet Count</h6>
                     <div className="gen_sub_title" />
-                    <h6 className="cnt">{VehCount}</h6>
+                    <h6 className="cnt">{fleetData.VehCount}</h6>
                   </div>
                   <div className="card_section" id="section4">
                     <img
@@ -268,7 +262,7 @@ const LandingPage = () => {
                           <h6 className="tile_sec_head">AMC</h6>
                         </center>
                         <center>
-                          <h6 className="cnt">{VasProdAmc}</h6>
+                          <h6 className="cnt">{fleetData.VasProdAmc}</h6>
                         </center>
                       </div>
                       <div className="col-md-6">
@@ -276,7 +270,7 @@ const LandingPage = () => {
                           <h6 className="tile_sec_head">FMS</h6>
                         </center>
                         <center>
-                          <h6 className="cnt">{VasProdFms}</h6>
+                          <h6 className="cnt">{fleetData.FMSCount}</h6>
                         </center>
                       </div>
                     </div>
@@ -290,7 +284,7 @@ const LandingPage = () => {
                     />
                     <h6>Fleet Under Fleetedge</h6>
                     <div className="gen_sub_title" />
-                    <h6 className="cnt">{AMCTypeCount}</h6>
+                    <h6 className="cnt">{fleetData.AmcTypeCount}</h6>
                   </div>
                 </div>
               </div>
@@ -319,7 +313,7 @@ const LandingPage = () => {
                         </div>
                         <div className="col-md-9 tile_main_div">
                           <h5>Due for Schedule Service</h5>
-                          <h6 className="cnt">{ServiceSchedule}</h6>
+                          <h6 className="cnt">{fleetData.ServiceSchedule}</h6>
                         </div>
                       </div>
                     </div>
@@ -350,7 +344,7 @@ const LandingPage = () => {
                           style={{ paddingRight: "10px" }}
                         >
                           <a>Due for Renewal</a>
-                          <h6 className="cnt">{Renewal}</h6>
+                          <h6 className="cnt">{fleetData.Renewal}</h6>
                         </div>
                       </div>
                     </div>

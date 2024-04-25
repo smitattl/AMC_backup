@@ -86,3 +86,15 @@ h2 {
 .text_blue {
   color: #042998;
 }
+.search_button {
+  background: #042998;
+  padding: 6px 30px;
+  color: white;
+  height: max-content;
+  border: 1px solid #042998;
+  border-radius: 5px;
+}
+.search_button:hover {
+  background: transparent;
+  color: #042998;
+}
