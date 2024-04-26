@@ -42,7 +42,7 @@ const homeApiSlice = createSlice({
     },
     resetFields(state) {
       state.arnNumber = initialState.arnNumber;
-      // state.fleetData = initialState.fleetData;
+      state.fleetData = initialState.fleetData;
       state.selectedUser = initialState.selectedUser;
       state.arnListForAdmin = initialState.arnListForAdmin;
       state.vehicleNumber = initialState.vehicleNumber;

@@ -138,7 +138,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
 
   return (
     <Form className="filter_wrapper">
-      <div className="d-flex justify-content-between align-items-end  gap-3 filter">
+      <div className="d-flex align-items-end  gap-3 filter">
         <Form.Group className="form_group">
           <Form.Label>Search Type</Form.Label>
           <Select

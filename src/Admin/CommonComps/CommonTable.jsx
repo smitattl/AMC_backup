@@ -5,10 +5,10 @@ import {
 } from "material-react-table";
 
 const CommonTable = ({ columns = [], data = [] }) => {
+  console.log(columns, data);
   const table = useMaterialReactTable({
     columns,
     data,
-
     enableColumnResizing: true,
     columnResizeMode: "onEnd",
     enableDensityToggle: false,

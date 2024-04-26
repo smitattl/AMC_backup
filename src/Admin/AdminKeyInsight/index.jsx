@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CommonFilterSection from "../CommonComps/CommonFilterSection";
 import BarGraph from "../../components/graph/BarGraph";
 import TableInSightsComp from "../../components/TableInsightsComp";
@@ -13,8 +13,13 @@ import {
   tableheaderThree,
 } from "../../DummyData";
 import { monthNames } from "../../StaticTableData";
+import { ApiInterface } from "../../API";
+import { useSelector } from "react-redux";
 
 function AdminKeyInsight() {
+  const { arnNumber } = useSelector((state) => state.homeApi);
+  const [loading, setLoading] = useState(false);
+
   const currentDate = new Date();
   let currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
@@ -34,15 +39,29 @@ function AdminKeyInsight() {
   const [tatDetails, setTatDetails] = useState([]);
   const [servicedetails, setServiceDetails] = useState([""]);
   const [dueForService, setDueForService] = useState([]);
-  const [advanceChasis, setAdvanceChasis] = useState([]);
-  const [FleetUptimeX, setFleetUptimeX] = useState([]);
-  const [FleetUptimeY, setFleetUptimeY] = useState([]);
-  const [vasType, setVasType] = useState("AMC");
-  const [loading, setLoading] = useState(false);
 
   const handleItemClick = (indexData) => {
     setindexTAT(indexData);
   };
+  const [VASOptions, setVASOptions] = useState([]);
+
+  const getvasdataHandler = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("arn_no", arnNumber.value);
+      const response = await ApiInterface.getvasData(formData);
+      setVASOptions(response?.data ?? []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching VAS data:", error);
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    getvasdataHandler();
+  }, [arnNumber]);
 
   return (
     <div className="">

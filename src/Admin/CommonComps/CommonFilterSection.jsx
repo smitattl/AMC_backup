@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import Select from "react-select";
 
-function CommonFilterSection() {
+function CommonFilterSection({ searchFilterhandler = () => {} }) {
+  const { arnNumber } = useSelector((state) => state.homeApi);
+  const { pathname } = useLocation();
   const { arnList } = useSelector((state) => state.arn);
   const [selectArnType, setSelectArnType] = useState("");
   const [vasType, setVasType] = useState("");
@@ -13,34 +16,32 @@ function CommonFilterSection() {
   }));
 
   return (
-    <div className="filter_wrapper">
-      <div className="d-flex gap-4 filter">
+    <Form className="filter_wrapper">
+      <div className="d-flex align-items-end  gap-3 filter">
         <Form.Group className="form_group">
-          <Form.Label>Account number</Form.Label>
-          <Select
-            options={arnNumberOptions}
-            value={selectArnType}
-            onChange={(option) => setSelectArnType(option)}
-            isSearchable
-            placeholder="Select or enter a value..."
-            noOptionsMessage={() => "Type to create a new value"}
-            className="react-select"
-          />
+          <Form.Label>ARN number</Form.Label>
+          <Form.Control value={arnNumber.value} readOnly />
         </Form.Group>
-        <Form.Group className="form_group">
-          <Form.Label>Vas Type</Form.Label>
-          <Select
-            options={arnList}
-            value={vasType}
-            onChange={(option) => setVasType(option)}
-            isSearchable
-            placeholder="Select or enter a value..."
-            noOptionsMessage={() => "Type to create a new value"}
-            className="react-select"
-          />
-        </Form.Group>
+        {pathname === "/admin/admin-key-insight" && (
+          <Form.Group className="form_group">
+            <Form.Label>Vas Type</Form.Label>
+            <Select
+              options={arnList}
+              value={vasType}
+              onChange={(option) => setVasType(option)}
+              className="react-select"
+            />
+          </Form.Group>
+        )}
+        <button
+          className="search_button"
+          type="button"
+          onClick={searchFilterhandler}
+        >
+          Search
+        </button>
       </div>
-    </div>
+    </Form>
   );
 }
 

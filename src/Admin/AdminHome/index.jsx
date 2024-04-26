@@ -77,7 +77,6 @@ function AdminHome() {
     getDetailedViewHandler("Renewals");
   };
 
-  console.log(arnNumber);
   return (
     <>
       {loading ? (
