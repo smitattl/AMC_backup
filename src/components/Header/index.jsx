@@ -51,7 +51,7 @@ function Header() {
               duration={50}
               spy={true}
               exact="true"
-              offset={-105}
+              offset={-140}
               onClick={() => handleClickActive("section1")}
               className="scroll_link"
             >
@@ -64,7 +64,7 @@ function Header() {
               duration={50}
               spy={true}
               exact="true"
-              offset={-100}
+              offset={-140}
               onClick={() => handleClickActive("section2")}
               className="scroll_link"
             >
