@@ -1,17 +1,11 @@
 import React from "react";
-import DeatiledTable from "../../components/Table/Table";
 import {
   dueForScheduleServiceColums,
   dueforRenewalColumns,
 } from "../../StaticTableData";
 import CommonTable from "../CommonComps/CommonTable";
 
-function AccordionTable({
-  activeAccordionItem,
-  setActiveAccordionItem = () => {},
-  serviceScheduleData = [],
-  renewalData = [],
-}) {
+function AccordionTable({ serviceScheduleData = [], renewalData = [] }) {
   return (
     <div className="container_wrapper">
       <div name="section1">

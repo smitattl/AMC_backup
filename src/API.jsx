@@ -129,6 +129,13 @@ export const ApiInterface = {
       data: body,
     }),
 
+  getARNPanByMobileNo: (body) =>
+    apiCall({
+      method: "POST",
+      url: "/get-arn-pan-by-phoneno",
+      data: body,
+    }),
+
   // form data applications
   // homee pageapi
   getVehicleDetails: (formData) =>

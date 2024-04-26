@@ -88,11 +88,13 @@ h2 {
 }
 .search_button {
   background: #042998;
-  padding: 6px 30px;
+  padding: 7px 30px;
   color: white;
   height: max-content;
   border: 1px solid #042998;
   border-radius: 5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 .search_button:hover {
   background: transparent;

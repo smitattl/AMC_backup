@@ -7,15 +7,15 @@ import TataIcon from "../../images/svgs/TataLogo.svg";
 import HomeIcon from "../../images/download.png";
 import BackIcon from "../../images/backarrow.png";
 import "react-tooltip/dist/react-tooltip.css";
-import { LogoutSession, useHandleClickActive } from "../../utils";
+import { maskEmail, useHandleClickActive } from "../../utils";
 import { Link as ScrollLink } from "react-scroll";
 
 function Header() {
-  const { arnList } = useSelector((state) => state.arn);
+  const { arnList, userData } = useSelector((state) => state.arn);
   const { fleetData } = useSelector((state) => state.homeApi);
-  const location = LogoutSession;
-
   const handleClickActive = useHandleClickActive();
+  console.log(userData);
+  const email = "sssssssssssssssssssssssssssssmita@tatattl.com";
 
   return (
     <div className="header_wrapper">
@@ -56,7 +56,7 @@ function Header() {
               className="scroll_link"
             >
               Due for Schedule Service{" "}
-              <span>({fleetData.ServiceSchedule})</span>
+              <span>({fleetData.ServiceSchedule || "0"})</span>
             </ScrollLink>
             <ScrollLink
               to="section2"
@@ -68,12 +68,18 @@ function Header() {
               onClick={() => handleClickActive("section2")}
               className="scroll_link"
             >
-              Due for Renewal<span>({fleetData.Renewal})</span>
+              Due for Renewal<span>({fleetData.Renewal || "0"})</span>
             </ScrollLink>
           </div>
-
-          <div className="arn_no_text">
-            ARN Number : <span className="scroll_link">{arnList[0]}</span>
+          <div className="arn_no_text" style={{ fontFamily: "sans-serif" }}>
+            <div>
+              <div>ARN Number</div>
+              <div className="arn_no_text text-end">Email</div>
+            </div>
+            <div className="d-flex flex-column text-left">
+              <span className="scroll_link">: {arnList[0]}</span>
+              <span className="scroll_link">: {maskEmail(email)}</span>
+            </div>
           </div>
         </div>
       </div>

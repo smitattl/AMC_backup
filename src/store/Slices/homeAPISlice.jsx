@@ -7,7 +7,9 @@ const initialState = {
   selectedUser: {},
   arnListForAdmin: [],
   searchType: searchOptions[0],
-  vehicleNumber: null,
+  vehicleNumber: "",
+  panNumber: "",
+  mobileNo: "",
 };
 
 const homeApiSlice = createSlice({
@@ -32,6 +34,21 @@ const homeApiSlice = createSlice({
     setVehicleNumber(state, action) {
       state.vehicleNumber = action.payload;
     },
+    setPanNumber(state, action) {
+      state.panNumber = action.payload;
+    },
+    setMobileNo(state, action) {
+      state.mobileNo = action.payload;
+    },
+    resetFields(state) {
+      state.arnNumber = initialState.arnNumber;
+      // state.fleetData = initialState.fleetData;
+      state.selectedUser = initialState.selectedUser;
+      state.arnListForAdmin = initialState.arnListForAdmin;
+      state.vehicleNumber = initialState.vehicleNumber;
+      state.panNumber = initialState.panNumber;
+      state.mobileNo = initialState.mobileNo;
+    },
   },
 });
 
@@ -42,5 +59,8 @@ export const {
   setArnListForAdmin,
   setSearchType,
   setVehicleNumber,
+  setPanNumber,
+  setMobileNo,
+  resetFields,
 } = homeApiSlice.actions;
 export default homeApiSlice.reducer;

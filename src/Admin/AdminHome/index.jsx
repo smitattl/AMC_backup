@@ -63,19 +63,28 @@ function AdminHome() {
     setLoading(false);
   };
 
-  const searchFilterhandler = () => {
+  const searchFilterhandler = (e) => {
+    e.preventDefault();
+
+    if (
+      Object.keys(arnNumber).length === 0 &&
+      arnNumber.constructor === Object
+    ) {
+      return;
+    }
     getGenericInformationHandler();
     getDetailedViewHandler("ServiceScheduled");
-    getDetailedViewHandler("Reneawls");
+    getDetailedViewHandler("Renewals");
   };
 
+  console.log(arnNumber);
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
         <div>
-          <FilterSection  searchFilterhandler={searchFilterhandler}/>
+          <FilterSection searchFilterhandler={searchFilterhandler} />
           <FleetOverView fleetData={fleetData} />
           <AccordionTable
             renewalData={renewalData}

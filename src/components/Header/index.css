@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 100;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   border: 1px solid #cdced563;
@@ -30,8 +30,11 @@ a {
   height: 20px;
 }
 .arn_no_text {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 .arn_no_text span {
   font-weight: 700;
@@ -74,6 +77,6 @@ a {
 }
 .bottom_header {
   backdrop-filter: blur(4px);
-  background-color: rgba(0, 0, 0, 0.086);
+  background-color: rgba(214, 229, 249, 0.626);
   width: 100%;
 }

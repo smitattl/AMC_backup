@@ -23,3 +23,11 @@ export const useHandleClickActive = () => {
 
   return handleClickActive;
 };
+
+export const maskEmail = (email) => {
+  const atIndex = email.indexOf("@");
+  if (atIndex === -1) return email;
+  const maskedPart = email.slice(0, atIndex).replace(/./g, "*");
+  const domainPart = email.slice(atIndex);
+  return maskedPart + domainPart;
+};

@@ -11,7 +11,7 @@ function FleetOverView({ fleetData = {} }) {
         <div className="card">
           <h5 className="opacity-75">Total Fleet Count</h5>
           <img src={vehiclecount} alt="/" className="card_img" />
-          <div className="font_weight_700">{fleetData.VehCount}</div>
+          <div className="font_weight_700">{fleetData.VehCount || "0"}</div>
         </div>
         <div className="card">
           <h5 className="opacity-75">Fleet Under VAS</h5>
@@ -19,18 +19,20 @@ function FleetOverView({ fleetData = {} }) {
           <div className="d-flex w-50 mx-auto mt-4 justify-content-between">
             <div className="d-flex flex-column gap-1">
               <div>AMC</div>
-              <div className="font_weight_700">{fleetData.VasProdAmc}</div>
+              <div className="font_weight_700">
+                {fleetData.VasProdAmc || "0"}
+              </div>
             </div>
             <div className="d-flex flex-column gap-1">
               <div>FMC</div>
-              <div className="font_weight_700">{fleetData.FMSCount}</div>
+              <div className="font_weight_700">{fleetData.FMSCount || "0"}</div>
             </div>
           </div>
         </div>
         <div className="card">
           <h5 className="opacity-75">Fleet Under Fleetedge</h5>
           <img src={product} alt="/" className="card_img" />
-          <div className="font_weight_700">{fleetData.AmcTypeCount}</div>
+          <div className="font_weight_700">{fleetData.AmcTypeCount || "0"}</div>
         </div>
       </div>
     </div>
