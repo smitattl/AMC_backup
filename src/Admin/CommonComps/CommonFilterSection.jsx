@@ -4,16 +4,14 @@ import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import Select from "react-select";
 
-function CommonFilterSection({ searchFilterhandler = () => {} }) {
+function CommonFilterSection({
+  searchFilterhandler = () => {},
+  VASOptions = [],
+  vasType = {},
+  setVasType = () => {},
+}) {
   const { arnNumber } = useSelector((state) => state.homeApi);
   const { pathname } = useLocation();
-  const { arnList } = useSelector((state) => state.arn);
-  const [selectArnType, setSelectArnType] = useState("");
-  const [vasType, setVasType] = useState("");
-  const arnNumberOptions = arnList.map((arn) => ({
-    value: arn,
-    label: arn,
-  }));
 
   return (
     <Form className="filter_wrapper">
@@ -26,7 +24,7 @@ function CommonFilterSection({ searchFilterhandler = () => {} }) {
           <Form.Group className="form_group">
             <Form.Label>Vas Type</Form.Label>
             <Select
-              options={arnList}
+              options={VASOptions}
               value={vasType}
               onChange={(option) => setVasType(option)}
               className="react-select"

@@ -22,7 +22,7 @@
 a {
   color: #27292f;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
 }
 .home_icon {
@@ -54,29 +54,32 @@ a {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  font-size: 13px;
-  background: black;
+  font-size: 15px;
+  background: #27292f;
   color: white;
   cursor: pointer;
   font-weight: 600;
 }
 .user_name:hover {
   background-color: white;
-  color: black;
+  color: #27292f;
 }
 .scroll_link {
-  color: #042998;
-  font-weight: 700;
+  color: #27292f;
+  font-weight: 600;
   font-family: sans-serif;
   cursor: pointer;
 }
 .scroll_link span {
   opacity: 0.5;
-  color: #042998;
-  font-weight: 700;
+  color: #27292f;
+  font-weight: 500;
+}
+.scroll_link:hover {
+  opacity: 0.6;
 }
 .bottom_header {
   backdrop-filter: blur(4px);
-  background-color: rgba(214, 229, 249, 0.626);
+  background-color: rgba(249, 249, 249, 0.384);
   width: 100%;
 }

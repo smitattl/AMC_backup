@@ -18,16 +18,16 @@
   margin: 0 auto;
 }
 .search_button {
-  background: #042998;
+  background: #27292f;
   padding: 7px 30px;
   color: white;
   height: max-content;
-  border: 1px solid #042998;
+  border: 1px solid #27292f;
   border-radius: 5px;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
 .search_button:hover {
   background: transparent;
-  color: #042998;
+  color: #27292f;
 }
