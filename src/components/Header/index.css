@@ -71,9 +71,8 @@ a {
   cursor: pointer;
 }
 .scroll_link span {
-  opacity: 0.5;
-  color: #27292f;
-  font-weight: 500;
+  color: #1a1b1f;
+  font-weight: 600;
 }
 .scroll_link:hover {
   opacity: 0.6;
