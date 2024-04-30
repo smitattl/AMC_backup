@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserLoggedIn from "./components/UserLoggedIn";
 import { setUserEntryCount } from "./store/Slices/arnSlice";
 import { Toaster } from "react-hot-toast";
+import { encryptMobileNo, encryptPan } from "./utils";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
@@ -78,10 +79,11 @@ function App() {
 
   const updateLoginEntriesHandler = async () => {
     try {
-      const formData = new FormData();
-      formData.append("mobile_no", userData.MobNo);
-      formData.append("Pan_no", userData.pan);
-      const response = await ApiInterface.checkLoginEntries(formData);
+      const body = {
+        mobile_no: userData.MobNo,
+        Pan_no: userData.pan,
+      };
+      const response = await ApiInterface.checkLoginEntries(body);
     } catch (error) {
       console.log(error);
     }
@@ -89,10 +91,11 @@ function App() {
 
   const getLoginEntryCounthandler = async () => {
     try {
-      const formData = new FormData();
-      formData.append("mobile_no", userData.MobNo);
-      formData.append("Pan_no", userData.pan);
-      const response = await ApiInterface.getLoginEntryCount(formData);
+      const body = {
+        mobile_no: userData.MobNo,
+        Pan_no: userData.pan,
+      };
+      const response = await ApiInterface.getLoginEntryCount(body);
       if (response.status === 200) {
         dispacth(setUserEntryCount(response?.data?.count ?? 0));
       }
@@ -102,11 +105,13 @@ function App() {
   };
 
   useEffect(() => {
-    getLoginEntryCounthandler();
-  }, []);
+    if (token && userData) {
+      getLoginEntryCounthandler();
+    }
+  }, [userData]);
 
   useEffect(() => {
-    if (userEntryCount <= 1000) {
+    if (userEntryCount <= 100 && token && userData) {
       updateLoginEntriesHandler();
     }
   }, []);
@@ -120,15 +125,12 @@ function App() {
         containerClassName=""
         containerStyle={{}}
         toastOptions={{
-          // Define default options
           className: "",
           duration: 5000,
           style: {
             background: "#363636",
             color: "#fff",
           },
-
-          // Default options for specific types
           success: {
             duration: 3000,
             theme: {

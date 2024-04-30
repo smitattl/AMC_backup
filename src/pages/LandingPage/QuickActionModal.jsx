@@ -26,7 +26,7 @@ function QuickActionModal({
               <div className="col-md-1">
                 <button
                   type="button"
-                  class="btn-close"
+                  className="btn-close"
                   aria-label="Close"
                   onClick={togglePopup}
                 />

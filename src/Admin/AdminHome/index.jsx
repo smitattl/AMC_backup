@@ -5,11 +5,7 @@ import "./index.css";
 import AccordionTable from "./AccordionTable";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiInterface } from "../../API";
-import {
-  setArnListForAdmin,
-  setArnNumber,
-  setFleetData,
-} from "../../store/Slices/homeAPISlice";
+import { setFleetData } from "../../store/Slices/homeAPISlice";
 import Loading from "../../components/Loading/Loading";
 
 function AdminHome() {
@@ -65,7 +61,6 @@ function AdminHome() {
 
   const searchFilterhandler = (e) => {
     e.preventDefault();
-
     if (
       Object.keys(arnNumber).length === 0 &&
       arnNumber.constructor === Object

@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 const FleetData = () => {
   const { arnList } = useSelector((state) => state.arn);
   const [Rowdata, setRowdata] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [arnNumber, setArnNumber] = useState(arnList[0]);
   const [amcCount, setAmcCount] = useState([]);
   const [fmsCount, setFmsCount] = useState([]);

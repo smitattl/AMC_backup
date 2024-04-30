@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./index.css";
 import LogoIcon from "../../images/svgs/Logo.svg";
 import TataIcon from "../../images/svgs/TataLogo.svg";
@@ -11,11 +11,11 @@ import { maskEmail, useHandleClickActive } from "../../utils";
 import { Link as ScrollLink } from "react-scroll";
 
 function Header() {
-  const { arnList, userData } = useSelector((state) => state.arn);
+  const { pathname } = useLocation();
+  const { arnList } = useSelector((state) => state.arn);
   const { fleetData } = useSelector((state) => state.homeApi);
   const handleClickActive = useHandleClickActive();
-  console.log(userData);
-  const email = "sssssssssssssssssssssssssssssmita@tatattl.com";
+  const email = "ssssssssssssmita@tatattl.com";
 
   return (
     <div className="header_wrapper">
@@ -45,31 +45,35 @@ function Header() {
               <img src={BackIcon} alt="/back-arrow" className="home_icon" />
               &nbsp; Online Sales Platform
             </Link>
-            <ScrollLink
-              to="section1"
-              smooth={true}
-              duration={50}
-              spy={true}
-              exact="true"
-              offset={-140}
-              onClick={() => handleClickActive("section1")}
-              className="scroll_link"
-            >
-              Due for Schedule Service{" "}
-              <span>({fleetData.ServiceSchedule || "0"})</span>
-            </ScrollLink>
-            <ScrollLink
-              to="section2"
-              smooth={true}
-              duration={50}
-              spy={true}
-              exact="true"
-              offset={-140}
-              onClick={() => handleClickActive("section2")}
-              className="scroll_link"
-            >
-              Due for Renewal<span>({fleetData.Renewal || "0"})</span>
-            </ScrollLink>
+            {pathname === "/admin" && (
+              <React.Fragment>
+                <ScrollLink
+                  to="section1"
+                  smooth={true}
+                  duration={50}
+                  spy={true}
+                  exact="true"
+                  offset={-140}
+                  onClick={() => handleClickActive("section1")}
+                  className="scroll_link"
+                >
+                  Due for Schedule Service{" "}
+                  <span>({fleetData.ServiceSchedule || "0"})</span>
+                </ScrollLink>
+                <ScrollLink
+                  to="section2"
+                  smooth={true}
+                  duration={50}
+                  spy={true}
+                  exact="true"
+                  offset={-140}
+                  onClick={() => handleClickActive("section2")}
+                  className="scroll_link"
+                >
+                  Due for Renewal<span>({fleetData.Renewal || "0"})</span>
+                </ScrollLink>
+              </React.Fragment>
+            )}
           </div>
           <div className="arn_no_text" style={{ fontFamily: "sans-serif" }}>
             <div>

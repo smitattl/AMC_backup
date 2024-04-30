@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { decodeToken } from "react-jwt";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Accordion } from "react-bootstrap";
 import { Link as ScrollLink, Element } from "react-scroll";
 import Form from "react-bootstrap/Form";
-import DeatiledTable from "../../components/Table/Table";
 import { ApiInterface } from "../../API";
 import transportIcon from "../../images/transportation.png";
 import renewable from "../../images/renewalTwo.png";
@@ -14,14 +14,19 @@ import product from "../../images/product.png";
 import "./HomePage.css";
 import Loading from "../../components/Loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { setArnList, setUserData } from "../../store/Slices/arnSlice";
+import arnSlice, { setArnList, setUserData } from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
 import QuickActionModal from "./QuickActionModal";
+import { decrypt } from "../../utils";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { arnList, userEntryCount } = useSelector((state) => state.arn);
+
+  const token = localStorage.getItem("Token");
+  const { arnList, userEntryCount, userData } = useSelector(
+    (state) => state.arn
+  );
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -30,28 +35,14 @@ const LandingPage = () => {
 
   const { param1 } = useParams();
   const { param2 } = useParams();
-
-  const [ARNName, setARNName] = useState();
-  const [ARNContact, setARNContact] = useState();
-  const [arnNumber, setArnNumber] = useState("");
-  const [isOpenGenricDetails, setisOpenGenricDetails] = useState(false);
+  const [arnNumber, setArnNumber] = useState(null);
   const [activeAccordionItem, setActiveAccordionItem] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [section, setSection] = useState("");
   const [isOpen, setIsOpen] = useState(true);
   const [isOpenNotifiction, setisOpenNotifiction] = useState(false);
-  const [isOpenNotifictionTile, setisOpenNotifictionTile] = useState(false);
-  const [openSS, setOpenSS] = useState(false);
-  const [openRen, setOpenRen] = useState(false);
   const [Rowdata, setRowdata] = useState([]);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
-  const [VehCount, setVehCount] = useState();
   const [ServiceSchedule, setServiceSchedule] = useState();
-  const [Renewal, setRenewal] = useState();
-  const [VasProdAmc, setVasProdAmc] = useState();
-  const [AMCTypeCount, setAMCTypeCount] = useState();
-  const [AppTypeCount, setAppTypeCount] = useState();
-  const [VasProdFms, setVasProdFms] = useState();
   const [fleetData, setFleetData] = useState({});
 
   const getDecryptedDataHandler = async () => {
@@ -62,14 +53,17 @@ const LandingPage = () => {
       formData.append("DataTwo", param2);
       const response = await ApiInterface.getDecryptedData(formData);
       if (response.status === 200) {
-        localStorage.setItem("ARN-Number", response.data.ARNList[0]);
+        const myDecodedToken = decodeToken(response.data.Token);
+        localStorage.setItem("Token", response.data.Token);
+        setArnNumber(myDecodedToken.ARN[0]);
+        localStorage.setItem("ARN-Number", myDecodedToken.ARN[0]);
         localStorage.setItem(
           "ARN-NumberList",
-          JSON.stringify(response.data.ARNList)
+          JSON.stringify(myDecodedToken.ARN)
         );
-        setArnNumber(response?.data?.ARNList[0]);
-        dispatch(setArnList([...response.data.ARNList, "All"]));
-        setLoading(false);
+        localStorage.setItem("ARN-Contact", myDecodedToken.MobNo);
+        const arnList = myDecodedToken?.ARN;
+        dispatch(setArnList([...arnList, "All"]));
       }
     } catch (error) {
       console.log(error);
@@ -98,18 +92,13 @@ const LandingPage = () => {
     try {
       const formData = new FormData();
       formData.append("ARN-Number", arnNumber);
+      formData.append("Token", token);
       const response = await ApiInterface.getARNDetails(formData);
       if (response.status === 200) {
-        setARNName(response.data.NameList);
-        setARNContact(response.data.MobNo);
-        localStorage.setItem("Token", response.data.Token);
-        if (isOpenGenricDetails !== true) {
-          setisOpenGenricDetails(!isOpenGenricDetails);
-        }
         localStorage.setItem("ARN-Name", response.data.NameList);
-        localStorage.setItem("ARN-Contact", response.data.MobNo);
+        const pan = response?.data?.pan;
+        dispatch(setUserData(response.data));
         setLoading(false);
-        dispatch(setUserData(response.data ?? null));
       }
     } catch (error) {
       console.log(error);
@@ -145,7 +134,7 @@ const LandingPage = () => {
   const handleChangeARNNumber = (e) => {
     const selectedValue = e.target.value;
     if (selectedValue === "All") {
-      const filteredArnList = arnList.filter((option) => option !== "All");
+      const filteredArnList = arnList?.filter((option) => option !== "All");
       setArnNumber(filteredArnList);
     } else {
       setArnNumber(selectedValue);
@@ -163,12 +152,16 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    if (userEntryCount < 1000) getDecryptedDataHandler();
-  }, [userEntryCount]);
-
+    if (userEntryCount < 100) getDecryptedDataHandler();
+  }, []);
   useEffect(() => {
     if (arnNumber) {
       getARNDetailsHandler();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (arnNumber) {
       getDetailedViewHandler("ServiceScheduled");
       getDetailedViewHandler("Reneawls");
       getGenericInformationHandler();
@@ -203,8 +196,8 @@ const LandingPage = () => {
                               value={arnNumber}
                               onChange={handleChangeARNNumber}
                             >
-                              <span>{arnNumber}</span>
-                              {arnList.map((option) => (
+                              {arnNumber}
+                              {arnList?.map((option) => (
                                 <option key={option} value={option}>
                                   {option}
                                 </option>
@@ -221,13 +214,16 @@ const LandingPage = () => {
             <div className="contact_tile">
               <p style={{ fontWeight: "bold" }}>
                 Customer Name:{" "}
-                <span style={{ fontFamily: "sans-serif" }}>{ARNName}</span>
+                <span style={{ fontFamily: "sans-serif" }}>
+                  {userData.NameList}
+                </span>
               </p>
               <p style={{ fontWeight: "bold" }}>
                 Contact Details:
                 <span style={{ fontFamily: "sans-serif" }}>
-                  {ARNContact &&
-                    ARNContact?.substring(0, ARNContact.length - 6) + "******"}
+                  {userData.MobNo &&
+                    userData.MobNo?.substring(0, userData.MobNo.length - 6) +
+                      "******"}
                 </span>
               </p>
             </div>
@@ -343,7 +339,7 @@ const LandingPage = () => {
                           className="col-md-9 tile_main_div"
                           style={{ paddingRight: "10px" }}
                         >
-                          <a>Due for Renewal</a>
+                          <span>Due for Renewal</span>
                           <h6 className="cnt">{fleetData.Renewal}</h6>
                         </div>
                       </div>
@@ -353,8 +349,6 @@ const LandingPage = () => {
               </div>
             </div>
             <TableAccordion
-              openSS={openSS}
-              openRen={openRen}
               activeAccordionItem={activeAccordionItem}
               setActiveAccordionItem={setActiveAccordionItem}
               serviceScheduleData={serviceScheduleData}
@@ -371,7 +365,6 @@ const LandingPage = () => {
           isOpen={isOpen}
           ServiceSchedule={ServiceSchedule}
           renewable={renewable}
-          Renewal={Renewal}
         />
       )}
     </>

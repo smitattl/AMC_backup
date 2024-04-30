@@ -68,7 +68,7 @@ function AdminFleetDetails() {
       <div className="container_wrapper">
         <div className="d-flex justify-content-between flex-wrap mt-2">
           <div className="graph_wrapper">
-            <div>
+            {amcChartData.length !== 0 && (
               <div className="view-box mb-2">
                 <div className="card_heading pt10">AMC Type Count</div>
                 <PieChartGraph
@@ -76,14 +76,16 @@ function AdminFleetDetails() {
                   increaseHeight={fmsChartData.length === 0 ? true : false}
                 />
               </div>
-            </div>
-            <div className="view-box">
-              <div className="card_heading pt10">AMC Type Count</div>
-              <PieChartGraph
-                data={amcChartData}
-                increaseHeight={fmsChartData.length === 0 ? true : false}
-              />
-            </div>
+            )}
+            {fmsChartData.length !== 0 && (
+              <div className="view-box">
+                <div className="card_heading pt10">AMC Type Count</div>
+                <PieChartGraph
+                  data={fmsChartData}
+                  increaseHeight={fmsChartData.length === 0 ? true : false}
+                />
+              </div>
+            )}
           </div>
           <div className="graph_wrapper">
             <CommonTable data={tableData} columns={fleetTableColumns} />

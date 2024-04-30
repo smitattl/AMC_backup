@@ -216,6 +216,5 @@ export const ApiInterface = {
       method: "POST",
       url: "checkLoginUserCountData",
       data: formData,
-      content_type: "multipart/form-data",
     }),
 };

@@ -68,7 +68,12 @@ function FilterSection({ searchFilterhandler = () => {} }) {
           label: name,
         }));
         const allOption = { value: "all", label: "ALL" };
-        const arnListWithAll = [allOption, ...arnData];
+        let arnListWithAll;
+        if (arnData.length > 1) {
+          arnListWithAll = [allOption, ...arnData];
+        } else {
+          arnListWithAll = arnData;
+        }
         dispatch(setArnListForAdmin(arnListWithAll));
       }
     } catch (error) {
@@ -90,8 +95,13 @@ function FilterSection({ searchFilterhandler = () => {} }) {
           value: name,
           label: name,
         }));
+        let arnListWithAll;
         const allOption = { value: "all", label: "ALL" };
-        const arnListWithAll = [allOption, ...arnData];
+        if (arnData.length > 1) {
+          arnListWithAll = [allOption, ...arnData];
+        } else {
+          arnListWithAll = arnData;
+        }
         dispatch(setArnListForAdmin(arnListWithAll));
       }
     } catch (error) {
@@ -110,8 +120,13 @@ function FilterSection({ searchFilterhandler = () => {} }) {
           value: name,
           label: name,
         }));
+        let arnListWithAll;
         const allOption = { value: "all", label: "ALL" };
-        const arnListWithAll = [allOption, ...arnData];
+        if (arnData.length > 1) {
+          arnListWithAll = [allOption, ...arnData];
+        } else {
+          arnListWithAll = arnData;
+        }
         dispatch(setPanNumber(response.data.pan));
         dispatch(setArnListForAdmin(arnListWithAll));
       }
@@ -231,7 +246,9 @@ function FilterSection({ searchFilterhandler = () => {} }) {
           <Form.Group className="form_group">
             <Form.Label>ARN Number</Form.Label>
             <Select
-              value={arnNumber}
+              value={
+                arnListForAdmin.length === 1 ? arnListForAdmin[0] : arnNumber
+              }
               options={arnListForAdmin}
               onChange={(option) => dispatch(setArnNumber(option))}
               isSearchable
