@@ -6,6 +6,7 @@ import Admin from "../Admin";
 import LandingPage from "../pages/LandingPage";
 import KeyInsights from "../pages/KeyInsights";
 import FleetDetails from "../pages/FleetDetails";
+import Error from "../components/Error";
 
 const IndexRoute = () => {
   return (
@@ -17,7 +18,7 @@ const IndexRoute = () => {
         <Route path="/Home/Key-insights" element={<KeyInsights />} />
         <Route path="/thank-you" element={<Logout />} />
       </Route>
-      <Route path="*" element={<Logout />} />
+      <Route path="*" element={<Error />} />
     </Routes>
   );
 };
