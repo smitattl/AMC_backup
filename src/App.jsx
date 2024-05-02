@@ -9,28 +9,35 @@ import {
   faCaretSquareDown,
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Watermark from "./components/WaterMark/WaterMark";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import CustomerHeader from "./components/CustomerHeader";
 import { ApiInterface } from "./API";
 import { useDispatch, useSelector } from "react-redux";
 import UserLoggedIn from "./components/UserLoggedIn";
-import { setUserEntryCount } from "./store/Slices/arnSlice";
+import {
+  setArnList,
+  setArnNumber,
+  setUserData,
+  setUserEntryCount,
+} from "./store/Slices/arnSlice";
 import { Toaster } from "react-hot-toast";
-import { encryptMobileNo, encryptPan } from "./utils";
+import { decodeToken } from "react-jwt";
+import WarningModal from "./components/WarningModal";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
 function App() {
-  const dispacth = useDispatch();
-  const token = localStorage.getItem("Token");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+  const token = localStorage.getItem("Token");
+  const { userData, userEntryCount, params, arnNumber } = useSelector(
+    (state) => state.arn
+  );
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
-
-  const { userData, userEntryCount } = useSelector((state) => state.arn);
+  const [loading, setLoading] = useState(false);
+  const [wrongUser, setWrongUser] = useState(false);
 
   const LogoutSession = () => {
     setIsLoggedIn(false);
@@ -77,13 +84,43 @@ function App() {
     setIsLoggedIn(!!storedToken);
   }, []);
 
+  const getDecryptedDataHandler = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("DataOne", params.param1);
+      formData.append("DataTwo", params.param2);
+      const response = await ApiInterface.getDecryptedData(formData);
+      if (response.status === 200) {
+        const myDecodedToken = decodeToken(response.data.Token);
+        localStorage.setItem("Token", response.data.Token);
+        dispatch(setArnNumber(myDecodedToken.ARN[0]));
+        localStorage.setItem("ARN-Number", myDecodedToken.ARN[0]);
+        localStorage.setItem(
+          "ARN-NumberList",
+          JSON.stringify(myDecodedToken.ARN)
+        );
+        localStorage.setItem("ARN-Contact", myDecodedToken.MobNo);
+        const arnList = myDecodedToken?.ARN;
+        dispatch(setArnList([...arnList, "All"]));
+        setWrongUser(false);
+      } else if (response.status !== 200) setWrongUser(true);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (userEntryCount < 100) getDecryptedDataHandler();
+  }, []);
+
   const updateLoginEntriesHandler = async () => {
     try {
-      const body = {
-        mobile_no: userData.MobNo,
-        Pan_no: userData.pan,
-      };
-      const response = await ApiInterface.checkLoginEntries(body);
+      const formData = new FormData();
+      formData.append("mobile_no", params.param1);
+      formData.append("Pan_no", params.param2);
+      const response = await ApiInterface.checkLoginEntries(formData);
     } catch (error) {
       console.log(error);
     }
@@ -91,13 +128,12 @@ function App() {
 
   const getLoginEntryCounthandler = async () => {
     try {
-      const body = {
-        mobile_no: userData.MobNo,
-        Pan_no: userData.pan,
-      };
-      const response = await ApiInterface.getLoginEntryCount(body);
+      const formData = new FormData();
+      formData.append("mobile_no", params.param1);
+      formData.append("Pan_no", params.param2);
+      const response = await ApiInterface.getLoginEntryCount(formData);
       if (response.status === 200) {
-        dispacth(setUserEntryCount(response?.data?.count ?? 0));
+        dispatch(setUserEntryCount(response?.data?.count ?? 0));
       }
     } catch (error) {
       console.log(error);
@@ -111,6 +147,31 @@ function App() {
   }, [userData]);
 
   useEffect(() => {
+    if (arnNumber) {
+      getARNDetailsHandler();
+    }
+  }, []);
+
+  const getARNDetailsHandler = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("ARN-Number", arnNumber);
+      formData.append("Token", token);
+      const response = await ApiInterface.getARNDetails(formData);
+      if (response.status === 200) {
+        localStorage.setItem("ARN-Name", response.data.NameList);
+        const pan = response?.data?.pan;
+        dispatch(setUserData(response.data));
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     if (userEntryCount <= 100 && token && userData) {
       updateLoginEntriesHandler();
     }
@@ -118,36 +179,42 @@ function App() {
 
   return (
     <div>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        gutter={8}
-        containerClassName=""
-        containerStyle={{}}
-        toastOptions={{
-          className: "",
-          duration: 5000,
-          style: {
-            background: "#363636",
-            color: "#fff",
-          },
-          success: {
-            duration: 3000,
-            theme: {
-              primary: "green",
-              secondary: "black",
-            },
-          },
-        }}
-      />
-      {userEntryCount > 1000 ? (
-        <UserLoggedIn />
+      {wrongUser ? (
+        <WarningModal />
       ) : (
         <React.Fragment>
-          {location.pathname.includes("Home") ? <CustomerHeader /> : <Header />}
-          <Watermark />
-          <IndexRoute />
-          <Footer />
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+            gutter={8}
+            containerClassName=""
+            containerStyle={{}}
+            toastOptions={{
+              className: "",
+              duration: 5000,
+              style: {
+                background: "#363636",
+                color: "#fff",
+              },
+              success: {
+                duration: 3000,
+                theme: {
+                  primary: "green",
+                  secondary: "black",
+                },
+              },
+            }}
+          />
+          {userEntryCount > 1000 ? (
+            <UserLoggedIn />
+          ) : (
+            <React.Fragment>
+              <Header />
+              <Watermark />
+              <IndexRoute />
+              <Footer />
+            </React.Fragment>
+          )}
         </React.Fragment>
       )}
     </div>

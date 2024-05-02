@@ -2,9 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   arnList: [],
+  arnNumber: "",
   activeAccordionItem: null,
   userData: [],
   userEntryCount: null,
+  params: {},
+  fleetData: {},
 };
 
 const arnSlice = createSlice({
@@ -23,6 +26,15 @@ const arnSlice = createSlice({
     setUserEntryCount(state, action) {
       state.userEntryCount = action.payload;
     },
+    setParams(state, action) {
+      state.params = action.payload;
+    },
+    setArnNumber(state, action) {
+      state.arnNumber = action.payload;
+    },
+    setFleetData(state, action) {
+      state.fleetData = action.payload;
+    },
   },
 });
 
@@ -31,5 +43,8 @@ export const {
   setActiveAccordionItem,
   setUserData,
   setUserEntryCount,
+  setParams,
+  setArnNumber,
+  setFleetData,
 } = arnSlice.actions;
 export default arnSlice.reducer;

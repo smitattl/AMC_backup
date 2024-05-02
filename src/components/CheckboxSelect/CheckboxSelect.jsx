@@ -36,20 +36,22 @@ const DropdownWithCheckbox = ({ options, onCheckboxChange }) => {
 
   return (
     <div className={styles.container}>
-    {options.map((option) => (
-           <div className="d-flex gap-2">
-              <input
-                type="radio"
-                className="form-check-label"
-                value={option}
-                checked={selectedOptions === option} // Use selectedOption instead of selectedOptions
-                onChange={() => handleRadioChange(option)} // Change the handler function to handle radio buttons
-                name="radioGroup"
-              />
-            <label className={styles.CheckboxLable} key={option}>{option}</label>
-          </div>
-        ))}
-      
+      {options.map((option) => (
+        <div className="d-flex gap-2">
+          <input
+            type="radio"
+            className="form-check-label"
+            value={option}
+            checked={selectedOptions === option} // Use selectedOption instead of selectedOptions
+            onChange={() => handleRadioChange(option)} // Change the handler function to handle radio buttons
+            name="radioGroup"
+          />
+          <label className={styles.CheckboxLable} key={option}>
+            {option}
+          </label>
+        </div>
+      ))}
+
       <div className="d-flex justify-content-between gap-4 align-items-center mt-5">
         <span className="text-danger" style={{ fontWeight: 600 }}>
           Note: Kindly use Mobile number and PAN card provided at the time of

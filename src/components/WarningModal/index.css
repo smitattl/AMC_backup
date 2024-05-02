@@ -1,0 +1,34 @@
+.warning_modal_wrapper {
+  background: #fafafa98;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.warning_modal {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.text_1 {
+  color: red;
+  font-weight: 600;
+}
+.warning_modal_wrapper button {
+  padding: 7px 20px;
+  background: #0c1066;
+  border: 1.5px solid #0c1066;
+  color: white;
+  border-radius: 5px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.warning_modal_wrapper button:hover {
+  background: transparent;
+  color: #0c1066;
+}

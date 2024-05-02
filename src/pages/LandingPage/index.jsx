@@ -14,62 +14,42 @@ import product from "../../images/product.png";
 import "./HomePage.css";
 import Loading from "../../components/Loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import arnSlice, { setArnList, setUserData } from "../../store/Slices/arnSlice";
+import arnSlice, {
+  setArnList,
+  setArnNumber,
+  setFleetData,
+  setParams,
+  setUserData,
+} from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
 import QuickActionModal from "./QuickActionModal";
 import { decrypt } from "../../utils";
 
 const LandingPage = () => {
+  const { param1, param2 } = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
 
   const token = localStorage.getItem("Token");
-  const { arnList, userEntryCount, userData } = useSelector(
+  const { arnList, userData, arnNumber, fleetData } = useSelector(
     (state) => state.arn
   );
+
+  useEffect(() => {
+    dispatch(setParams({ param1, param2 }));
+  }, [param1, param2]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const referrer = searchParams.get("referrer");
   }, [location.search]);
 
-  const { param1 } = useParams();
-  const { param2 } = useParams();
-  const [arnNumber, setArnNumber] = useState(null);
   const [activeAccordionItem, setActiveAccordionItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [isOpenNotifiction, setisOpenNotifiction] = useState(false);
   const [Rowdata, setRowdata] = useState([]);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
-  const [ServiceSchedule, setServiceSchedule] = useState();
-  const [fleetData, setFleetData] = useState({});
-
-  const getDecryptedDataHandler = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("DataOne", param1);
-      formData.append("DataTwo", param2);
-      const response = await ApiInterface.getDecryptedData(formData);
-      if (response.status === 200) {
-        const myDecodedToken = decodeToken(response.data.Token);
-        localStorage.setItem("Token", response.data.Token);
-        setArnNumber(myDecodedToken.ARN[0]);
-        localStorage.setItem("ARN-Number", myDecodedToken.ARN[0]);
-        localStorage.setItem(
-          "ARN-NumberList",
-          JSON.stringify(myDecodedToken.ARN)
-        );
-        localStorage.setItem("ARN-Contact", myDecodedToken.MobNo);
-        const arnList = myDecodedToken?.ARN;
-        dispatch(setArnList([...arnList, "All"]));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-  };
 
   const getGenericInformationHandler = async () => {
     try {
@@ -78,7 +58,7 @@ const LandingPage = () => {
       formData.append("ARN-Number", arnNumber);
       const response = await ApiInterface.getGenericInformation(formData);
       if (response.status === 200) {
-        setFleetData(response.data);
+        dispatch(setFleetData(response.data));
         setLoading(false);
       }
     } catch (error) {
@@ -135,9 +115,9 @@ const LandingPage = () => {
     const selectedValue = e.target.value;
     if (selectedValue === "All") {
       const filteredArnList = arnList?.filter((option) => option !== "All");
-      setArnNumber(filteredArnList);
+      dispatch(setArnNumber(filteredArnList));
     } else {
-      setArnNumber(selectedValue);
+      dispatch(setArnNumber(selectedValue));
     }
     setIsOpen(isOpen);
     setisOpenNotifiction(isOpenNotifiction);
@@ -151,9 +131,6 @@ const LandingPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (userEntryCount < 100) getDecryptedDataHandler();
-  }, []);
   useEffect(() => {
     if (arnNumber) {
       getARNDetailsHandler();
@@ -241,7 +218,7 @@ const LandingPage = () => {
                     />
                     <h6>Total Fleet Count</h6>
                     <div className="gen_sub_title" />
-                    <h6 className="cnt">{fleetData.VehCount}</h6>
+                    <h6 className="cnt">{fleetData?.VehCount}</h6>
                   </div>
                   <div className="card_section" id="section4">
                     <img
@@ -258,7 +235,7 @@ const LandingPage = () => {
                           <h6 className="tile_sec_head">AMC</h6>
                         </center>
                         <center>
-                          <h6 className="cnt">{fleetData.VasProdAmc}</h6>
+                          <h6 className="cnt">{fleetData?.VasProdAmc}</h6>
                         </center>
                       </div>
                       <div className="col-md-6">
@@ -266,7 +243,7 @@ const LandingPage = () => {
                           <h6 className="tile_sec_head">FMS</h6>
                         </center>
                         <center>
-                          <h6 className="cnt">{fleetData.FMSCount}</h6>
+                          <h6 className="cnt">{fleetData?.FMSCount}</h6>
                         </center>
                       </div>
                     </div>
@@ -280,7 +257,7 @@ const LandingPage = () => {
                     />
                     <h6>Fleet Under Fleetedge</h6>
                     <div className="gen_sub_title" />
-                    <h6 className="cnt">{fleetData.AmcTypeCount}</h6>
+                    <h6 className="cnt">{fleetData?.AmcTypeCount}</h6>
                   </div>
                 </div>
               </div>
@@ -309,7 +286,7 @@ const LandingPage = () => {
                         </div>
                         <div className="col-md-9 tile_main_div">
                           <h5>Due for Schedule Service</h5>
-                          <h6 className="cnt">{fleetData.ServiceSchedule}</h6>
+                          <h6 className="cnt">{fleetData?.ServiceSchedule}</h6>
                         </div>
                       </div>
                     </div>
@@ -339,8 +316,8 @@ const LandingPage = () => {
                           className="col-md-9 tile_main_div"
                           style={{ paddingRight: "10px" }}
                         >
-                          <span>Due for Renewal</span>
-                          <h6 className="cnt">{fleetData.Renewal}</h6>
+                          <h5>Due for Renewal</h5>
+                          <h6 className="cnt">{fleetData?.Renewal}</h6>
                         </div>
                       </div>
                     </div>
@@ -363,8 +340,9 @@ const LandingPage = () => {
           setIsOpen={setIsOpen}
           handleClickActive={handleClickActive}
           isOpen={isOpen}
-          ServiceSchedule={ServiceSchedule}
+          ServiceSchedule={fleetData?.ServiceSchedule}
           renewable={renewable}
+          Renewal={fleetData?.Renewal}
         />
       )}
     </>
