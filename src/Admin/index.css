@@ -72,3 +72,6 @@ label {
   opacity: 0.7;
   font-family: sans-serif;
 }
+.css-1nmdiq5-menu {
+  z-index: 10 !important;
+}

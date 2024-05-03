@@ -92,7 +92,7 @@ function Header() {
             <Link to="/admin">
               <img src={HomeIcon} alt="HomeIcon" className="home_img" />
             </Link>
-            {userData?.NameList && (
+            {userData?.NameList && !pathname.includes("/admin") && (
               <div className="position-relative" ref={dropdownRef}>
                 <div
                   onClick={() => setShowDropDown(!showDropdown)}

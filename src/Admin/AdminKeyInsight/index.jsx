@@ -19,7 +19,7 @@ import FilterSection from "../AdminHome/FilterSection";
 
 function AdminKeyInsight() {
   const token = localStorage.getItem("Token");
-  const { arnNumber } = useSelector((state) => state.homeApi);
+  const { arnNumber, arnValues } = useSelector((state) => state.homeApi);
   const [FleetUptimeX, setFleetUptimeX] = useState([]);
   const [FleetUptimeY, setFleetUptimeY] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -61,13 +61,11 @@ function AdminKeyInsight() {
   };
 
   const getkeyInsightsdataHandler = async () => {
-    if (!arnNumber) {
-      return;
-    }
+    if (!arnValues) return;
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnNumber?.value);
+      formData.append("arn_no", arnValues);
       formData.append("vas", vasType?.value);
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
@@ -85,16 +83,11 @@ function AdminKeyInsight() {
   };
 
   const FleetupTimehandler = async () => {
-    if (
-      Object?.keys(arnNumber)?.length === 0 &&
-      arnNumber?.constructor === Object
-    )
-      return;
-
+    if (!arnValues) return;
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("ARN-Number", arnNumber?.value);
+      formData.append("ARN-Number", arnValues);
       formData.append("Vas-type", vasType?.value);
       formData.append("Token", token);
       const response = await ApiInterface.getFleetUptime(formData);
@@ -130,7 +123,7 @@ function AdminKeyInsight() {
     getvasdataHandler();
     FleetupTimehandler();
     getkeyInsightsdataHandler();
-  }, [arnNumber]);
+  }, []);
 
   const searchBasedOnVas = () => {
     getkeyInsightsdataHandler();

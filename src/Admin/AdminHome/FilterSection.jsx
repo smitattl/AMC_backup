@@ -13,6 +13,7 @@ import {
   setVehicleNumber,
   setMobileNo,
   resetFields,
+  setArnValues,
 } from "../../store/Slices/homeAPISlice";
 import { searchOptions } from "../../StaticTableData";
 import { useLocation } from "react-router-dom";
@@ -76,14 +77,11 @@ function FilterSection({
         const allOption = { value: "all", label: "ALL" };
         let arnListWithAll;
         if (arnData.length > 1) {
-          arnListWithAll = [...arnData, allOption];
-          dispatch(setArnListForAdmin(arnListWithAll));
-          dispatch(setArnNumber(arnListWithAll[0]));
+          arnListWithAll = [allOption, ...arnData];
         } else if (arnData.length === 1) {
           arnListWithAll = arnData;
-          dispatch(setArnNumber(arnListWithAll));
-          dispatch(setArnListForAdmin(arnListWithAll));
         }
+        dispatch(setArnListForAdmin(arnListWithAll));
       }
     } catch (error) {
       console.error("Error fetching account names:", error);
@@ -159,6 +157,17 @@ function FilterSection({
   useEffect(() => {
     if (mobileNo) getARNPanHandler();
   }, [mobileNo]);
+
+  useEffect(() => {
+    if (arnNumber.value === "all") {
+      const values = arnListForAdmin
+        .filter((option) => option.value !== "all")
+        .map((option) => option.value);
+      dispatch(setArnValues(values));
+    } else {
+      dispatch(setArnValues(arnNumber.value));
+    }
+  }, [arnNumber]);
 
   return (
     <Form className="filter_wrapper">
@@ -256,7 +265,9 @@ function FilterSection({
             <Select
               value={arnNumber}
               options={arnListForAdmin}
-              onChange={(option) => dispatch(setArnNumber(option))}
+              onChange={(option) => {
+                dispatch(setArnNumber(option));
+              }}
               isSearchable
               placeholder="Type to search..."
               noOptionsMessage={() => "No options found"}

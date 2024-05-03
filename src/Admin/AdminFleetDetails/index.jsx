@@ -9,17 +9,18 @@ import FilterSection from "../AdminHome/FilterSection";
 import Loading from "../../components/Loading/Loading";
 
 function AdminFleetDetails() {
-  const { arnNumber } = useSelector((state) => state.homeApi);
+  const { arnValues } = useSelector((state) => state.homeApi);
   const [amcChartData, setAmcChartData] = useState([]);
   const [fmsChartData, setFmsChartData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
+  console.log(arnValues);
 
   const getAmcdataHandler = async () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnNumber.value);
+      formData.append("arn_no", arnValues);
       const response = await ApiInterface.getAmcCountData(formData);
       if (response.status === 200) {
         const amcData = response?.data?.amc_count?.map((item) => ({
@@ -44,7 +45,7 @@ function AdminFleetDetails() {
     try {
       const formData = new FormData();
       formData.append("Section", element);
-      formData.append("ARN-Number", arnNumber.value);
+      formData.append("ARN-Number", arnValues);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         setTableData(response?.data?.RowData ?? []);
@@ -57,11 +58,9 @@ function AdminFleetDetails() {
   };
 
   useEffect(() => {
-    if (arnNumber) {
-      getAmcdataHandler();
-      getDetailedViewHandler("VehicleCount");
-    }
-  }, [arnNumber]);
+    getAmcdataHandler();
+    getDetailedViewHandler("VehicleCount");
+  }, []);
 
   const searchFilterhandler = () => {
     getAmcdataHandler();

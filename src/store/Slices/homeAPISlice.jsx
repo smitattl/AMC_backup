@@ -10,6 +10,7 @@ const initialState = {
   vehicleNumber: "",
   panNumber: "",
   mobileNo: "",
+  arnValues: "",
 };
 
 const homeApiSlice = createSlice({
@@ -40,6 +41,9 @@ const homeApiSlice = createSlice({
     setMobileNo(state, action) {
       state.mobileNo = action.payload;
     },
+    setArnValues(state, action) {
+      state.arnValues = action.payload;
+    },
     resetFields(state) {
       state.arnNumber = initialState.arnNumber;
       state.fleetData = initialState.fleetData;
@@ -62,5 +66,6 @@ export const {
   setPanNumber,
   setMobileNo,
   resetFields,
+  setArnValues,
 } = homeApiSlice.actions;
 export default homeApiSlice.reducer;
