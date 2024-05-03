@@ -13,25 +13,26 @@ import AMCType from "../../images/AMC_Type.png";
 import product from "../../images/product.png";
 import "./HomePage.css";
 import Loading from "../../components/Loading/Loading";
+
 import { useDispatch, useSelector } from "react-redux";
-import arnSlice, {
+import {
   setArnList,
-  setArnNumber,
   setFleetData,
   setParams,
+  setArnNumber,
   setUserData,
+  setUserMobile,
 } from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
 import QuickActionModal from "./QuickActionModal";
-import { decrypt } from "../../utils";
 
-const LandingPage = () => {
+const LandingPage = ({ setWrongUser, userEntryCount }) => {
   const { param1, param2 } = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
 
   const token = localStorage.getItem("Token");
-  const { arnList, userData, arnNumber, fleetData } = useSelector(
+  const { arnList, userData, userMobile, arnNumber, fleetData } = useSelector(
     (state) => state.arn
   );
 
@@ -51,6 +52,40 @@ const LandingPage = () => {
   const [Rowdata, setRowdata] = useState([]);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
 
+  const getDecryptedDataHandler = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("DataOne", param1);
+      formData.append("DataTwo", param2);
+      const response = await ApiInterface.getDecryptedData(formData);
+      if (response.status === 200) {
+        const myDecodedToken = decodeToken(response.data.Token);
+        localStorage.setItem("Token", response.data.Token);
+        dispatch(setArnNumber(myDecodedToken.ARN[0]));
+        localStorage.setItem("ARN-Number", myDecodedToken.ARN[0]);
+        localStorage.setItem(
+          "ARN-NumberList",
+          JSON.stringify(myDecodedToken.ARN)
+        );
+        localStorage.setItem("ARN-Contact", myDecodedToken.MobNo);
+        const arnList = myDecodedToken?.ARN;
+        const mobileNumber = myDecodedToken.MobNo;
+        dispatch(setArnList([...arnList, "All"]));
+        dispatch(setUserMobile(mobileNumber));
+
+        setWrongUser(false);
+      } else if (response.status !== 200) setWrongUser(true);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getDecryptedDataHandler();
+  }, []);
+
   const getGenericInformationHandler = async () => {
     try {
       setLoading(true);
@@ -65,25 +100,6 @@ const LandingPage = () => {
       console.log(error);
       setLoading(false);
     }
-  };
-
-  const getARNDetailsHandler = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("ARN-Number", arnNumber);
-      formData.append("Token", token);
-      const response = await ApiInterface.getARNDetails(formData);
-      if (response.status === 200) {
-        localStorage.setItem("ARN-Name", response.data.NameList);
-        const pan = response?.data?.pan;
-        dispatch(setUserData(response.data));
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
   };
 
   const getDetailedViewHandler = async (element) => {
@@ -130,12 +146,6 @@ const LandingPage = () => {
       setActiveAccordionItem("1");
     }
   };
-
-  useEffect(() => {
-    if (arnNumber) {
-      getARNDetailsHandler();
-    }
-  }, []);
 
   useEffect(() => {
     if (arnNumber) {
@@ -198,9 +208,8 @@ const LandingPage = () => {
               <p style={{ fontWeight: "bold" }}>
                 Contact Details:
                 <span style={{ fontFamily: "sans-serif" }}>
-                  {userData.MobNo &&
-                    userData.MobNo?.substring(0, userData.MobNo.length - 6) +
-                      "******"}
+                  {userMobile &&
+                    userMobile?.substring(0, userMobile.length - 6) + "******"}
                 </span>
               </p>
             </div>

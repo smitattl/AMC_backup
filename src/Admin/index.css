@@ -4,7 +4,7 @@
   padding: 10px 0;
 }
 .layout_wrapper {
-  padding-top: 120px;
+  padding-top: 90px;
   overflow: hidden;
 }
 .filter_wrapper {
@@ -19,15 +19,56 @@
 }
 .search_button {
   background: #27292f;
-  padding: 7px 30px;
+  padding: 8px 30px;
   color: white;
   height: max-content;
   border: 1px solid #27292f;
   border-radius: 5px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  font-size: 13px;
 }
 .search_button:hover {
   background: transparent;
   color: #27292f;
+}
+
+.form-control {
+  height: 37px;
+  font-size: 14px;
+}
+.mySelect__value-container {
+  height: 30px;
+  font-size: 14px;
+}
+.react-select__value-container {
+  height: 20px;
+}
+.css-13cymwt-control {
+  min-height: 30px !important;
+  padding: 0 4px;
+}
+.css-1dimb5e-singleValue {
+  margin-bottom: 5px;
+}
+.css-1xc3v61-indicatorContainer {
+  padding: 0;
+  margin-bottom: 0;
+}
+label {
+  font-size: 10px;
+}
+.title {
+  font-size: 22px;
+  font-weight: 600;
+}
+.subtitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+.title_second {
+  font-size: 20px;
+  font-weight: 500;
+  opacity: 0.7;
+  font-family: sans-serif;
 }

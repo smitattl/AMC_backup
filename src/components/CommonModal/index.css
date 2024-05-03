@@ -1,0 +1,53 @@
+.common_modal_Wrapper {
+  background: #fafafa65;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 101;
+  backdrop-filter: blur(4px);
+}
+.common_modal {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.219);
+}
+.common_modal h3 {
+  font-weight: 600;
+}
+
+.common_modal p {
+  font-weight: 600;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.common_modal button {
+  width: 100%;
+  background: #1f77b4;
+  border: 1px solid #1f77b4;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+}
+.common_modal button:hover {
+  background: white;
+  color: #1f77b4;
+}
+.common_modal img {
+  width: 17px;
+  height: 17px;
+}

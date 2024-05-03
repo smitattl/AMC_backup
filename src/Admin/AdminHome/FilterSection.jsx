@@ -15,10 +15,16 @@ import {
   resetFields,
 } from "../../store/Slices/homeAPISlice";
 import { searchOptions } from "../../StaticTableData";
-import { errorMsg } from "../../Config";
+import { useLocation } from "react-router-dom";
 
-function FilterSection({ searchFilterhandler = () => {} }) {
+function FilterSection({
+  searchFilterhandler = () => {},
+  VASOptions = [],
+  vasType,
+  setVasType,
+}) {
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const {
     arnNumber,
     selectedUser,
@@ -35,7 +41,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
   const handleInputChange = async () => {
     try {
       const body = {
-        ac_name: searchUserName,
+        ac_name: searchUserName.toUpperCase(),
       };
       const response = await ApiInterface.getuserNameData(body);
       if (response.status === 200) {
@@ -54,9 +60,9 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     if (
       Object.keys(selectedUser).length === 0 &&
       selectedUser.constructor === Object
-    ) {
+    )
       return;
-    }
+
     try {
       const body = {
         account_name: selectedUser.value,
@@ -70,11 +76,14 @@ function FilterSection({ searchFilterhandler = () => {} }) {
         const allOption = { value: "all", label: "ALL" };
         let arnListWithAll;
         if (arnData.length > 1) {
-          arnListWithAll = [allOption, ...arnData];
-        } else {
+          arnListWithAll = [...arnData, allOption];
+          dispatch(setArnListForAdmin(arnListWithAll));
+          dispatch(setArnNumber(arnListWithAll[0]));
+        } else if (arnData.length === 1) {
           arnListWithAll = arnData;
+          dispatch(setArnNumber(arnListWithAll));
+          dispatch(setArnListForAdmin(arnListWithAll));
         }
-        dispatch(setArnListForAdmin(arnListWithAll));
       }
     } catch (error) {
       console.error("Error fetching account names:", error);
@@ -166,6 +175,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
             placeholder="Select or enter a value..."
             noOptionsMessage={() => "Type to create a new value"}
             className="react-select"
+            classNamePrefix="mySelect"
           />
         </Form.Group>
         {searchType?.value === "account_name" ? (
@@ -181,7 +191,6 @@ function FilterSection({ searchFilterhandler = () => {} }) {
               placeholder="Type to search..."
               noOptionsMessage={() => "No options found"}
             />
-            {/* {!selectedUser && <span>{error}</span>} */}
           </Form.Group>
         ) : searchType?.value === "mobile_no" ? (
           <>
@@ -230,7 +239,6 @@ function FilterSection({ searchFilterhandler = () => {} }) {
               placeholder="Add value here"
               onChange={(e) => dispatch(setVehicleNumber(e.target.value))}
             />
-            {/* {!vehicleNumber && <span>{error}</span>} */}
           </Form.Group>
         ) : null}
         {searchType?.value === "arn_number" ? (
@@ -246,16 +254,24 @@ function FilterSection({ searchFilterhandler = () => {} }) {
           <Form.Group className="form_group">
             <Form.Label>ARN Number</Form.Label>
             <Select
-              value={
-                arnListForAdmin.length === 1 ? arnListForAdmin[0] : arnNumber
-              }
+              value={arnNumber}
               options={arnListForAdmin}
               onChange={(option) => dispatch(setArnNumber(option))}
               isSearchable
               placeholder="Type to search..."
               noOptionsMessage={() => "No options found"}
             />
-            {/* {!arnNumber && <span>{error}</span>} */}
+          </Form.Group>
+        )}
+        {pathname === "/admin/admin-key-insight" && VASOptions.length !== 0 && (
+          <Form.Group className="form_group">
+            <Form.Label>Vas Type</Form.Label>
+            <Select
+              options={VASOptions}
+              value={vasType}
+              onChange={(option) => setVasType(option)}
+              className="react-select"
+            />
           </Form.Group>
         )}
         <button

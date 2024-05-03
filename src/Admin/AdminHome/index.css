@@ -22,24 +22,14 @@
   border-color: transparent;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
-h2 {
-  font-size: 25px;
-}
-h5 {
-  font-size: 18px;
-}
 
-h5,
-h2 {
-  font-weight: 700 !important;
-}
 .card {
   background: white;
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.119);
   padding: 20px;
   width: 33%;
-  max-width: 300px;
+  max-width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,12 +40,12 @@ h2 {
   transition: 0.3s;
 }
 .card_img {
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
 }
 .font_weight_700 {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
 }
 .card_second {
   background: white;
@@ -78,11 +68,20 @@ h2 {
   object-fit: contain;
 }
 .left_line {
-  background: black;
+  background: #042998;
   height: 30px;
-  width: 5px;
-  border-radius: 0 5px 5px 0;
+  width: 4px;
+  border-radius: 0 10px 10px 0;
 }
 .text_blue {
+  color: #042998;
+}
+.accordion_title {
+  background-color: #d6e5f9;
+  border: 1px solid #abcdfaba;
+  padding: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   color: #042998;
 }

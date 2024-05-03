@@ -376,12 +376,12 @@ export const monthNames = [
 
 export const searchOptions = [
   {
-    label: "Account Name",
-    value: "account_name",
-  },
-  {
     label: "ARN Number",
     value: "arn_number",
+  },
+  {
+    label: "Account Name",
+    value: "account_name",
   },
   {
     label: "Vehicle Registration Number",

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
 import he from "he";
 import PopupModal from "../../components/PopupModal";
+import CommonModal from "../CommonModal";
+import { Tooltip } from "react-tooltip";
 
 function TableInSightsComp({
   heading = "",
@@ -9,7 +10,6 @@ function TableInSightsComp({
   tabledata = [],
   tableheader = [],
   FleetDetailsColumns,
-  // FleetDetailsData,
   tabledataTwo = [],
   tableheaderForTwo = [],
   tabledataFive = [],
@@ -17,6 +17,7 @@ function TableInSightsComp({
   fleetTurn = false,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showLink, setShowLink] = useState(false);
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -25,8 +26,6 @@ function TableInSightsComp({
   const [indexTAT, setindexTAT] = useState();
 
   const handleTdClick = (headerresp, header) => {
-    // console.log("TAT FleetDetailsData ----------------->", tableheader[0].title);
-    // alert("test");
     if (headerresp !== 0 && tableheader[0].title !== "All Jobs") {
       setindexTAT(header);
       setIsModalOpen(true);
@@ -63,26 +62,67 @@ function TableInSightsComp({
                               if (
                                 header.accessor === "Fleet_Mileage" ||
                                 fleetTurn
-                              )
+                              ) {
                                 handleTdClick(row[header.accessor], cellIndex);
+                              } else if (header.accessor === "active_vehicles")
+                                setShowLink(!showLink);
                             }}
                             className={
-                              header.accessor === "Fleet_Mileage" || fleetTurn
-                                ? "fleet_link"
-                                : ""
+                              header.accessor === "Fleet_Mileage" ||
+                              header.accessor === "active_vehicles" ||
+                              fleetTurn
+                                ? "fleet_link position-relative"
+                                : "position-relative"
                             }
                           >
-                            {row[header.accessor] || "0"}
+                            <span
+                              data-tooltip-id="fleetedge_link"
+                              data-tooltip-content="Click here for Fleetedge"
+                              data-tooltip-place="bottom"
+                              onClick={() =>
+                                window.open(
+                                  "https://fleetedge.home.tatamotors/auth/login"
+                                )
+                              }
+                            >
+                              {row[header.accessor || "0"]}
+                            </span>
+                            <Tooltip id="fleetedge_link" />
                           </td>
                         ))}
                       </tr>
                     );
                   })
                 ) : (
-                  // Render a single row with "0" in each cell if tabledata is empty
                   <tr>
                     {tableheader.map((header, cellIndex) => (
-                      <td key={cellIndex}>0</td>
+                      <td
+                        key={cellIndex}
+                        // onClick={() => {
+                        //   if (header.accessor === "active_vehicles") {
+                        //     setShowLink(!showLink);
+                        //   }
+                        // }}
+                        className={
+                          header.accessor === "active_vehicles"
+                            ? "fleet_link position-relative"
+                            : "position-relative"
+                        }
+                      >
+                        <span
+                          data-tooltip-id="fleetedge_link"
+                          data-tooltip-content="Click here for Fleetedge"
+                          data-tooltip-place="bottom"
+                          onClick={() =>
+                            window.open(
+                              "https://fleetedge.home.tatamotors/auth/login"
+                            )
+                          }
+                        >
+                          0
+                        </span>
+                        <Tooltip id="fleetedge_link" />
+                      </td>
                     ))}
                   </tr>
                 )}
@@ -109,7 +149,6 @@ function TableInSightsComp({
                               <td key={cellIndex}>
                                 <a
                                   onClick={() =>
-                                    // handleTdClick(row[header.accessor])
                                     handleTdClick(
                                       row[header.accessor],
                                       cellIndex
@@ -124,7 +163,6 @@ function TableInSightsComp({
                         );
                       })
                     ) : (
-                      // Render a single row with "0" in each cell if tabledata is empty
                       <tr>
                         {tableheaderForTwo.map((header, cellIndex) => (
                           <td key={cellIndex}>0</td>
@@ -156,14 +194,13 @@ function TableInSightsComp({
                               <td key={cellIndex}>
                                 <a
                                   onClick={() =>
-                                    // handleTdClick(row[header.accessor])
                                     handleTdClick(
                                       row[header.accessor],
                                       cellIndex
                                     )
                                   }
                                 >
-                                  {row[header.accessor] || "0"}
+                                  {row[header.accessor || "0"]}
                                 </a>
                               </td>
                             ))}
@@ -171,7 +208,6 @@ function TableInSightsComp({
                         );
                       })
                     ) : (
-                      // Render a single row with "0" in each cell if tabledata is empty
                       <tr>
                         {tableheaderForFive.map((header, cellIndex) => (
                           <td key={cellIndex}>0</td>
@@ -189,10 +225,30 @@ function TableInSightsComp({
         isOpen={isModalOpen}
         onClose={closeModal}
         FleetDetailsColumns={FleetDetailsColumns}
-        // FleetDetailsData={FleetDetailsData}
         fleetTil={FleetTitle}
         indexClick={indexTAT}
       />
+      {/* {showLink && (
+        <CommonModal
+          setCloseModal={setShowLink}
+          children={
+            <React.Fragment>
+              <p>
+                You can redirect to FleetEdge, our comprehensive fleet
+                management platform
+              </p>
+
+              <button
+                onClick={() =>
+                  window.open("https://fleetedge.home.tatamotors/auth/login")
+                }
+              >
+                Redirect to FLeetedge
+              </button>
+            </React.Fragment>
+          }
+        />
+      )} */}
     </>
   );
 }

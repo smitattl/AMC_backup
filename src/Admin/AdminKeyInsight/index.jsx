@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import CommonFilterSection from "../CommonComps/CommonFilterSection";
 import BarGraph from "../../components/graph/BarGraph";
 import TableInSightsComp from "../../components/TableInsightsComp";
 import Speedometer from "../../images/speedometer.png";
@@ -16,6 +15,7 @@ import {
 import { monthNames } from "../../StaticTableData";
 import { ApiInterface } from "../../API";
 import Loading from "../../components/Loading/Loading";
+import FilterSection from "../AdminHome/FilterSection";
 
 function AdminKeyInsight() {
   const token = localStorage.getItem("Token");
@@ -61,15 +61,14 @@ function AdminKeyInsight() {
   };
 
   const getkeyInsightsdataHandler = async () => {
-    if (Object.keys(arnNumber).length === 0 && arnNumber.constructor === Object)
+    if (!arnNumber) {
       return;
-    if (Object.keys(vasType).length === 0 && vasType.constructor === Object)
-      return;
+    }
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnNumber.value);
-      formData.append("vas", vasType.value);
+      formData.append("arn_no", arnNumber?.value);
+      formData.append("vas", vasType?.value);
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
@@ -84,15 +83,19 @@ function AdminKeyInsight() {
     }
     setLoading(false);
   };
+
   const FleetupTimehandler = async () => {
-    if (Object.keys(arnNumber).length === 0 && arnNumber.constructor === Object)
+    if (
+      Object?.keys(arnNumber)?.length === 0 &&
+      arnNumber?.constructor === Object
+    )
       return;
 
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("ARN-Number", arnNumber.value);
-      formData.append("Vas-type", vasType.value);
+      formData.append("ARN-Number", arnNumber?.value);
+      formData.append("Vas-type", vasType?.value);
       formData.append("Token", token);
       const response = await ApiInterface.getFleetUptime(formData);
       if (response.status === 200) {
@@ -140,7 +143,7 @@ function AdminKeyInsight() {
         <Loading />
       ) : (
         <>
-          <CommonFilterSection
+          <FilterSection
             VASOptions={VASOptions}
             setVasType={setVasType}
             vasType={vasType}
@@ -149,14 +152,16 @@ function AdminKeyInsight() {
           <div className="container_wrapper">
             <div className="row mt-3">
               <div className="col-md-6 ">
-                <div className="view-box">
-                  <div className="card_heading pt10">Fleet Up-Time</div>
-                  <div className="box-body p-0">
-                    <div className="js-plotly-plot">
-                      <BarGraph data={barGraphData} />
+                {barGraphData.length !== 0 && (
+                  <div className="view-box">
+                    <div className="card_heading pt10">Fleet Up-Time</div>
+                    <div className="box-body p-0">
+                      <div className="js-plotly-plot">
+                        <BarGraph data={barGraphData} />
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
               <div
                 className="col-md-6"

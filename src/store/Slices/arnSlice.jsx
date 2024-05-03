@@ -5,9 +5,12 @@ const initialState = {
   arnNumber: "",
   activeAccordionItem: null,
   userData: [],
+  userMobile: "",
   userEntryCount: null,
   params: {},
   fleetData: {},
+  showTableForAdminOne: false,
+  showTableForAdminTwo: false,
 };
 
 const arnSlice = createSlice({
@@ -35,6 +38,15 @@ const arnSlice = createSlice({
     setFleetData(state, action) {
       state.fleetData = action.payload;
     },
+    setUserMobile(state, action) {
+      state.userMobile = action.payload;
+    },
+    setShowTableForAdminOne(state, action) {
+      state.showTableForAdminOne = action.payload;
+    },
+    setShowTableForAdminTwo(state, action) {
+      state.showTableForAdminTwo = action.payload;
+    },
   },
 });
 
@@ -46,5 +58,8 @@ export const {
   setParams,
   setArnNumber,
   setFleetData,
+  setUserMobile,
+  setShowTableForAdminOne,
+  setShowTableForAdminTwo,
 } = arnSlice.actions;
 export default arnSlice.reducer;

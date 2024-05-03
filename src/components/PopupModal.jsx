@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Button, Modal } from "react-bootstrap";
 import BasicDataTable from "./BasicTable/BasicDataTable";
-// import CustomTable from "./Table/CustomTable"
 
 const PopupModal = ({
   isOpen,
@@ -18,19 +17,11 @@ const PopupModal = ({
           <Modal.Title>Fleet Data</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* {FleetDetailsData !== undefined ? (
-                    // <Loading />
-                    "loading"
-                ) : (
-                    <BasicDataTable columns={FleetDetailsColumns} data={FleetDetailsData}/>
-                )} */}
           <BasicDataTable
             columns={FleetDetailsColumns}
             indextable={indexClick}
             title={fleetTil}
           />
-          {/* <BasicTable columns={FleetDetailsColumns} data={FleetDetailsData}/> */}
-          {/* <CustomTable columns={FleetDetailsColumns} data={FleetDetailsData}/> */}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onClose}>

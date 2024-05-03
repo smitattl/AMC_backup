@@ -4,7 +4,6 @@ import AdminHome from "./AdminHome";
 import AdminKeyInsight from "./AdminKeyInsight";
 import AdminFleetDetails from "./AdminFleetDetails";
 import "./index.css";
-import CommonFilterSection from "./CommonComps/CommonFilterSection";
 
 function Admin() {
   return (

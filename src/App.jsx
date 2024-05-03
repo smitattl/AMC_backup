@@ -9,7 +9,7 @@ import {
   faCaretSquareDown,
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Watermark from "./components/WaterMark/WaterMark";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -21,6 +21,7 @@ import {
   setArnNumber,
   setUserData,
   setUserEntryCount,
+  setUserMobile,
 } from "./store/Slices/arnSlice";
 import { Toaster } from "react-hot-toast";
 import { decodeToken } from "react-jwt";
@@ -29,6 +30,7 @@ import WarningModal from "./components/WarningModal";
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
 function App() {
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
@@ -59,7 +61,6 @@ function App() {
     const resetInactivityTimeout = () => {
       clearTimeout(inactivityTimeout);
       inactivityTimeout = setTimeout(() => {
-        console.log("User inactive for too long. Logging out...");
         LogoutSession();
       }, 1800000);
     };
@@ -82,37 +83,6 @@ function App() {
   useEffect(() => {
     const storedToken = localStorage.getItem("Token");
     setIsLoggedIn(!!storedToken);
-  }, []);
-
-  const getDecryptedDataHandler = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("DataOne", params.param1);
-      formData.append("DataTwo", params.param2);
-      const response = await ApiInterface.getDecryptedData(formData);
-      if (response.status === 200) {
-        const myDecodedToken = decodeToken(response.data.Token);
-        localStorage.setItem("Token", response.data.Token);
-        dispatch(setArnNumber(myDecodedToken.ARN[0]));
-        localStorage.setItem("ARN-Number", myDecodedToken.ARN[0]);
-        localStorage.setItem(
-          "ARN-NumberList",
-          JSON.stringify(myDecodedToken.ARN)
-        );
-        localStorage.setItem("ARN-Contact", myDecodedToken.MobNo);
-        const arnList = myDecodedToken?.ARN;
-        dispatch(setArnList([...arnList, "All"]));
-        setWrongUser(false);
-      } else if (response.status !== 200) setWrongUser(true);
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (userEntryCount < 100) getDecryptedDataHandler();
   }, []);
 
   const updateLoginEntriesHandler = async () => {
@@ -141,16 +111,10 @@ function App() {
   };
 
   useEffect(() => {
-    if (token && userData) {
+    if (token && userData && !pathname.includes("/admin")) {
       getLoginEntryCounthandler();
     }
   }, [userData]);
-
-  useEffect(() => {
-    if (arnNumber) {
-      getARNDetailsHandler();
-    }
-  }, []);
 
   const getARNDetailsHandler = async () => {
     setLoading(true);
@@ -160,10 +124,7 @@ function App() {
       formData.append("Token", token);
       const response = await ApiInterface.getARNDetails(formData);
       if (response.status === 200) {
-        localStorage.setItem("ARN-Name", response.data.NameList);
-        const pan = response?.data?.pan;
         dispatch(setUserData(response.data));
-        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -172,14 +133,20 @@ function App() {
   };
 
   useEffect(() => {
-    if (userEntryCount <= 100 && token && userData) {
+    if (userEntryCount <= 100 && !pathname.includes("/admin")) {
       updateLoginEntriesHandler();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (arnNumber) {
+      getARNDetailsHandler();
     }
   }, []);
 
   return (
     <div>
-      {wrongUser ? (
+      {wrongUser && !pathname.includes("/admin") ? (
         <WarningModal />
       ) : (
         <React.Fragment>
@@ -211,7 +178,10 @@ function App() {
             <React.Fragment>
               <Header />
               <Watermark />
-              <IndexRoute />
+              <IndexRoute
+                setWrongUser={setWrongUser}
+                userEntryCount={userEntryCount}
+              />
               <Footer />
             </React.Fragment>
           )}

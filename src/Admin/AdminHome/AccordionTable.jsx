@@ -4,15 +4,32 @@ import {
   dueforRenewalColumns,
 } from "../../StaticTableData";
 import CommonTable from "../CommonComps/CommonTable";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setShowTableForAdmin,
+  setShowTableForAdminOne,
+  setShowTableForAdminTwo,
+} from "../../store/Slices/arnSlice";
 
 function AccordionTable({ serviceScheduleData = [], renewalData = [] }) {
+  const { showTableForAdminOne, showTableForAdminTwo } = useSelector(
+    (state) => state.arn
+  );
+  const dispatch = useDispatch();
   return (
     <div className="container_wrapper">
-      <div name="section1">
-        <div className="d-flex gap-3 align-items-center my-4">
-          <div className="left_line" />
-          <h3 className="m-0">Due for Schedule Service</h3>
-        </div>
+      <div
+        name="section1"
+        className="d-flex gap-3 align-items-center my-4 accordion_title"
+        onClick={() => {
+          dispatch(setShowTableForAdminOne(!showTableForAdminOne));
+          dispatch(setShowTableForAdminTwo(false));
+        }}
+      >
+        <div className="left_line" />
+        <h3 className="m-0 title_second">Due for Schedule Service</h3>
+      </div>
+      {showTableForAdminOne && (
         <div className="box-body p-0">
           <div className="js-plotly-plot">
             <CommonTable
@@ -21,16 +38,25 @@ function AccordionTable({ serviceScheduleData = [], renewalData = [] }) {
             />
           </div>
         </div>
-      </div>
-      <div className="d-flex gap-3 align-items-center my-4" name="section2">
+      )}
+      <div
+        className="d-flex gap-3 align-items-center my-4 accordion_title"
+        name="section2"
+        onClick={() => {
+          dispatch(setShowTableForAdminOne(false));
+          dispatch(setShowTableForAdminTwo(!showTableForAdminTwo));
+        }}
+      >
         <div className="left_line" />
-        <h3 className="m-0">Due for Renewal</h3>
+        <h3 className="m-0 title_second">Due for Renewal</h3>
       </div>
-      <div className="box-body p-0">
-        <div className="js-plotly-plot">
-          <CommonTable columns={dueforRenewalColumns} data={renewalData} />
+      {showTableForAdminTwo && (
+        <div className="box-body p-0">
+          <div className="js-plotly-plot">
+            <CommonTable columns={dueforRenewalColumns} data={renewalData} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

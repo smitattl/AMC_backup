@@ -7,6 +7,7 @@
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
     rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   border: 1px solid #cdced563;
+  font-size: 12px !important;
 }
 .header_contaier {
   width: 90%;
@@ -15,14 +16,12 @@
 }
 
 .vas_title {
-  font-size: 16px;
   color: #27292f;
   font-weight: 700;
 }
 a {
   color: #27292f;
   text-decoration: none;
-  font-size: 15px;
   font-weight: 700;
 }
 .home_icon {
@@ -30,7 +29,7 @@ a {
   height: 20px;
 }
 .arn_no_text {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   display: flex;
   justify-content: space-between;
@@ -54,7 +53,6 @@ a {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  font-size: 15px;
   background: #27292f;
   color: white;
   cursor: pointer;
@@ -81,4 +79,66 @@ a {
   backdrop-filter: blur(4px);
   background-color: rgba(249, 249, 249, 0.384);
   width: 100%;
+}
+.menu_section {
+  position: absolute;
+  top: 40px;
+  width: 250px;
+  background: white;
+  right: -100px;
+  height: auto;
+  z-index: 101;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.212);
+}
+
+.intials {
+  background: black;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid black;
+  font-weight: 500;
+  transition: transform 0.3s ease-in-out;
+}
+
+.intials:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  background: transparent;
+  color: black;
+}
+
+.menu_section h6 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.menu_section button {
+  width: 100%;
+  background: black;
+  border: 1px solid black;
+  padding: 5px 20px;
+  color: white;
+  border-radius: 5px;
+}
+.menu_section button:hover {
+  background: white;
+  color: black;
+}
+.activeLink {
+  font-weight: 600;
+  color: #1f77b4;
+}
+.home_img {
+  width: 20px;
+  height: 20px;
 }

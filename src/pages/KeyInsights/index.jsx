@@ -19,6 +19,7 @@ import BarGraph from "../../components/graph/BarGraph";
 import TableInSightsComp from "../../components/TableInsightsComp";
 import { monthNames } from "../../StaticTableData";
 import { useSelector } from "react-redux";
+import PopupModal from "../../components/PopupModal";
 
 const KeyInsights = () => {
   const { arnList } = useSelector((state) => state.arn);
@@ -86,6 +87,7 @@ const KeyInsights = () => {
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
+        console.log(response.data);
         setTatDetails(data.tat_details);
         setServiceDetails(data.service_details);
         setDueForService(data.due_for_service);
@@ -212,14 +214,16 @@ const KeyInsights = () => {
             </div>
             <div className="row">
               <div className="col-md-6 ">
-                <div className="view-box">
-                  <div className="card_heading pt10">Fleet Up-Time</div>
-                  <div className="box-body p-0">
-                    <div className="js-plotly-plot">
-                      <BarGraph data={barGraphData} />
+                {barGraphData.length > 0 && (
+                  <div className="view-box">
+                    <div className="card_heading pt10">Fleet Up-Time</div>
+                    <div className="box-body p-0">
+                      <div className="js-plotly-plot">
+                        <BarGraph data={barGraphData} />
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
               <div
                 className="col-md-6"
@@ -234,7 +238,7 @@ const KeyInsights = () => {
                   image={Speedometer}
                   tabledata={totalActiveVehicle}
                   tableheader={tableheaderOne}
-                  heading={`Total Active Vehicle Under Fleetedge`}
+                  heading="Total Active Vehicle Under Fleetedge"
                   FleetDetailsColumns={FleetDetailsColumns}
                 />
                 <TableInSightsComp

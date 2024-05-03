@@ -6,15 +6,15 @@ import product from "../../images/product.png";
 function FleetOverView({ fleetData = {} }) {
   return (
     <div className="fleet_overview container_wrapper">
-      <h2 className="text-center">Fleet Overview</h2>
-      <div className="w-full flex-wrap  py-2 d-flex justify-content-around  gap-3">
+      <h2 className="text-center title">Fleet Overview</h2>
+      <div className="w-full flex-wrap  py-2 d-flex justify-content-evenly   gap-3">
         <div className="card">
-          <h5 className="opacity-75">Total Fleet Count</h5>
+          <h5 className="opacity-75 subtitle">Total Fleet Count</h5>
           <img src={vehiclecount} alt="/" className="card_img" />
           <div className="font_weight_700">{fleetData.VehCount || "0"}</div>
         </div>
         <div className="card">
-          <h5 className="opacity-75">Fleet Under VAS</h5>
+          <h5 className="opacity-75 subtitle">Fleet Under VAS</h5>
           <img src={AMCType} alt="/" className="card_img" />
           <div className="d-flex w-50 mx-auto mt-4 justify-content-between">
             <div className="d-flex flex-column gap-1">
@@ -30,7 +30,7 @@ function FleetOverView({ fleetData = {} }) {
           </div>
         </div>
         <div className="card">
-          <h5 className="opacity-75">Fleet Under Fleetedge</h5>
+          <h5 className="opacity-75 subtitle">Fleet Under Fleetedge</h5>
           <img src={product} alt="/" className="card_img" />
           <div className="font_weight_700">{fleetData.AmcTypeCount || "0"}</div>
         </div>
