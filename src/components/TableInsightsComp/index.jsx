@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useState } from "react";
 import he from "he";
 import PopupModal from "../../components/PopupModal";
-import CommonModal from "../CommonModal";
 import { Tooltip } from "react-tooltip";
+import { setIndexTAT } from "../../store/Slices/customerSlice";
+import { useDispatch } from "react-redux";
 
 function TableInSightsComp({
   heading = "",
@@ -16,18 +17,17 @@ function TableInSightsComp({
   tableheaderForFive = [],
   fleetTurn = false,
 }) {
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showLink, setShowLink] = useState(false);
+  const [FleetTitle, setFleetTitel] = useState();
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
-  const [FleetTitle, setFleetTitel] = useState();
-  const [indexTAT, setindexTAT] = useState();
-
   const handleTdClick = (headerresp, header) => {
     if (headerresp !== 0 && tableheader[0].title !== "All Jobs") {
-      setindexTAT(header);
+      dispatch(setIndexTAT(header));
       setIsModalOpen(true);
       setFleetTitel(tableheader[0].title);
     }
@@ -75,19 +75,28 @@ function TableInSightsComp({
                                 : "position-relative"
                             }
                           >
-                            <span
-                              data-tooltip-id="fleetedge_link"
-                              data-tooltip-content="Click here for Fleetedge"
-                              data-tooltip-place="bottom"
-                              onClick={() =>
-                                window.open(
-                                  "https://fleetedge.home.tatamotors/auth/login"
-                                )
-                              }
-                            >
-                              {row[header.accessor || "0"]}
-                            </span>
-                            <Tooltip id="fleetedge_link" />
+                            {header.accessor === "active_vehicles" ? (
+                              <>
+                                <span
+                                  data-tooltip-id="fleetedge_link"
+                                  data-tooltip-content="Click here for Fleetedge"
+                                  data-tooltip-place="bottom"
+                                  onClick={() =>
+                                    window.open(
+                                      "https://fleetedge.home.tatamotors/auth/login"
+                                    )
+                                  }
+                                >
+                                  {row[header.accessor || 0]}
+                                </span>
+                                <Tooltip
+                                  id="fleetedge_link"
+                                  style={{ zIndex: "10" }}
+                                />
+                              </>
+                            ) : (
+                              row[header.accessor || 0]
+                            )}
                           </td>
                         ))}
                       </tr>
@@ -98,30 +107,34 @@ function TableInSightsComp({
                     {tableheader.map((header, cellIndex) => (
                       <td
                         key={cellIndex}
-                        // onClick={() => {
-                        //   if (header.accessor === "active_vehicles") {
-                        //     setShowLink(!showLink);
-                        //   }
-                        // }}
                         className={
                           header.accessor === "active_vehicles"
                             ? "fleet_link position-relative"
                             : "position-relative"
                         }
                       >
-                        <span
-                          data-tooltip-id="fleetedge_link"
-                          data-tooltip-content="Click here for Fleetedge"
-                          data-tooltip-place="bottom"
-                          onClick={() =>
-                            window.open(
-                              "https://fleetedge.home.tatamotors/auth/login"
-                            )
-                          }
-                        >
+                        {header.accessor === "active_vehicles" ? (
+                          <>
+                            <span
+                              data-tooltip-id="fleetedge_link"
+                              data-tooltip-content="Click here for Fleetedge"
+                              data-tooltip-place="bottom"
+                              onClick={() =>
+                                window.open(
+                                  "https://fleetedge.home.tatamotors/auth/login"
+                                )
+                              }
+                            >
+                              0
+                            </span>
+                            <Tooltip
+                              id="fleetedge_link"
+                              style={{ zIndex: "10" }}
+                            />
+                          </>
+                        ) : (
                           0
-                        </span>
-                        <Tooltip id="fleetedge_link" />
+                        )}
                       </td>
                     ))}
                   </tr>
@@ -226,29 +239,7 @@ function TableInSightsComp({
         onClose={closeModal}
         FleetDetailsColumns={FleetDetailsColumns}
         fleetTil={FleetTitle}
-        indexClick={indexTAT}
       />
-      {/* {showLink && (
-        <CommonModal
-          setCloseModal={setShowLink}
-          children={
-            <React.Fragment>
-              <p>
-                You can redirect to FleetEdge, our comprehensive fleet
-                management platform
-              </p>
-
-              <button
-                onClick={() =>
-                  window.open("https://fleetedge.home.tatamotors/auth/login")
-                }
-              >
-                Redirect to FLeetedge
-              </button>
-            </React.Fragment>
-          }
-        />
-      )} */}
     </>
   );
 }

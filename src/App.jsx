@@ -9,7 +9,7 @@ import {
   faCaretSquareDown,
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Watermark from "./components/WaterMark/WaterMark";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -17,15 +17,22 @@ import { ApiInterface } from "./API";
 import { useDispatch, useSelector } from "react-redux";
 import UserLoggedIn from "./components/UserLoggedIn";
 import {
-  setArnList,
-  setArnNumber,
+  setParams,
   setUserData,
   setUserEntryCount,
-  setUserMobile,
 } from "./store/Slices/arnSlice";
 import { Toaster } from "react-hot-toast";
-import { decodeToken } from "react-jwt";
 import WarningModal from "./components/WarningModal";
+import QuickActionModal from "./pages/LandingPage/QuickActionModal";
+import { setArnNumber, setUserMobile } from "./store/Slices/arnSlice";
+import { decodeToken } from "react-jwt";
+import {
+  setActiveAccordionItem,
+  setArnForCustomer,
+  setArnListForCustomer,
+  setArnValuesForCustomer,
+} from "./store/Slices/customerSlice";
+import Loading from "./components/Loading/Loading";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
@@ -34,9 +41,11 @@ function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = localStorage.getItem("Token");
-  const { userData, userEntryCount, params, arnNumber } = useSelector(
+  const { userData, userEntryCount, params } = useSelector(
     (state) => state.arn
   );
+  const { isOpen, arnValuesForCustomer, arnForCustomer, arnListForCustomer } =
+    useSelector((state) => state.customer);
   const [isLoggedIn, setIsLoggedIn] = useState(!!token);
   const [loading, setLoading] = useState(false);
   const [wrongUser, setWrongUser] = useState(false);
@@ -46,6 +55,13 @@ function App() {
     localStorage.clear();
     navigate("/thank-you");
     window.location.href = "https://buytrucknbus-osp3dev.home.tatamotors/";
+  };
+  const handleClickActive = (element) => {
+    if (element === "section1") {
+      dispatch(setActiveAccordionItem("0"));
+    } else if (element === "section2") {
+      dispatch(setActiveAccordionItem("1"));
+    }
   };
 
   useEffect(() => {
@@ -85,6 +101,43 @@ function App() {
     setIsLoggedIn(!!storedToken);
   }, []);
 
+  const getDecryptedDataHandler = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("DataOne", params.param1);
+      formData.append("DataTwo", params.param2);
+      const response = await ApiInterface.getDecryptedData(formData);
+      if (response.status === 200) {
+        localStorage.setItem("Token", response.data.Token);
+        const { ARN, MobNo, email_id, userName } = decodeToken(
+          response.data.Token
+        );
+        const userData = { MobNo, email_id, userName };
+        dispatch(setUserData(userData));
+        const arnData = ARN.map((name) => ({
+          value: name,
+          label: name,
+        }));
+        let arnListWithAll;
+        const allOption = { value: "all", label: "All" };
+        if (arnData.length > 1) {
+          arnListWithAll = [allOption, ...arnData];
+        } else {
+          arnListWithAll = arnData;
+        }
+        const preselectedArn =
+          arnListWithAll.length > 0 ? arnListWithAll[0] : null;
+        dispatch(setArnListForCustomer(arnListWithAll));
+        dispatch(setArnForCustomer(preselectedArn));
+        setWrongUser(false);
+      } else if (response.status !== 200) setWrongUser(true);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const updateLoginEntriesHandler = async () => {
     try {
       const formData = new FormData();
@@ -96,7 +149,7 @@ function App() {
     }
   };
 
-  const getLoginEntryCounthandler = async () => {
+  const getLoginEntryCountHandler = async () => {
     try {
       const formData = new FormData();
       formData.append("mobile_no", params.param1);
@@ -111,43 +164,44 @@ function App() {
   };
 
   useEffect(() => {
-    if (token && userData && !pathname.includes("/admin")) {
-      getLoginEntryCounthandler();
+    if (params.param1 !== undefined && !token && !pathname.includes("/admin")) {
+      getDecryptedDataHandler();
     }
-  }, [userData]);
-
-  const getARNDetailsHandler = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("ARN-Number", arnNumber);
-      formData.append("Token", token);
-      const response = await ApiInterface.getARNDetails(formData);
-      if (response.status === 200) {
-        dispatch(setUserData(response.data));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-  };
+  }, [token, params]);
 
   useEffect(() => {
-    if (userEntryCount <= 100 && !pathname.includes("/admin")) {
+    if (token && userData && !pathname.includes("/admin")) {
+      getLoginEntryCountHandler();
+    }
+  }, [token, userData]);
+
+  useEffect(() => {
+    if (
+      userEntryCount &&
+      userEntryCount <= 100 &&
+      !pathname.includes("/admin")
+    ) {
       updateLoginEntriesHandler();
     }
-  }, []);
+  }, [userEntryCount, pathname, updateLoginEntriesHandler]);
 
   useEffect(() => {
-    if (arnNumber) {
-      getARNDetailsHandler();
+    if (arnForCustomer?.value === "all") {
+      const values = arnListForCustomer
+        ?.filter((option) => option.value !== "all")
+        ?.map((option) => option.value);
+      dispatch(setArnValuesForCustomer(values));
+    } else {
+      dispatch(setArnValuesForCustomer(arnForCustomer?.value));
     }
-  }, []);
+  }, [arnForCustomer, arnListForCustomer, dispatch]);
 
   return (
     <div>
       {wrongUser && !pathname.includes("/admin") ? (
         <WarningModal />
+      ) : loading ? (
+        <Loading />
       ) : (
         <React.Fragment>
           <Toaster
@@ -186,6 +240,9 @@ function App() {
             </React.Fragment>
           )}
         </React.Fragment>
+      )}
+      {isOpen && !pathname.includes("/admin") && (
+        <QuickActionModal handleClickActive={handleClickActive} />
       )}
     </div>
   );

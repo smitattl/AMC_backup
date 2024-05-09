@@ -7,7 +7,6 @@ import {
   setShowTableForAdminOne,
   setShowTableForAdminTwo,
 } from "./store/Slices/arnSlice";
-import { apiDecryptionKey } from "./Config";
 
 export const LogoutSession = () => {
   const navigate = useLocation();
@@ -47,7 +46,7 @@ export const maskEmail = (email) => {
   if (atIndex === -1) return email;
   const maskedPart = email.slice(0, atIndex).replace(/./g, "*");
   const domainPart = email.slice(atIndex);
-  return maskedPart + domainPart;
+  return email.slice(0, 2) + maskedPart + domainPart;
 };
 
 export const NameInitials = ({ names }) => {

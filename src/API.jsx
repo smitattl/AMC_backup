@@ -61,20 +61,6 @@ export const ApiInterface = {
       data: body,
     }),
 
-  getFleetTatdetailsData: (body) =>
-    apiCall({
-      method: "POST",
-      url: "/fleet-TAT-detailed",
-      data: body,
-    }),
-
-  getTotalFleetDetailsData: (body) =>
-    apiCall({
-      method: "POST",
-      url: "/total-fleet-detailed",
-      data: body,
-    }),
-
   getTermsandCondition: (body) =>
     apiCall({
       method: "POST",
@@ -98,13 +84,6 @@ export const ApiInterface = {
     apiCall({
       method: "POST",
       url: "/Fleet-uptime",
-      data: body,
-    }),
-
-  getFleetUpTatDetails: (body) =>
-    apiCall({
-      method: "POST",
-      url: "/fleet-TAT-detailed",
       data: body,
     }),
 
@@ -138,6 +117,15 @@ export const ApiInterface = {
 
   // form data applications
   // homee pageapi
+
+  getTotalFleetDetailsData: (formData) =>
+    apiCall({
+      method: "POST",
+      url: "/total-fleet-detailed",
+      data: formData,
+      content_type: "multipart/form-data",
+    }),
+
   getVehicleDetails: (formData) =>
     apiCall({
       method: "POST",
@@ -150,14 +138,6 @@ export const ApiInterface = {
     apiCall({
       method: "POST",
       url: "/de-key",
-      data: formData,
-      content_type: "multipart/form-data",
-    }),
-
-  getARNDetails: (formData) =>
-    apiCall({
-      method: "POST",
-      url: "/ARN-details",
       data: formData,
       content_type: "multipart/form-data",
     }),
@@ -204,6 +184,18 @@ export const ApiInterface = {
       content_type: "multipart/form-data",
     }),
 
+  getKeyInsightsDataByChasis: (formData) =>
+    apiCall({
+      method: "POST",
+      url: "/get-chasis-bar-graph-data",
+      data: formData,
+    }),
+  getVehicledataforCustomer: (formData) =>
+    apiCall({
+      method: "POST",
+      url: "/",
+      data: formData,
+    }),
   checkLoginEntries: (formData) =>
     apiCall({
       method: "POST",

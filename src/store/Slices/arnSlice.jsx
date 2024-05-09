@@ -11,6 +11,7 @@ const initialState = {
   fleetData: {},
   showTableForAdminOne: false,
   showTableForAdminTwo: false,
+  chasis_no: "",
 };
 
 const arnSlice = createSlice({
@@ -41,6 +42,9 @@ const arnSlice = createSlice({
     setUserMobile(state, action) {
       state.userMobile = action.payload;
     },
+    setChasisNo(state, action) {
+      state.chasis_no = action.payload;
+    },
     setShowTableForAdminOne(state, action) {
       state.showTableForAdminOne = action.payload;
     },
@@ -61,5 +65,6 @@ export const {
   setUserMobile,
   setShowTableForAdminOne,
   setShowTableForAdminTwo,
+  setChasisNo,
 } = arnSlice.actions;
 export default arnSlice.reducer;

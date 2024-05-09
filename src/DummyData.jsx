@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export const tableheaderOne = [
   {
     title: "Total Active Vehicle Count Under Fleetedge",
@@ -60,7 +58,7 @@ export const tableheaderThree = [
   },
   {
     title: "Due for Scheduled Service",
-    accessor: "Due_for_Schedule_Service",
+    accessor: "Scheduled_service",
   },
   {
     title: "Schedule Services Availed",
@@ -68,7 +66,7 @@ export const tableheaderThree = [
   },
   {
     title: "Adherence",
-    accessor: "Adherence",
+    accessor: "Chassis_Count",
   },
 ];
 export const tableheaderFour = [
@@ -118,7 +116,7 @@ export const FleetDetailsColumns = [
   {
     width: 130,
     title: "DEF",
-    field: "DEF",
+    field: "DFE",
     enableSearch: true,
     enableFilter: true,
   },
@@ -187,13 +185,6 @@ export const FleetTATColumns = [
     enableSearch: true,
     enableFilter: true,
   },
-  // {
-  //   width: 130,
-  //   title: "Contract start Date",
-  //   field: "amc_Start_date",
-  //   enableSearch: true,
-  //   enableFilter: true,
-  // },
   {
     width: 140,
     title: "Contract End Date",
@@ -201,13 +192,6 @@ export const FleetTATColumns = [
     enableSearch: true,
     enableFilter: true,
   },
-  // {
-  //   width: 130,
-  //   title: "Start Kms",
-  //   field: "Amc_Start_Kms",
-  //   enableSearch: true,
-  //   enableFilter: true,
-  // },
   {
     width: 130,
     title: "Contract End KMs",
@@ -229,132 +213,23 @@ export const FleetTATColumns = [
     enableSearch: true,
     enableFilter: true,
   },
-  // {
-  //   width: 140,
-  //   title: "Current Status",
-  //   field: "amc_status",
-  //   enableSearch: true,
-  //   enableFilter: true,
-  // },
-  // {
-  //   width: 130,
-  //   title: "Application Type",
-  //   field: "Application",
-  //   enableSearch: true,
-  //   enableFilter: true,
-  // },
 ];
 
 export const FleetTATData = [
-  { chassis_no: "SCVPass",Jobcard_Created_Date: "10",Jobcard_Close_Date: "Ace Gold CNG",Vehicle_Reg_No: "Ace Gold CNG",Vas_Type: "135",amc_status:"",Application:"",amc_Start_date:"",amc_end_Date:"",Amc_Start_Kms:"",Amc_End_Kms:"",lob:"",ppl:"",pl:""},
+  {
+    chassis_no: "SCVPass",
+    Jobcard_Created_Date: "10",
+    Jobcard_Close_Date: "Ace Gold CNG",
+    Vehicle_Reg_No: "Ace Gold CNG",
+    Vas_Type: "135",
+    amc_status: "",
+    Application: "",
+    amc_Start_date: "",
+    amc_end_Date: "",
+    Amc_Start_Kms: "",
+    Amc_End_Kms: "",
+    lob: "",
+    ppl: "",
+    pl: "",
+  },
 ];
-
-// export const FleetDetailsData = [
-//   { LOB: "SCVPass",FE: "10",PPL: "Ace Gold CNG",PL: "Ace Gold CNG",Count: "135",},
-//   { LOB: "ICV Trucks", FE: "15", PPL: "Ace Gold Diesel", PL: "", Count: "6" },
-//   {LOB: "MCV Trucks",FE: "20",PPL: "Ace Gold Petrol CX",PL: "",Count: "33",},
-//   { LOB: "ScPass", FE: "25", PPL: "Intra V10", PL: "", Count: "6" },
-//   { LOB: "HCV Cargo", FE: "30", PPL: "Intra V20", PL: "", Count: "1" },
-//   { LOB: "HCV Const", FE: "35", PPL: "Intra V30", PL: "", Count: "70" },
-//   {
-//     LOB: "Buses",
-//     FE: "40",
-//     PPL: "Pickup Large",
-//     PL: "Pickup Large",
-//     Count: "6",
-//   },
-//   { LOB: "LCV", FE: "45", PPL: "Tata Ace", PL: "", Count: "1" },
-//   { LOB: "SCV Cargo", FE: "50", PPL: "Yodha", PL: "Yodha", Count: "1100" },
-//   { LOB: "Pickups", FE: "55", PPL: "Yodha1", PL: "Yodha", Count: "1100" },
-// ];
-
-// const [LOBOptions, setLOBOptions] = useState([
-//   {
-//     label: "LOB1",
-//     value: "LOB1",
-//   },
-//   {
-//     label: "LOB2",
-//     value: "LOB2",
-//   },
-//   {
-//     label: "LOB3",
-//     value: "LOB3",
-//   },
-//   {
-//     label: "LOB4",
-//     value: "LOB4",
-//   },
-// ]);
-// const [PPLOptions, setPPLOptions] = useState([
-//   {
-//     label: "PPL1",
-//     value: "PPL1",
-//   },
-//   {
-//     label: "PPL2",
-//     value: "PPL2",
-//   },
-//   {
-//     label: "PPL3",
-//     value: "PPL3",
-//   },
-//   {
-//     label: "PPL4",
-//     value: "PPL4",
-//   },
-// ]);
-// const [PLOptions, setPLOptions] = useState([
-//   {
-//     label: "PL1",
-//     value: "PL1",
-//   },
-//   {
-//     label: "PL2",
-//     value: "PL2",
-//   },
-//   {
-//     label: "PL3",
-//     value: "PL3",
-//   },
-//   {
-//     label: "PL4",
-//     value: "PL4",
-//   },
-// ]);
-// const [StateOptions, setStateOptions] = useState([
-//   {
-//     label: "State1",
-//     value: "State1",
-//   },
-//   {
-//     label: "State2",
-//     value: "State2",
-//   },
-//   {
-//     label: "State3",
-//     value: "State3",
-//   },
-//   {
-//     label: "State4",
-//     value: "State4",
-//   },
-// ]);
-// const [DistOptions, setDistOptions] = useState([
-//   {
-//     label: "Dist1",
-//     value: "Dist1",
-//   },
-//   {
-//     label: "Dist2",
-//     value: "Dist2",
-//   },
-//   {
-//     label: "Dist3",
-//     value: "Dist3",
-//   },
-//   {
-//     label: "Dist4",
-//     value: "Dist4",
-//   },
-// ]);

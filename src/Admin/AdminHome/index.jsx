@@ -13,13 +13,14 @@ function AdminHome() {
   const { arnNumber, fleetData, arnListForAdmin } = useSelector(
     (state) => state.homeApi
   );
+
   const [loading, setLoading] = useState(false);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
   const [renewalData, setRenewalData] = useState([]);
 
   const arnValues = arnListForAdmin
-    .filter((item) => item.value !== "all")
-    .map((item) => item.value);
+    ?.filter((item) => item.value !== "all")
+    ?.map((item) => item.value);
 
   const getGenericInformationHandler = async () => {
     try {
@@ -71,7 +72,13 @@ function AdminHome() {
     getDetailedViewHandler("ServiceScheduled");
     getDetailedViewHandler("Renewals");
   };
-
+  useEffect(() => {
+    if (arnNumber) {
+      getGenericInformationHandler();
+      getDetailedViewHandler("ServiceScheduled");
+      getDetailedViewHandler("Renewals");
+    }
+  }, []);
   return (
     <>
       {loading ? (

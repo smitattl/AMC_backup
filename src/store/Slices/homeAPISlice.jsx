@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { searchOptions } from "../../StaticTableData";
 
 const initialState = {
-  arnNumber: { lable: "AR02-23-1186083206797", value: "AR02-23-1186083206797" },
+  arnNumber: {},
   fleetData: {},
   selectedUser: {},
   arnListForAdmin: [],
@@ -10,7 +10,9 @@ const initialState = {
   vehicleNumber: "",
   panNumber: "",
   mobileNo: "",
-  arnValues: "",
+  arnValues: null,
+  vasType: {},
+  vasOptions: [],
 };
 
 const homeApiSlice = createSlice({
@@ -18,7 +20,16 @@ const homeApiSlice = createSlice({
   initialState,
   reducers: {
     setArnNumber(state, action) {
-      state.arnNumber = action.payload;
+      if (action.payload) {
+        const { label, value } = action.payload;
+        if (label && value) {
+          state.arnNumber = { label, value };
+        }
+      }
+    },
+    clearArnNumber: (state) => {
+      state.arnNumber.label = "";
+      state.arnNumber.value = "";
     },
     setFleetData(state, action) {
       state.fleetData = action.payload;
@@ -44,6 +55,12 @@ const homeApiSlice = createSlice({
     setArnValues(state, action) {
       state.arnValues = action.payload;
     },
+    setVasType(state, action) {
+      state.vasType = action.payload;
+    },
+    setVasOptions(state, action) {
+      state.vasOptions = action.payload;
+    },
     resetFields(state) {
       state.arnNumber = initialState.arnNumber;
       state.fleetData = initialState.fleetData;
@@ -52,12 +69,15 @@ const homeApiSlice = createSlice({
       state.vehicleNumber = initialState.vehicleNumber;
       state.panNumber = initialState.panNumber;
       state.mobileNo = initialState.mobileNo;
+      state.vasType = initialState.vasType;
+      state.vasOptions = initialState.vasOptions;
     },
   },
 });
 
 export const {
   setArnNumber,
+  clearArnNumber,
   setFleetData,
   setSelectedUser,
   setArnListForAdmin,
@@ -67,5 +87,7 @@ export const {
   setMobileNo,
   resetFields,
   setArnValues,
+  setVasType,
+  setVasOptions,
 } = homeApiSlice.actions;
 export default homeApiSlice.reducer;

@@ -1,111 +1,81 @@
 import React from "react";
 import "./quickactionmodal.css";
-import { Link as ReactLink } from "react-scroll";
 import transportIcon from "../../images/transportation.png";
 import { useHandleClickActive } from "../../utils";
+import { Link as ScrollLink } from "react-scroll";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsOpen } from "../../store/Slices/customerSlice";
 
-function QuickActionModal({
-  setIsOpen = () => {},
-  isOpen = false,
-  ServiceSchedule,
-  renewable,
-  Renewal,
-}) {
+import renewable from "../../images/renewalTwo.png";
+
+function QuickActionModal() {
+  const dispatch = useDispatch();
+  const { fleetData } = useSelector((state) => state.arn);
+
   const handleClickActive = useHandleClickActive();
-  const togglePopup = () => {
-    setIsOpen(!isOpen);
-  };
+
   return (
     <>
       <div className="overlay" />
-      <div className="popup">
-        <div className="popupcontent">
-          <div className="popupheader">
-            <div className="row position-relative">
-              <div className="col-md-11"></div>
-              <div className="col-md-1">
-                <button
-                  type="button"
-                  className="btn-close"
-                  aria-label="Close"
-                  onClick={togglePopup}
-                />
-              </div>
+      <div className="modal_wrapper_for_quick_action">
+        <div className="quick_action_modal">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="title_qa mb-0 text-center">
+              Quick Actions Required
             </div>
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => dispatch(setIsOpen(false))}
+            />
           </div>
-          <div className="popupbody">
-            <div className="row">
-              <div className="text-center h3 font-weight-bold mb-4">
-                Quick Actions Required
-              </div>
-              <div className="col-md-6 cursor-pointer" id="section1">
-                <ReactLink
-                  to="section1"
-                  smooth={true}
-                  className="text-black text-decoration-none"
-                  duration={500}
-                  spy={true}
-                  exact="true"
-                  offset={-120}
-                  onClick={() => {
-                    handleClickActive("section1");
-                    setIsOpen(false);
-                  }}
-                >
-                  <div className="tile" onClick={togglePopup}>
-                    <div className="row">
-                      <div className="col-md-2">
-                        <img
-                          src={transportIcon}
-                          alt="/"
-                          style={{ height: 50, width: 58 }}
-                        />
-                      </div>
-                      <div
-                        className="col-md-9 tile_main_div"
-                        style={{ marginLeft: "10px" }}
-                      >
-                        <h6>Due for Schedule Service</h6>
-                        <h6 className="cnt">{ServiceSchedule}</h6>
-                      </div>
-                    </div>
-                  </div>
-                </ReactLink>
-              </div>
-              <div className="col-md-6 cursor-pointer" id="section2">
-                <ReactLink
-                  to="section2"
-                  className="text-black text-decoration-none cursor-pointer"
-                  smooth={true}
-                  duration={50}
-                  spy={true}
-                  exact="true"
-                  offset={-370}
-                  onClick={() => {
-                    handleClickActive("section2");
-                    setIsOpen(false);
-                  }}
-                >
-                  <div className="tile" onClick={togglePopup}>
-                    <div className="row">
-                      <div className="col-md-2">
-                        <img
-                          src={renewable}
-                          alt="/"
-                          style={{ height: 50, width: 50 }}
-                        />
-                      </div>
-                      <div
-                        className="col-md-9 tile_main_div"
-                        style={{ paddingRight: "10px" }}
-                      >
-                        <h6>Due for Renewal</h6>
-                        <h6 className="cnt">{Renewal}</h6>
-                      </div>
-                    </div>
-                  </div>
-                </ReactLink>
-              </div>
+          <div className="tile_wrapper d-flex ">
+            <div className="quick_action quick_action_modal" id="section1">
+              <ScrollLink
+                to="section1"
+                smooth={true}
+                duration={50}
+                spy={true}
+                exact="true"
+                offset={-120}
+                onClick={() => handleClickActive("section1")}
+                className="renewal_link_div renewal_link_modal"
+              >
+                <img
+                  src={transportIcon}
+                  alt="/"
+                  style={{ height: 30, width: 30 }}
+                />
+                <div className="d-flex flex-column  justify-content-between h-100">
+                  <h6>Due for Schedule Service</h6>
+                  <h6 className="cnt text-center">
+                    {fleetData?.ServiceSchedule}
+                  </h6>
+                </div>
+              </ScrollLink>
+            </div>
+            <div className="quick_action quick_action_modal" id="section2">
+              <ScrollLink
+                to="section2"
+                smooth={true}
+                duration={50}
+                spy={true}
+                exact="true"
+                offset={-370}
+                onClick={() => handleClickActive("section2")}
+                className="renewal_link_div renewal_link_modal"
+              >
+                <img
+                  src={renewable}
+                  alt="/"
+                  style={{ height: 30, width: 30 }}
+                />
+                <div className="d-flex flex-column  justify-content-between h-100">
+                  <h6>Due for Renewal</h6>
+                  <h6 className="cnt text-center">{fleetData?.Renewal}</h6>
+                </div>
+              </ScrollLink>
             </div>
           </div>
         </div>

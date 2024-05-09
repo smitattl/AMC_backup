@@ -18,8 +18,9 @@ function Header() {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { arnList, userData } = useSelector((state) => state.arn);
+  const { arnList, userData, params } = useSelector((state) => state.arn);
   const { fleetData, arnNumber } = useSelector((state) => state.homeApi);
+  const { arnForCustomer } = useSelector((state) => state.customer);
   const handleClickActiveForAdmin = useHandleClickActiveForAdmin();
   const [showDropdown, setShowDropDown] = useState(false);
 
@@ -89,7 +90,14 @@ function Header() {
             >
               Key Insights
             </Link>
-            <Link to="/admin">
+
+            <Link
+              to={
+                pathname.includes("/admin")
+                  ? "/admin"
+                  : `/Home/${params.param1}/${params.param2}`
+              }
+            >
               <img src={HomeIcon} alt="HomeIcon" className="home_img" />
             </Link>
             {userData?.NameList && !pathname.includes("/admin") && (
@@ -126,8 +134,7 @@ function Header() {
             {!(
               pathname === "/admin/admin-fleet-details" ||
               pathname === "/admin/admin-key-insight" ||
-              pathname === "/Home/Fleet-details" ||
-              pathname === "/Home/Key-insights"
+              pathname.includes("/Home")
             ) && (
               <React.Fragment>
                 <ScrollLink
@@ -153,21 +160,31 @@ function Header() {
                   onClick={() => handleClickActiveForAdmin("section2")}
                   className="scroll_link"
                 >
-                  Due for Renewal <span>({fleetData.Renewal || "0"})</span>
+                  Due for Renewal <span>({fleetData?.Renewal || 0})</span>
                 </ScrollLink>
               </React.Fragment>
             )}
           </div>
           <div className="arn_no_text" style={{ fontFamily: "sans-serif" }}>
             <div>
-              <div>ARN Number</div>
-              {userData?.email_id && (
+              {pathname?.includes("/admin") && arnNumber && (
+                <div>ARN Number </div>
+              )}
+              {pathname?.includes("/Home") && arnForCustomer && (
+                <div>ARN Number </div>
+              )}
+              {userData?.email_id && pathname.includes("/Home") && (
                 <div className="arn_no_text text-end">Email</div>
               )}
             </div>
             <div className="d-flex flex-column text-left">
-              <span className="">: {arnList[0] || arnNumber?.value}</span>
-              {userData?.email_id && (
+              {pathname?.includes("/Home") && arnForCustomer && (
+                <div> : {arnForCustomer?.label}</div>
+              )}
+              {pathname?.includes("/admin") && arnNumber && (
+                <div>{arnNumber?.label || arnList[0]} </div>
+              )}
+              {userData?.email_id && pathname.includes("/Home") && (
                 <span className="scroll_link">
                   : {maskEmail(userData?.email_id || "")}
                 </span>

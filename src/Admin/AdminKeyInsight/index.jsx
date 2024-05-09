@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BarGraph from "../../components/graph/BarGraph";
 import TableInSightsComp from "../../components/TableInsightsComp";
 import Speedometer from "../../images/speedometer.png";
@@ -16,13 +16,24 @@ import { monthNames } from "../../StaticTableData";
 import { ApiInterface } from "../../API";
 import Loading from "../../components/Loading/Loading";
 import FilterSection from "../AdminHome/FilterSection";
+import { setVasOptions } from "../../store/Slices/homeAPISlice";
 
 function AdminKeyInsight() {
   const token = localStorage.getItem("Token");
-  const { arnNumber, arnValues } = useSelector((state) => state.homeApi);
+  const dispatch = useDispatch();
+  const { arnNumber, arnValues, vasType } = useSelector(
+    (state) => state.homeApi
+  );
   const [FleetUptimeX, setFleetUptimeX] = useState([]);
   const [FleetUptimeY, setFleetUptimeY] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [advanceChasis, setAdvanceChasis] = useState([]);
+  const [initialized, setInitialized] = useState(false);
+  const [indexTAT, setindexTAT] = useState([]);
+  const [totalActiveVehicle, setTotalActiveVehicle] = useState([]);
+  const [tatDetails, setTatDetails] = useState([]);
+  const [servicedetails, setServiceDetails] = useState([]);
+  const [dueForService, setDueForService] = useState([]);
 
   const currentDate = new Date();
   let currentMonth = currentDate.getMonth() + 1;
@@ -37,14 +48,6 @@ function AdminKeyInsight() {
   }
   const previousMonthName = monthNames[previousMonth - 1];
 
-  const [indexTAT, setindexTAT] = useState([]);
-  const [totalActiveVehicle, setTotalActiveVehicle] = useState([]);
-  const [tatDetails, setTatDetails] = useState([]);
-  const [servicedetails, setServiceDetails] = useState([""]);
-  const [dueForService, setDueForService] = useState([]);
-  const [VASOptions, setVASOptions] = useState([]);
-  const [vasType, setVasType] = useState(null);
-
   const barGraphData = [
     {
       x: FleetUptimeX || [],
@@ -52,14 +55,10 @@ function AdminKeyInsight() {
       type: "bar",
     },
   ];
-  useEffect(() => {
-    if (VASOptions) setVasType(VASOptions[0]);
-  }, [VASOptions]);
 
   const handleItemClick = (indexData) => {
     setindexTAT(indexData);
   };
-
   const getkeyInsightsdataHandler = async () => {
     if (!arnValues) return;
     setLoading(true);
@@ -70,11 +69,29 @@ function AdminKeyInsight() {
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
+        const adherence = data?.advance_chassis_count[0]?.Chassis_Count;
+        const updatedServiceDetails = data.service_details.map(
+          (serviceDetail) => {
+            const matchingDueService = data.due_for_service.find(
+              (dueService) => dueService.arn_no === serviceDetail.arn_no
+            );
+            if (matchingDueService) {
+              return { ...serviceDetail, Availed: matchingDueService.Availed };
+            }
+            return serviceDetail;
+          }
+        );
+        setServiceDetails(
+          updatedServiceDetails.map((detail) => ({
+            ...detail,
+            Chassis_Count: adherence,
+          }))
+        );
         setTatDetails(data.tat_details);
-        setServiceDetails(data.service_details);
         setDueForService(data.due_for_service);
         setTotalActiveVehicle(data?.total_active_vehicles);
-        setLoading(false);
+        setAdvanceChasis(data?.advance_chassis_count);
+        setInitialized(false);
       }
     } catch (error) {
       console.log(error);
@@ -100,27 +117,8 @@ function AdminKeyInsight() {
     }
     setLoading(false);
   };
-  const getvasdataHandler = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("arn_no", arnNumber.value);
-      const response = await ApiInterface.getvasData(formData);
-      const vasOptions = response?.data?.map((item) => ({
-        label: item?.vas_type,
-        value: item?.vas_type,
-      }));
-      setVASOptions(vasOptions ?? []);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching VAS data:", error);
-      setLoading(false);
-    }
-    setLoading(false);
-  };
 
   useEffect(() => {
-    getvasdataHandler();
     FleetupTimehandler();
     getkeyInsightsdataHandler();
   }, []);
@@ -136,12 +134,7 @@ function AdminKeyInsight() {
         <Loading />
       ) : (
         <>
-          <FilterSection
-            VASOptions={VASOptions}
-            setVasType={setVasType}
-            vasType={vasType}
-            searchFilterhandler={searchBasedOnVas}
-          />
+          <FilterSection searchFilterhandler={searchBasedOnVas} />
           <div className="container_wrapper">
             <div className="row mt-3">
               <div className="col-md-6 ">
@@ -169,7 +162,7 @@ function AdminKeyInsight() {
                   image={Speedometer}
                   tabledata={totalActiveVehicle}
                   tableheader={tableheaderOne}
-                  heading={`Total Active Vehicle Under Fleetedge`}
+                  heading="Total Active Vehicle Under Fleetedge"
                   FleetDetailsColumns={FleetDetailsColumns}
                 />
                 <TableInSightsComp

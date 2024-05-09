@@ -8,31 +8,23 @@ import PieChartGraph from "../../components/PieChart/PieChart";
 import { ApiInterface } from "../../API";
 import { fleetTableColumns } from "../../StaticTableData";
 import { useSelector } from "react-redux";
+import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
 
 const FleetDetails = () => {
-  const { arnList } = useSelector((state) => state.arn);
   const [Rowdata, setRowdata] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [arnNumber, setArnNumber] = useState(arnList[0]);
   const [amcCount, setAmcCount] = useState([]);
   const [fmsCount, setFmsCount] = useState([]);
-
-  const handleChangeARNNumber = (e) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === "All") {
-      const filteredArnList = arnList.filter((option) => option !== "All");
-      setArnNumber(filteredArnList);
-    } else {
-      setArnNumber(selectedValue);
-    }
-  };
+  const { arnForCustomer, arnValuesForCustomer } = useSelector(
+    (state) => state.customer
+  );
 
   const getDetailedViewHandler = async (element) => {
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("Section", element);
-      formData.append("ARN-Number", arnNumber);
+      formData.append("ARN-Number", arnValuesForCustomer);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         setRowdata(response?.data?.RowData ?? []);
@@ -45,12 +37,16 @@ const FleetDetails = () => {
   };
 
   useEffect(() => {
-    if (arnNumber) {
+    if (arnForCustomer) {
       getAmcdataHandler();
       getDetailedViewHandler("VehicleCount");
     }
-  }, [arnNumber]);
+  }, []);
 
+  const searchData = () => {
+    getAmcdataHandler();
+    getDetailedViewHandler("VehicleCount");
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
   };
@@ -59,7 +55,7 @@ const FleetDetails = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnNumber);
+      formData.append("arn_no", arnValuesForCustomer);
       const response = await ApiInterface.getAmcCountData(formData);
       if (response.status === 200) {
         setAmcCount(response?.data?.amc_count ?? []);
@@ -91,41 +87,7 @@ const FleetDetails = () => {
             <div className="container-fluid pb-4">
               <div className="row">
                 <div className="col-md-12">
-                  <Accordion defaultActiveKey="0">
-                    <Accordion.Item
-                      eventKey="0"
-                      style={{ marginBottom: "10px" }}
-                    >
-                      <Accordion.Header>Search Filter</Accordion.Header>
-                      <Accordion.Body>
-                        <form onSubmit={handleSubmit}>
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "end",
-                              gap: "10px",
-                            }}
-                          >
-                            <Form.Group className="form_group">
-                              <Form.Label>ARN Number</Form.Label>
-                              <Form.Select
-                                aria-label="ARN Number"
-                                value={arnNumber}
-                                onChange={handleChangeARNNumber}
-                              >
-                                <span>{arnNumber}</span>
-                                {arnList.map((option) => (
-                                  <option key={option} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                              </Form.Select>
-                            </Form.Group>
-                          </div>
-                        </form>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
+                  <FilterSectionForCustomer searchData={searchData} />
                   <div className="row d-flex flex-wrap">
                     <div className="col-md-5">
                       {amcChartData.length > 0 && (

@@ -19,27 +19,28 @@ import BarGraph from "../../components/graph/BarGraph";
 import TableInSightsComp from "../../components/TableInsightsComp";
 import { monthNames } from "../../StaticTableData";
 import { useSelector } from "react-redux";
-import PopupModal from "../../components/PopupModal";
+import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
 
 const KeyInsights = () => {
-  const { arnList } = useSelector((state) => state.arn);
+  const {
+    chasisNumber,
+    arnValuesForCustomer,
+    selectSearchType,
+    vehicleRegistrationNo,
+    selectVasType,
+  } = useSelector((state) => state.customer);
   const token = localStorage.getItem("Token");
 
-  const [indexTAT, setindexTAT] = useState([]);
   const [initialized, setInitialized] = useState(false);
-  const [arnNumber, setArnNumber] = useState([
-    localStorage.getItem("ARN-Number"),
-  ]);
 
   const [VASOptions, setVASOptions] = useState([]);
   const [totalActiveVehicle, setTotalActiveVehicle] = useState([]);
   const [tatDetails, setTatDetails] = useState([]);
-  const [servicedetails, setServiceDetails] = useState([""]);
+  const [servicedetails, setServiceDetails] = useState([]);
   const [dueForService, setDueForService] = useState([]);
   const [advanceChasis, setAdvanceChasis] = useState([]);
   const [FleetUptimeX, setFleetUptimeX] = useState([]);
   const [FleetUptimeY, setFleetUptimeY] = useState([]);
-  const [vasType, setVasType] = useState("AMC");
   const [loading, setLoading] = useState(false);
 
   const currentDate = new Date();
@@ -67,7 +68,7 @@ const KeyInsights = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnNumber);
+      formData.append("arn_no", arnValuesForCustomer);
       const response = await ApiInterface.getvasData(formData);
       setVASOptions(response?.data ?? []);
       setLoading(false);
@@ -82,14 +83,31 @@ const KeyInsights = () => {
     setInitialized(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnNumber);
-      formData.append("vas", vasType);
+      formData.append("arn_no", arnValuesForCustomer);
+      formData.append("vas", selectVasType.value);
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
-        console.log(response.data);
+        const adherence = data?.advance_chassis_count[0]?.Chassis_Count;
+        const updatedServiceDetails = data.service_details.map(
+          (serviceDetail) => {
+            const matchingDueService = data.due_for_service.find(
+              (dueService) => dueService.arn_no === serviceDetail.arn_no
+            );
+            if (matchingDueService) {
+              return { ...serviceDetail, Availed: matchingDueService.Availed };
+            }
+            return serviceDetail;
+          }
+        );
+
+        setServiceDetails(
+          updatedServiceDetails.map((detail) => ({
+            ...detail,
+            Chassis_Count: adherence,
+          }))
+        );
         setTatDetails(data.tat_details);
-        setServiceDetails(data.service_details);
         setDueForService(data.due_for_service);
         setTotalActiveVehicle(data?.total_active_vehicles);
         setAdvanceChasis(data?.advance_chassis_count);
@@ -105,8 +123,8 @@ const KeyInsights = () => {
     setInitialized(true);
     try {
       const formData = new FormData();
-      formData.append("ARN-Number", arnNumber);
-      formData.append("Vas-type", vasType);
+      formData.append("ARN-Number", arnValuesForCustomer);
+      formData.append("Vas-type", selectVasType.value);
       formData.append("Token", token);
       const response = await ApiInterface.getFleetUptime(formData);
       if (response.status === 200) {
@@ -119,29 +137,61 @@ const KeyInsights = () => {
     setInitialized(false);
   };
 
-  const handleItemClick = (indexData) => {
-    setindexTAT(indexData);
+  const getChasisDatahandler = async () => {
+    try {
+      const body = {
+        chassis_no: chasisNumber,
+      };
+      const response = await ApiInterface.getKeyInsightsDataByChasis(body);
+      if (response.status === 200) {
+        setFleetUptimeX(response?.data?.xlist);
+        setFleetUptimeY(response?.data?.ylist);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const getDataByVehicleRegNoHandler = async () => {
+    try {
+      const body = {
+        vehicle_registration_no: vehicleRegistrationNo,
+      };
+      const response = await ApiInterface.getVehicledataforCustomer(body);
+      if (response.status === 200) {
+        const data = response.data;
+        setTatDetails(data.tat_details);
+        setServiceDetails(data.service_details);
+        setDueForService(data.due_for_service);
+        setTotalActiveVehicle(data?.total_active_vehicles);
+        setAdvanceChasis(data?.advance_chassis_count);
+        setInitialized(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    if (arnNumber) {
-      getvasdataHandler();
-      FleetupTimehandler();
-      getkeyInsightsdataHandler();
-    }
-  }, [arnNumber, vasType]);
+    getvasdataHandler();
+    FleetupTimehandler();
+    getkeyInsightsdataHandler();
+  }, []);
 
-  const handleChangeARNNumber = (e) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === "All") {
-      const filteredArnList = arnList.filter((option) => option !== "All");
-      setArnNumber(filteredArnList);
-    } else {
-      setArnNumber(selectedValue);
-    }
-  };
-  const handleChangeVasType = (e) => {
-    setVasType(e.target.value);
+  const searchData = () => {
+    getvasdataHandler();
+    getkeyInsightsdataHandler();
+    if (selectSearchType.value === "chassis_name" && chasisNumber !== "")
+      getChasisDatahandler();
+    else if (
+      selectSearchType.value === "vehicle_registration_no" &&
+      vehicleRegistrationNo !== ""
+    )
+      getDataByVehicleRegNoHandler();
+    else if (
+      selectSearchType.value === "arn_number" &&
+      arnValuesForCustomer !== null
+    )
+      FleetupTimehandler();
   };
 
   return (
@@ -153,63 +203,7 @@ const KeyInsights = () => {
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-12">
-                <Accordion>
-                  <Accordion.Item eventKey="0" style={{ marginBottom: "10px" }}>
-                    <Accordion.Header>Search Filter</Accordion.Header>
-                    <Accordion.Body>
-                      <form onSubmit={(e) => e.preventDefault()}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "end",
-                            gap: "10px",
-                          }}
-                        >
-                          <Form.Group className="form_group">
-                            <Form.Label>ARN Number</Form.Label>
-                            <Form.Select
-                              aria-label="ARN Number"
-                              value={arnNumber}
-                              onChange={handleChangeARNNumber}
-                            >
-                              <span>{arnNumber}</span>
-                              {arnList.map((option) => (
-                                <option key={option} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </Form.Select>
-                          </Form.Group>
-                          <Form.Group className="form_group">
-                            <Form.Label>VAS Type</Form.Label>
-                            <Form.Select
-                              aria-label="Default select example"
-                              id="selectOption"
-                              value={vasType}
-                              onChange={handleChangeVasType}
-                            >
-                              <span>
-                                {
-                                  VASOptions?.find(
-                                    (option) => option.vas_type === vasType
-                                  )?.vas_type
-                                }
-                              </span>
-                              {VASOptions.map((option) => (
-                                <option
-                                  key={option.vas_type}
-                                  value={option.vas_type}
-                                >
-                                  {option.vas_type}
-                                </option>
-                              ))}
-                            </Form.Select>
-                          </Form.Group>
-                        </div>
-                      </form>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
+                <FilterSectionForCustomer searchData={searchData} />
               </div>
             </div>
             <div className="row">
@@ -248,7 +242,6 @@ const KeyInsights = () => {
                   heading="Fleet Turn Around Time"
                   FleetDetailsColumns={FleetTATColumns}
                   fleetTurn
-                  onItemClick={handleItemClick}
                 />
               </div>
             </div>
@@ -258,7 +251,7 @@ const KeyInsights = () => {
                 tabledata={servicedetails}
                 tableheader={tableheaderThree}
                 heading={`Service Details ${
-                  dueForService[0]?.Jobcard_Created_Month ||
+                  (dueForService && dueForService[0]?.Jobcard_Created_Month) ||
                   `${previousMonthName} - ${previousYear}`
                 }`}
               />

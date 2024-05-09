@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { decodeToken } from "react-jwt";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Accordion } from "react-bootstrap";
-import { Link as ScrollLink, Element } from "react-scroll";
-import Form from "react-bootstrap/Form";
+import { Link as ScrollLink } from "react-scroll";
 import { ApiInterface } from "../../API";
 import transportIcon from "../../images/transportation.png";
 import renewable from "../../images/renewalTwo.png";
@@ -20,77 +18,36 @@ import {
   setFleetData,
   setParams,
   setArnNumber,
-  setUserData,
   setUserMobile,
 } from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
-import QuickActionModal from "./QuickActionModal";
+import {
+  setActiveAccordionItem,
+  setArnForCustomer,
+  setArnListForCustomer,
+} from "../../store/Slices/customerSlice";
+import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
 
-const LandingPage = ({ setWrongUser, userEntryCount }) => {
+const LandingPage = () => {
   const { param1, param2 } = useParams();
   const dispatch = useDispatch();
-  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [Rowdata, setRowdata] = useState([]);
+  const [serviceScheduleData, setServiceScheduleData] = useState([]);
 
-  const token = localStorage.getItem("Token");
-  const { arnList, userData, userMobile, arnNumber, fleetData } = useSelector(
-    (state) => state.arn
-  );
+  const { userData, userMobile, fleetData } = useSelector((state) => state.arn);
+  const { arnForCustomer, arnValuesForCustomer, activeAccordionItem } =
+    useSelector((state) => state.customer);
 
   useEffect(() => {
     dispatch(setParams({ param1, param2 }));
   }, [param1, param2]);
 
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const referrer = searchParams.get("referrer");
-  }, [location.search]);
-
-  const [activeAccordionItem, setActiveAccordionItem] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
-  const [isOpenNotifiction, setisOpenNotifiction] = useState(false);
-  const [Rowdata, setRowdata] = useState([]);
-  const [serviceScheduleData, setServiceScheduleData] = useState([]);
-
-  const getDecryptedDataHandler = async () => {
+  const getGenericInformationHandler = async () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("DataOne", param1);
-      formData.append("DataTwo", param2);
-      const response = await ApiInterface.getDecryptedData(formData);
-      if (response.status === 200) {
-        const myDecodedToken = decodeToken(response.data.Token);
-        localStorage.setItem("Token", response.data.Token);
-        dispatch(setArnNumber(myDecodedToken.ARN[0]));
-        localStorage.setItem("ARN-Number", myDecodedToken.ARN[0]);
-        localStorage.setItem(
-          "ARN-NumberList",
-          JSON.stringify(myDecodedToken.ARN)
-        );
-        localStorage.setItem("ARN-Contact", myDecodedToken.MobNo);
-        const arnList = myDecodedToken?.ARN;
-        const mobileNumber = myDecodedToken.MobNo;
-        dispatch(setArnList([...arnList, "All"]));
-        dispatch(setUserMobile(mobileNumber));
-
-        setWrongUser(false);
-      } else if (response.status !== 200) setWrongUser(true);
-    } catch (error) {
-      console.log(error);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getDecryptedDataHandler();
-  }, []);
-
-  const getGenericInformationHandler = async () => {
-    try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("ARN-Number", arnNumber);
+      formData.append("ARN-Number", arnValuesForCustomer);
       const response = await ApiInterface.getGenericInformation(formData);
       if (response.status === 200) {
         dispatch(setFleetData(response.data));
@@ -100,6 +57,7 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
       console.log(error);
       setLoading(false);
     }
+    setLoading(false);
   };
 
   const getDetailedViewHandler = async (element) => {
@@ -107,7 +65,7 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
     try {
       const formData = new FormData();
       formData.append("Section", element);
-      formData.append("ARN-Number", arnNumber);
+      formData.append("ARN-Number", arnValuesForCustomer);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         if (element === "ServiceScheduled") {
@@ -122,39 +80,27 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
     }
     setLoading(false);
   };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
-
-  const handleChangeARNNumber = (e) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === "All") {
-      const filteredArnList = arnList?.filter((option) => option !== "All");
-      dispatch(setArnNumber(filteredArnList));
-    } else {
-      dispatch(setArnNumber(selectedValue));
-    }
-    setIsOpen(isOpen);
-    setisOpenNotifiction(isOpenNotifiction);
-  };
-
   const handleClickActive = (element) => {
     if (element === "section1") {
-      setActiveAccordionItem("0");
+      dispatch(setActiveAccordionItem("0"));
     } else if (element === "section2") {
-      setActiveAccordionItem("1");
+      dispatch(setActiveAccordionItem("1"));
     }
+  };
+
+  const searchData = () => {
+    getDetailedViewHandler("ServiceScheduled");
+    getDetailedViewHandler("Renewals");
+    getGenericInformationHandler();
   };
 
   useEffect(() => {
-    if (arnNumber) {
+    if (arnValuesForCustomer) {
       getDetailedViewHandler("ServiceScheduled");
-      getDetailedViewHandler("Reneawls");
+      getDetailedViewHandler("Renewals");
       getGenericInformationHandler();
     }
-  }, [arnNumber]);
-
+  }, []);
   return (
     <>
       {loading ? (
@@ -162,54 +108,20 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
       ) : (
         <div className="main_content">
           <div className="container">
-            <div className="row mb-4">
-              <div className="col-md-12">
-                <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="0" style={{ marginBottom: "10px" }}>
-                    <Accordion.Header>Search Filter</Accordion.Header>
-                    <Accordion.Body>
-                      <form onSubmit={handleSubmit}>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "end",
-                            gap: "10px",
-                          }}
-                        >
-                          <Form.Group className="form_group">
-                            <Form.Label>ARN Number</Form.Label>
-                            <Form.Select
-                              aria-label="ARN Number"
-                              value={arnNumber}
-                              onChange={handleChangeARNNumber}
-                            >
-                              {arnNumber}
-                              {arnList?.map((option) => (
-                                <option key={option} value={option}>
-                                  {option}
-                                </option>
-                              ))}
-                            </Form.Select>
-                          </Form.Group>
-                        </div>
-                      </form>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </div>
-            </div>
+            <FilterSectionForCustomer searchData={searchData} />
             <div className="contact_tile">
               <p style={{ fontWeight: "bold" }}>
                 Customer Name:{" "}
                 <span style={{ fontFamily: "sans-serif" }}>
-                  {userData.NameList}
+                  {userData.userName}
                 </span>
               </p>
               <p style={{ fontWeight: "bold" }}>
                 Contact Details:
                 <span style={{ fontFamily: "sans-serif" }}>
-                  {userMobile &&
-                    userMobile?.substring(0, userMobile.length - 6) + "******"}
+                  {userData?.MobNo &&
+                    userData?.MobNo?.substring(0, userData.MobNo.length - 6) +
+                      "******"}
                 </span>
               </p>
             </div>
@@ -273,8 +185,8 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
               <h6 className="tileHeading mt-4 text-center">
                 Quick Actions Required
               </h6>
-              <div className="row w-75 mx-auto justify-content-around flex-wrap">
-                <div className="col-md-5" id="section1">
+              <div className="tile_wrapper w-75 mx-auto">
+                <div className="quick_action" id="section1">
                   <ScrollLink
                     to="section1"
                     smooth={true}
@@ -283,25 +195,20 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
                     exact="true"
                     offset={-120}
                     onClick={() => handleClickActive("section1")}
+                    className="renewal_link_div"
                   >
-                    <div className="tile">
-                      <div className="row">
-                        <div className="col-md-2">
-                          <img
-                            src={transportIcon}
-                            alt="/"
-                            style={{ height: 50, width: 58 }}
-                          />
-                        </div>
-                        <div className="col-md-9 tile_main_div">
-                          <h5>Due for Schedule Service</h5>
-                          <h6 className="cnt">{fleetData?.ServiceSchedule}</h6>
-                        </div>
-                      </div>
+                    <img
+                      src={transportIcon}
+                      alt="/"
+                      style={{ height: 50, width: 58 }}
+                    />
+                    <div className="d-flex flex-column  justify-content-between h-100 text-center">
+                      <h5>Due for Schedule Service</h5>
+                      <h6 className="cnt ">{fleetData?.ServiceSchedule}</h6>
                     </div>
                   </ScrollLink>
                 </div>
-                <div className="col-md-5" id="section2">
+                <div className="quick_action" id="section2">
                   <ScrollLink
                     to="section2"
                     smooth={true}
@@ -310,25 +217,16 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
                     exact="true"
                     offset={-370}
                     onClick={() => handleClickActive("section2")}
-                    className="renewal_link"
+                    className="renewal_link_div"
                   >
-                    <div className="tile">
-                      <div className="row">
-                        <div className="col-md-2">
-                          <img
-                            src={renewable}
-                            alt="/"
-                            style={{ height: 50, width: 50 }}
-                          />
-                        </div>
-                        <div
-                          className="col-md-9 tile_main_div"
-                          style={{ paddingRight: "10px" }}
-                        >
-                          <h5>Due for Renewal</h5>
-                          <h6 className="cnt">{fleetData?.Renewal}</h6>
-                        </div>
-                      </div>
+                    <img
+                      src={renewable}
+                      alt="/"
+                      style={{ height: 50, width: 50 }}
+                    />
+                    <div className="d-flex flex-column  justify-content-between h-100 ">
+                      <h5>Due for Renewal</h5>
+                      <h6 className="cnt text-center">{fleetData?.Renewal}</h6>
                     </div>
                   </ScrollLink>
                 </div>
@@ -342,17 +240,6 @@ const LandingPage = ({ setWrongUser, userEntryCount }) => {
             />
           </div>
         </div>
-      )}
-
-      {isOpen && (
-        <QuickActionModal
-          setIsOpen={setIsOpen}
-          handleClickActive={handleClickActive}
-          isOpen={isOpen}
-          ServiceSchedule={fleetData?.ServiceSchedule}
-          renewable={renewable}
-          Renewal={fleetData?.Renewal}
-        />
       )}
     </>
   );

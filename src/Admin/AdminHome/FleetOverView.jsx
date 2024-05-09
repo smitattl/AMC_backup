@@ -24,7 +24,7 @@ function FleetOverView({ fleetData = {} }) {
               </div>
             </div>
             <div className="d-flex flex-column gap-1">
-              <div>FMC</div>
+              <div>FMS</div>
               <div className="font_weight_700">{fleetData.FMSCount || "0"}</div>
             </div>
           </div>

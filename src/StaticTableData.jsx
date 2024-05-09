@@ -392,3 +392,18 @@ export const searchOptions = [
     value: "mobile_no",
   },
 ];
+
+export const customerSelectOptions = [
+  {
+    label: "ARN Number",
+    value: "arn_number",
+  },
+  {
+    label: "Chassis Number",
+    value: "chassis_name",
+  },
+  {
+    label: "Vehicle Registration Number",
+    value: "vehicle_registration_no",
+  },
+];

@@ -14,7 +14,6 @@ function AdminFleetDetails() {
   const [fmsChartData, setFmsChartData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(arnValues);
 
   const getAmcdataHandler = async () => {
     setLoading(true);
@@ -88,7 +87,7 @@ function AdminFleetDetails() {
                 )}
                 {fmsChartData.length !== 0 && (
                   <div className="view-box">
-                    <div className="card_heading pt10">AMC Type Count</div>
+                    <div className="card_heading pt10">FMS Type Count</div>
                     <PieChartGraph
                       data={fmsChartData}
                       increaseHeight={fmsChartData.length === 0 ? true : false}

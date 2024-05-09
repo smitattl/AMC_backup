@@ -9,6 +9,7 @@ const PopupModal = ({
   indexClick,
   FleetDetailsColumns,
   fleetTil,
+  heading,
 }) => {
   return (
     <div>
@@ -21,6 +22,7 @@ const PopupModal = ({
             columns={FleetDetailsColumns}
             indextable={indexClick}
             title={fleetTil}
+            heading={heading}
           />
         </Modal.Body>
         <Modal.Footer>
