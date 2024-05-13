@@ -16,12 +16,12 @@ import { monthNames } from "../../StaticTableData";
 import { ApiInterface } from "../../API";
 import Loading from "../../components/Loading/Loading";
 import FilterSection from "../AdminHome/FilterSection";
-import { setVasOptions } from "../../store/Slices/homeAPISlice";
+import { setVasOptions, setVasType } from "../../store/Slices/homeAPISlice";
 
 function AdminKeyInsight() {
   const token = localStorage.getItem("Token");
   const dispatch = useDispatch();
-  const { arnNumber, arnValues, vasType } = useSelector(
+  const { vasOptions, arnValues, vasType } = useSelector(
     (state) => state.homeApi
   );
   const [FleetUptimeX, setFleetUptimeX] = useState([]);
@@ -69,26 +69,13 @@ function AdminKeyInsight() {
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
-        const adherence = data?.advance_chassis_count[0]?.Chassis_Count;
-        const updatedServiceDetails = data.service_details.map(
-          (serviceDetail) => {
-            const matchingDueService = data.due_for_service.find(
-              (dueService) => dueService.arn_no === serviceDetail.arn_no
-            );
-            if (matchingDueService) {
-              return { ...serviceDetail, Availed: matchingDueService.Availed };
-            }
-            return serviceDetail;
-          }
-        );
-        setServiceDetails(
-          updatedServiceDetails.map((detail) => ({
-            ...detail,
-            Chassis_Count: adherence,
-          }))
-        );
         setTatDetails(data.tat_details);
-        setDueForService(data.due_for_service);
+        setDueForService({
+          ...data.due_for_service[0],
+          due_for_service_schedule:
+            response.data.due_for_service[0]?.free_service +
+            response.data.due_for_service[0]?.Scheduled_service,
+        });
         setTotalActiveVehicle(data?.total_active_vehicles);
         setAdvanceChasis(data?.advance_chassis_count);
         setInitialized(false);
@@ -100,7 +87,7 @@ function AdminKeyInsight() {
   };
 
   const FleetupTimehandler = async () => {
-    if (!arnValues) return;
+    if (!arnValues && vasType.value !== "undefined") return;
     setLoading(true);
     try {
       const formData = new FormData();
@@ -118,9 +105,40 @@ function AdminKeyInsight() {
     setLoading(false);
   };
 
+  const getvasdataHandler = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("arn_no", arnValues);
+      const response = await ApiInterface.getvasData(formData);
+      if (response.status === 200) {
+        const vasOptionsData = response?.data?.map((item) => ({
+          label: item?.vas_type,
+          value: item?.vas_type,
+        }));
+
+        console.log("vasOptionsData:", vasOptionsData);
+
+        if (vasOptionsData && vasOptionsData.length > 0) {
+          dispatch(setVasOptions(vasOptionsData));
+          console.log("Dispatching setVasType:", vasOptionsData[0]);
+          dispatch(setVasType(vasOptionsData[0]));
+        } else {
+          console.log("vasOptionsData is empty");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching VAS data:", error);
+    }
+  };
   useEffect(() => {
-    FleetupTimehandler();
-    getkeyInsightsdataHandler();
+    getvasdataHandler();
+  }, [arnValues]);
+
+  useEffect(() => {
+    if (vasType.value !== "undefined") {
+      FleetupTimehandler();
+      getkeyInsightsdataHandler();
+    }
   }, []);
 
   const searchBasedOnVas = () => {
@@ -179,7 +197,7 @@ function AdminKeyInsight() {
             <div className="my-4">
               <TableInSightsComp
                 image={ScheduleIcon}
-                tabledata={servicedetails}
+                tabledata={dueForService}
                 tableheader={tableheaderThree}
                 heading={`Service Details ${
                   dueForService[0]?.Jobcard_Created_Month ||

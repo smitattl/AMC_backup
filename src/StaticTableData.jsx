@@ -156,8 +156,9 @@ export const dueforRenewalColumns = [
       align: "center",
     },
   },
+
   {
-    accessorKey: "contract_start_date",
+    accessorKey: "contract_start_Date",
     header: "Contract Start Date     ",
     Header: ({ column }) => <a>{column.columnDef.header}</a>,
     muiTableBodyCellProps: {
@@ -270,7 +271,7 @@ export const fleetTableColumns = [
     },
   },
   {
-    accessorKey: "Contract_start_Date",
+    accessorKey: "contract_start_Date",
     header: "Contract start date ",
     Header: ({ column }) => <a>{column.columnDef.header}</a>,
     muiTableBodyCellProps: {
@@ -281,7 +282,7 @@ export const fleetTableColumns = [
     },
   },
   {
-    accessorKey: "Contract_End_Date",
+    accessorKey: "contract_end_Date",
     header: "Contract end date ",
     Header: ({ column }) => <a>{column.columnDef.header}</a>,
     muiTableBodyCellProps: {
@@ -292,7 +293,7 @@ export const fleetTableColumns = [
     },
   },
   {
-    accessorKey: "Start_KMs",
+    accessorKey: "contract_start_kms",
     header: "Contract Start KMs   ",
     Header: ({ column }) => <a>{column.columnDef.header}</a>,
     muiTableBodyCellProps: {
@@ -303,7 +304,7 @@ export const fleetTableColumns = [
     },
   },
   {
-    accessorKey: "End_KMs",
+    accessorKey: "contract_end_kms",
     header: "Contract End KMs ",
     Header: ({ column }) => <a>{column.columnDef.header}</a>,
     muiTableBodyCellProps: {
@@ -325,7 +326,7 @@ export const fleetTableColumns = [
     },
   },
   {
-    accessorKey: "application_Type",
+    accessorKey: "application",
     header: "Application Type",
     Header: ({ column }) => <a>{column.columnDef.header}</a>,
     muiTableBodyCellProps: {

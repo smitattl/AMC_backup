@@ -12,6 +12,8 @@ const initialState = {
   isOpen: true,
   showFilterOptions: false,
   activeAccordionItem: "",
+  showTableForCustomerOne: false,
+  showTableForCustomerTwo: false,
 };
 
 const customerSlice = createSlice({
@@ -51,6 +53,12 @@ const customerSlice = createSlice({
     setActiveAccordionItem(state, action) {
       state.activeAccordionItem = action.payload;
     },
+    setShowTableForCustomerOne(state, action) {
+      state.showTableForCustomerOne = action.payload;
+    },
+    setShowTableForCustomerTwo(state, action) {
+      state.showTableForCustomerTwo = action.payload;
+    },
   },
 });
 
@@ -65,5 +73,8 @@ export const {
   setIsOpen,
   setShowFilterOptions,
   setActiveAccordionItem,
+  setShowCustomerTable,
+  setShowTableForCustomerTwo,
+  setShowTableForCustomerOne,
 } = customerSlice.actions;
 export default customerSlice.reducer;

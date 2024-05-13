@@ -13,7 +13,7 @@ const PopupModal = ({
 }) => {
   return (
     <div>
-      <Modal show={isOpen !== false} onHide={onClose} className="modal_sec">
+      <Modal show={isOpen} onHide={onClose} className="modal_sec">
         <Modal.Header closeButton>
           <Modal.Title>Fleet Data</Modal.Title>
         </Modal.Header>

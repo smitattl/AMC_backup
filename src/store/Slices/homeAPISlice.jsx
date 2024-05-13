@@ -13,6 +13,8 @@ const initialState = {
   arnValues: null,
   vasType: {},
   vasOptions: [],
+  serviceScheduleData: [],
+  renewalData: [],
 };
 
 const homeApiSlice = createSlice({
@@ -61,6 +63,12 @@ const homeApiSlice = createSlice({
     setVasOptions(state, action) {
       state.vasOptions = action.payload;
     },
+    setServiceScheduleData(state, action) {
+      state.serviceScheduleData = action.payload;
+    },
+    setRenewalData(state, action) {
+      state.renewalData = action.payload;
+    },
     resetFields(state) {
       state.arnNumber = initialState.arnNumber;
       state.fleetData = initialState.fleetData;
@@ -89,5 +97,7 @@ export const {
   setArnValues,
   setVasType,
   setVasOptions,
+  setServiceScheduleData,
+  setRenewalData,
 } = homeApiSlice.actions;
 export default homeApiSlice.reducer;

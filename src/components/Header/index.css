@@ -66,15 +66,12 @@ a {
   color: #27292f;
   font-weight: 600;
   font-family: sans-serif;
-  cursor: pointer;
 }
 .scroll_link span {
   color: #1a1b1f;
   font-weight: 600;
 }
-.scroll_link:hover {
-  opacity: 0.6;
-}
+
 .bottom_header {
   backdrop-filter: blur(4px);
   background-color: rgba(249, 249, 249, 0.384);

@@ -6,7 +6,6 @@ import {
 import CommonTable from "../CommonComps/CommonTable";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setShowTableForAdmin,
   setShowTableForAdminOne,
   setShowTableForAdminTwo,
 } from "../../store/Slices/arnSlice";
@@ -16,6 +15,7 @@ function AccordionTable({ serviceScheduleData = [], renewalData = [] }) {
     (state) => state.arn
   );
   const dispatch = useDispatch();
+
   return (
     <div className="container_wrapper">
       <div

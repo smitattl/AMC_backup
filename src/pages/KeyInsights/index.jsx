@@ -88,27 +88,13 @@ const KeyInsights = () => {
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
-        const adherence = data?.advance_chassis_count[0]?.Chassis_Count;
-        const updatedServiceDetails = data.service_details.map(
-          (serviceDetail) => {
-            const matchingDueService = data.due_for_service.find(
-              (dueService) => dueService.arn_no === serviceDetail.arn_no
-            );
-            if (matchingDueService) {
-              return { ...serviceDetail, Availed: matchingDueService.Availed };
-            }
-            return serviceDetail;
-          }
-        );
-
-        setServiceDetails(
-          updatedServiceDetails.map((detail) => ({
-            ...detail,
-            Chassis_Count: adherence,
-          }))
-        );
+        setDueForService({
+          ...data.due_for_service[0],
+          due_for_service_schedule:
+            data?.due_for_service[0]?.free_service +
+            data?.due_for_service[0]?.Scheduled_service,
+        });
         setTatDetails(data.tat_details);
-        setDueForService(data.due_for_service);
         setTotalActiveVehicle(data?.total_active_vehicles);
         setAdvanceChasis(data?.advance_chassis_count);
         setInitialized(false);
@@ -173,8 +159,13 @@ const KeyInsights = () => {
   };
   useEffect(() => {
     getvasdataHandler();
-    FleetupTimehandler();
-    getkeyInsightsdataHandler();
+  }, []);
+
+  useEffect(() => {
+    if (arnValuesForCustomer && selectVasType) {
+      FleetupTimehandler();
+      getkeyInsightsdataHandler();
+    }
   }, []);
 
   const searchData = () => {

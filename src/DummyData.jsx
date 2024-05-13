@@ -58,7 +58,7 @@ export const tableheaderThree = [
   },
   {
     title: "Due for Scheduled Service",
-    accessor: "Scheduled_service",
+    accessor: "due_for_service_schedule",
   },
   {
     title: "Schedule Services Availed",

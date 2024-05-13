@@ -164,26 +164,22 @@ function App() {
   };
 
   useEffect(() => {
-    if (params.param1 !== undefined && !token && !pathname.includes("/admin")) {
+    if (params.param1 !== undefined && !pathname.includes("/admin")) {
       getDecryptedDataHandler();
     }
-  }, [token, params]);
+  }, []);
 
   useEffect(() => {
     if (token && userData && !pathname.includes("/admin")) {
       getLoginEntryCountHandler();
     }
-  }, [token, userData]);
+  }, [token]);
 
   useEffect(() => {
-    if (
-      userEntryCount &&
-      userEntryCount <= 100 &&
-      !pathname.includes("/admin")
-    ) {
+    if (userEntryCount <= 5 && !pathname.includes("/admin")) {
       updateLoginEntriesHandler();
     }
-  }, [userEntryCount, pathname, updateLoginEntriesHandler]);
+  }, []);
 
   useEffect(() => {
     if (arnForCustomer?.value === "all") {

@@ -25,6 +25,7 @@ import {
   setActiveAccordionItem,
   setArnForCustomer,
   setArnListForCustomer,
+  setIsOpen,
 } from "../../store/Slices/customerSlice";
 import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
 
@@ -194,7 +195,10 @@ const LandingPage = () => {
                     spy={true}
                     exact="true"
                     offset={-120}
-                    onClick={() => handleClickActive("section1")}
+                    onClick={() => {
+                      handleClickActive("section1");
+                      dispatch(setIsOpen(false));
+                    }}
                     className="renewal_link_div"
                   >
                     <img

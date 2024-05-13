@@ -39,7 +39,10 @@ function QuickActionModal() {
                 spy={true}
                 exact="true"
                 offset={-120}
-                onClick={() => handleClickActive("section1")}
+                onClick={() => {
+                  handleClickActive("section1");
+                  dispatch(setIsOpen(false));
+                }}
                 className="renewal_link_div renewal_link_modal"
               >
                 <img
@@ -63,7 +66,10 @@ function QuickActionModal() {
                 spy={true}
                 exact="true"
                 offset={-370}
-                onClick={() => handleClickActive("section2")}
+                onClick={() => {
+                  handleClickActive("section2");
+                  dispatch(setIsOpen(false));
+                }}
                 className="renewal_link_div renewal_link_modal"
               >
                 <img

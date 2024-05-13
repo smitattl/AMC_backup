@@ -5,18 +5,24 @@ import "./index.css";
 import AccordionTable from "./AccordionTable";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiInterface } from "../../API";
-import { setFleetData } from "../../store/Slices/homeAPISlice";
+import {
+  setFleetData,
+  setRenewalData,
+  setServiceScheduleData,
+} from "../../store/Slices/homeAPISlice";
 import Loading from "../../components/Loading/Loading";
 
 function AdminHome() {
   const dispatch = useDispatch();
-  const { arnNumber, fleetData, arnListForAdmin } = useSelector(
-    (state) => state.homeApi
-  );
+  const {
+    arnNumber,
+    fleetData,
+    arnListForAdmin,
+    renewalData,
+    serviceScheduleData,
+  } = useSelector((state) => state.homeApi);
 
   const [loading, setLoading] = useState(false);
-  const [serviceScheduleData, setServiceScheduleData] = useState([]);
-  const [renewalData, setRenewalData] = useState([]);
 
   const arnValues = arnListForAdmin
     ?.filter((item) => item.value !== "all")
@@ -41,17 +47,37 @@ function AdminHome() {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("Section", element);
+      formData.append("Section", "ServiceScheduled");
       if (arnNumber.value === "all") {
         formData.append("ARN-Number", arnValues);
       } else formData.append("ARN-Number", arnNumber.value);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         if (element === "ServiceScheduled") {
-          setServiceScheduleData(response?.data?.RowData ?? []);
-        } else if (element === "Reneawls") {
-          setRenewalData(response?.data?.RowData ?? []);
+          dispatch(setServiceScheduleData(response?.data?.RowData ?? []));
         }
+        if (element === "Reneawls") {
+          dispatch(setRenewalData(response?.data?.RowData ?? []));
+        }
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  const getDetailedViewHandlerForRenwal = async (element) => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("Section", "Renewals");
+      if (arnNumber.value === "all") {
+        formData.append("ARN-Number", arnValues);
+      } else formData.append("ARN-Number", arnNumber.value);
+      const response = await ApiInterface.getVehicleDetails(formData);
+      if (response.status === 200) {
+        dispatch(setRenewalData(response?.data?.RowData ?? []));
         setLoading(false);
       }
     } catch (error) {
@@ -69,16 +95,17 @@ function AdminHome() {
       return;
     }
     getGenericInformationHandler();
-    getDetailedViewHandler("ServiceScheduled");
-    getDetailedViewHandler("Renewals");
+    getDetailedViewHandler();
+    getDetailedViewHandlerForRenwal();
   };
   useEffect(() => {
     if (arnNumber) {
       getGenericInformationHandler();
-      getDetailedViewHandler("ServiceScheduled");
-      getDetailedViewHandler("Renewals");
+      getDetailedViewHandler();
+      getDetailedViewHandlerForRenwal();
     }
   }, []);
+
   return (
     <>
       {loading ? (

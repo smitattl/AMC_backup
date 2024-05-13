@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import {
-  setActiveAccordionItem,
-  setShowTableForAdmin,
   setShowTableForAdminOne,
   setShowTableForAdminTwo,
 } from "./store/Slices/arnSlice";
+import {
+  setShowTableForCustomerOne,
+  setShowTableForCustomerTwo,
+} from "./store/Slices/customerSlice";
 
 export const LogoutSession = () => {
   const navigate = useLocation();
@@ -19,9 +21,9 @@ export const useHandleClickActive = () => {
   const dispatch = useDispatch();
   const handleClickActive = (element) => {
     if (element === "section1") {
-      dispatch(setActiveAccordionItem("0"));
+      dispatch(setShowTableForCustomerOne(true));
     } else if (element === "section2") {
-      dispatch(setActiveAccordionItem("1"));
+      dispatch(setShowTableForCustomerTwo(true));
     }
   };
 

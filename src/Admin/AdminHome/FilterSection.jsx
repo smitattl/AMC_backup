@@ -161,9 +161,6 @@ function FilterSection({ searchFilterhandler = () => {} }) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    if (vasOptions) dispatch(setVasType(vasOptions[0]));
-  }, [vasOptions]);
 
   useEffect(() => {
     if (vehicleNumber) getARNNumbersByVehicleHandler();
@@ -191,23 +188,6 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     dispatch(setVasType({}));
     dispatch(setVasOptions([]));
   };
-  const getvasdataHandler = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("arn_no", arnValues);
-      const response = await ApiInterface.getvasData(formData);
-      const vasOptions = response?.data?.map((item) => ({
-        label: item?.vas_type,
-        value: item?.vas_type,
-      }));
-      dispatch(setVasOptions(vasOptions ?? []));
-    } catch (error) {
-      console.error("Error fetching VAS data:", error);
-    }
-  };
-  useEffect(() => {
-    if (arnValues) getvasdataHandler();
-  }, [arnValues]);
 
   return (
     <Form className="filter_wrapper">
