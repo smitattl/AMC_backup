@@ -53,7 +53,7 @@ function QuickActionModal() {
                 <div className="d-flex flex-column  justify-content-between h-100">
                   <h6>Due for Schedule Service</h6>
                   <h6 className="cnt text-center">
-                    {fleetData?.ServiceSchedule}
+                    {fleetData?.ServiceSchedule || 0}
                   </h6>
                 </div>
               </ScrollLink>
@@ -79,7 +79,7 @@ function QuickActionModal() {
                 />
                 <div className="d-flex flex-column  justify-content-between h-100">
                   <h6>Due for Renewal</h6>
-                  <h6 className="cnt text-center">{fleetData?.Renewal}</h6>
+                  <h6 className="cnt text-center">{fleetData?.Renewal || 0}</h6>
                 </div>
               </ScrollLink>
             </div>

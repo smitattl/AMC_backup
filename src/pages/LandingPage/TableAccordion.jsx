@@ -15,7 +15,7 @@ function TableAccordion({ serviceScheduleData = [], renewalData }) {
   const { showTableForCustomerOne, showTableForCustomerTwo } = useSelector(
     (state) => state.customer
   );
-  console.log(showTableForCustomerOne);
+
   return (
     <div className="row py-5">
       <div className="col-md-12">

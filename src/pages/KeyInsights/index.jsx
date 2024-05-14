@@ -70,8 +70,11 @@ const KeyInsights = () => {
       const formData = new FormData();
       formData.append("arn_no", arnValuesForCustomer);
       const response = await ApiInterface.getvasData(formData);
-      setVASOptions(response?.data ?? []);
-      setLoading(false);
+      if (response.data === 200) {
+        setVASOptions(response?.data ?? []);
+        response.data;
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching VAS data:", error);
       setLoading(false);

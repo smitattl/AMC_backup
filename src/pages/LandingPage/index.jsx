@@ -11,21 +11,14 @@ import AMCType from "../../images/AMC_Type.png";
 import product from "../../images/product.png";
 import "./HomePage.css";
 import Loading from "../../components/Loading/Loading";
-
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setArnList,
-  setFleetData,
-  setParams,
-  setArnNumber,
-  setUserMobile,
-} from "../../store/Slices/arnSlice";
+import { setFleetData, setParams } from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
 import {
   setActiveAccordionItem,
-  setArnForCustomer,
-  setArnListForCustomer,
   setIsOpen,
+  setShowTableForCustomerOne,
+  setShowTableForCustomerTwo,
 } from "../../store/Slices/customerSlice";
 import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
 
@@ -36,9 +29,14 @@ const LandingPage = () => {
   const [Rowdata, setRowdata] = useState([]);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
 
-  const { userData, userMobile, fleetData } = useSelector((state) => state.arn);
-  const { arnForCustomer, arnValuesForCustomer, activeAccordionItem } =
-    useSelector((state) => state.customer);
+  const { userData, fleetData } = useSelector((state) => state.arn);
+  const {
+    arnValuesForCustomer,
+    activeAccordionItem,
+    showTableForCustomerTwo,
+    showTableForCustomerOne,
+    arnForCustomer,
+  } = useSelector((state) => state.customer);
 
   useEffect(() => {
     dispatch(setParams({ param1, param2 }));
@@ -65,15 +63,11 @@ const LandingPage = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("Section", element);
+      formData.append("Section", "ServiceScheduled");
       formData.append("ARN-Number", arnValuesForCustomer);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
-        if (element === "ServiceScheduled") {
-          setServiceScheduleData(response?.data?.RowData ?? []);
-        } else if (element === "Reneawls") {
-          setRowdata(response?.data?.RowData ?? []);
-        }
+        setServiceScheduleData(response?.data?.RowData ?? []);
         setLoading(false);
       }
     } catch (error) {
@@ -81,27 +75,48 @@ const LandingPage = () => {
     }
     setLoading(false);
   };
+
+  const getRenewalDetailedViewHandler = async (element) => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("Section", "Reneawls");
+      formData.append("ARN-Number", arnValuesForCustomer);
+      const response = await ApiInterface.getVehicleDetails(formData);
+      if (response.status === 200) {
+        setRowdata(response?.data?.RowData ?? []);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const handleClickActive = (element) => {
     if (element === "section1") {
-      dispatch(setActiveAccordionItem("0"));
+      dispatch(setShowTableForCustomerOne(!showTableForCustomerOne));
+      dispatch(setShowTableForCustomerTwo(false));
     } else if (element === "section2") {
-      dispatch(setActiveAccordionItem("1"));
+      dispatch(setShowTableForCustomerTwo(!showTableForCustomerTwo));
+      dispatch(setShowTableForCustomerOne(false));
     }
   };
 
   const searchData = () => {
-    getDetailedViewHandler("ServiceScheduled");
-    getDetailedViewHandler("Renewals");
+    getDetailedViewHandler();
+    getRenewalDetailedViewHandler();
     getGenericInformationHandler();
   };
 
   useEffect(() => {
     if (arnValuesForCustomer) {
-      getDetailedViewHandler("ServiceScheduled");
-      getDetailedViewHandler("Renewals");
+      getDetailedViewHandler();
+      getRenewalDetailedViewHandler();
       getGenericInformationHandler();
     }
   }, []);
+
   return (
     <>
       {loading ? (
@@ -191,23 +206,23 @@ const LandingPage = () => {
                   <ScrollLink
                     to="section1"
                     smooth={true}
-                    duration={50}
+                    duration={200}
                     spy={true}
                     exact="true"
-                    offset={-120}
+                    offset={50}
                     onClick={() => {
                       handleClickActive("section1");
                       dispatch(setIsOpen(false));
                     }}
-                    className="renewal_link_div"
+                    className="renewal_link_div cursor_pointer"
                   >
                     <img
                       src={transportIcon}
                       alt="/"
                       style={{ height: 50, width: 58 }}
                     />
-                    <div className="d-flex flex-column  justify-content-between h-100 text-center">
-                      <h5>Due for Schedule Service</h5>
+                    <div className="d-flex flex-column  justify-content-between h-100">
+                      <h5 className="text-center">Due for Schedule Service</h5>
                       <h6 className="cnt ">{fleetData?.ServiceSchedule}</h6>
                     </div>
                   </ScrollLink>
@@ -216,20 +231,20 @@ const LandingPage = () => {
                   <ScrollLink
                     to="section2"
                     smooth={true}
-                    duration={50}
+                    duration={200}
                     spy={true}
                     exact="true"
-                    offset={-370}
+                    offset={50}
                     onClick={() => handleClickActive("section2")}
-                    className="renewal_link_div"
+                    className="renewal_link_div cursor_pointer  text-center"
                   >
                     <img
                       src={renewable}
                       alt="/"
                       style={{ height: 50, width: 50 }}
                     />
-                    <div className="d-flex flex-column  justify-content-between h-100 ">
-                      <h5>Due for Renewal</h5>
+                    <div className="d-flex flex-column  justify-content-between h-100">
+                      <h5 className="text-center">Due for Renewal</h5>
                       <h6 className="cnt text-center">{fleetData?.Renewal}</h6>
                     </div>
                   </ScrollLink>

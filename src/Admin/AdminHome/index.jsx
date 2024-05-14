@@ -53,12 +53,7 @@ function AdminHome() {
       } else formData.append("ARN-Number", arnNumber.value);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
-        if (element === "ServiceScheduled") {
-          dispatch(setServiceScheduleData(response?.data?.RowData ?? []));
-        }
-        if (element === "Reneawls") {
-          dispatch(setRenewalData(response?.data?.RowData ?? []));
-        }
+        dispatch(setServiceScheduleData(response?.data?.RowData ?? []));
         setLoading(false);
       }
     } catch (error) {
