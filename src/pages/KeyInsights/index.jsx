@@ -72,7 +72,6 @@ const KeyInsights = () => {
       const response = await ApiInterface.getvasData(formData);
       if (response.data === 200) {
         setVASOptions(response?.data ?? []);
-        response.data;
         setLoading(false);
       }
     } catch (error) {
