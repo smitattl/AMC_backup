@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "./index.css";
-import IndexRoute from "./routes";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCaretSquareUp,
@@ -33,6 +32,7 @@ import {
   setArnValuesForCustomer,
 } from "./store/Slices/customerSlice";
 import Loading from "./components/Loading/Loading";
+import IndexRoute from "./IndexRoute";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 

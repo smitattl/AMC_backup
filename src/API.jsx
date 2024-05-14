@@ -190,12 +190,12 @@ export const ApiInterface = {
       url: "/get-chasis-bar-graph-data",
       data: formData,
     }),
-  getVehicledataforCustomer: (formData) =>
-    apiCall({
-      method: "POST",
-      url: "/",
-      data: formData,
-    }),
+  // getVehicledataforCustomer: (formData) =>
+  //   apiCall({
+  //     method: "POST",
+  //     url: "/",
+  //     data: formData,
+  //   }),
   checkLoginEntries: (formData) =>
     apiCall({
       method: "POST",
