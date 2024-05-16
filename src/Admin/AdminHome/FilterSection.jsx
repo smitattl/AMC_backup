@@ -14,9 +14,8 @@ import {
   setMobileNo,
   resetFields,
   clearArnNumber,
-  setVasType,
-  setVasOptions,
   setArnValues,
+  setVasType,
 } from "../../store/Slices/homeAPISlice";
 import { searchOptions } from "../../StaticTableData";
 import { useLocation } from "react-router-dom";
@@ -32,9 +31,8 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     vehicleNumber,
     panNumber,
     vasType,
-    mobileNo,
     vasOptions,
-    arnValues,
+    mobileNo,
   } = useSelector((state) => state.homeApi);
 
   useEffect(() => {
@@ -47,6 +45,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
       dispatch(setArnValues(arnNumber.value));
     }
   }, [arnNumber, arnListForAdmin, dispatch]);
+
   const [searchUserName, setSearchUserName] = useState(null);
   const [accountNameList, setAccountNameList] = useState([]);
 
@@ -185,8 +184,6 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     if (newValue === "") {
       dispatch(clearArnNumber());
     }
-    dispatch(setVasType({}));
-    dispatch(setVasOptions([]));
   };
 
   return (

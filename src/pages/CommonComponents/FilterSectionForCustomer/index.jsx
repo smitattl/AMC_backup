@@ -1,64 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import "./index.css";
-import { ApiInterface } from "../../../API";
 import { useLocation } from "react-router-dom";
 import {
   setArnForCustomer,
-  setArnValuesForCustomer,
   setChasisNumber,
   setSelectVasType,
   setShowFilterOptions,
 } from "../../../store/Slices/customerSlice";
 import downArrowIcon from "../../../images/down-arrow.png";
 
-function FilterSectionForCustomer({ searchData }) {
+function FilterSectionForCustomer({ searchData, vasOptions }) {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const {
     arnListForCustomer,
     arnForCustomer,
     selectSearchType,
-    arnValuesForCustomer,
     chasisNumber,
     selectVasType,
     showFilterOptions,
   } = useSelector((state) => state.customer);
 
-  const [vasOptions, setVasOptions] = useState([]);
   const [vehicleRegNo, setVehicleRegNo] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const getvasdataHandler = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("arn_no", arnValuesForCustomer);
-      const response = await ApiInterface.getvasData(formData);
-      const vasTypes = response.data.map((item) => ({
-        value: item.vas_type,
-        label: item.vas_type,
-      }));
-      setVasOptions(vasTypes ?? []);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching VAS data:", error);
-      setLoading(false);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (pathname === "/Home/Key-insights") {
-      getvasdataHandler();
-    }
-  }, [arnForCustomer]);
-
-  useEffect(() => {
-    if (vasOptions.length > 0) dispatch(setSelectVasType(vasOptions[0]));
-  }, [vasOptions]);
 
   return (
     <div className="filter_Section_accordion my-3">
@@ -110,14 +77,14 @@ function FilterSectionForCustomer({ searchData }) {
                   isSearchable={false}
                 />
               </Form.Group>
-              {vasOptions.length > 0 && pathname === "/Home/Key-insights" && (
+              {vasOptions?.length > 0 && pathname === "/Home/Key-insights" && (
                 <Form.Group className="form_group">
                   <Form.Label>Vas Type</Form.Label>
                   <Select
                     options={vasOptions}
                     value={selectVasType}
                     onChange={(selectedOption) => {
-                      setSelectVasType(selectedOption);
+                      dispatch(setSelectVasType(selectedOption));
                     }}
                     placeholder="Select or enter a value..."
                     noOptionsMessage={() => "Type to create a new value"}

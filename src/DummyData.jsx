@@ -58,7 +58,7 @@ export const tableheaderThree = [
   },
   {
     title: "Due for Scheduled Service",
-    accessor: "due_for_service_schedule",
+    accessor: "Scheduled_service",
   },
   {
     title: "Schedule Services Availed",
@@ -66,7 +66,7 @@ export const tableheaderThree = [
   },
   {
     title: "Adherence",
-    accessor: "Chassis_Count",
+    accessor: "adherence",
   },
 ];
 export const tableheaderFour = [

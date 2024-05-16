@@ -16,19 +16,14 @@ import { monthNames } from "../../StaticTableData";
 import { ApiInterface } from "../../API";
 import Loading from "../../components/Loading/Loading";
 import FilterSection from "../AdminHome/FilterSection";
-import { setVasOptions, setVasType } from "../../store/Slices/homeAPISlice";
 
 function AdminKeyInsight() {
   const token = localStorage.getItem("Token");
-  const dispatch = useDispatch();
-  const { vasOptions, arnValues, vasType } = useSelector(
-    (state) => state.homeApi
-  );
+
+  const { arnValues, vasType } = useSelector((state) => state.homeApi);
   const [FleetUptimeX, setFleetUptimeX] = useState([]);
   const [FleetUptimeY, setFleetUptimeY] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [advanceChasis, setAdvanceChasis] = useState([]);
-  const [initialized, setInitialized] = useState(false);
   const [indexTAT, setindexTAT] = useState([]);
   const [totalActiveVehicle, setTotalActiveVehicle] = useState([]);
   const [tatDetails, setTatDetails] = useState([]);
@@ -59,26 +54,19 @@ function AdminKeyInsight() {
   const handleItemClick = (indexData) => {
     setindexTAT(indexData);
   };
+
   const getkeyInsightsdataHandler = async () => {
-    if (!arnValues) return;
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("arn_no", arnValues);
-      formData.append("vas", vasType?.value);
+      formData.append("vas", vasType.value);
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
+        setDueForService(data.due_for_service);
         setTatDetails(data.tat_details);
-        setDueForService({
-          ...data.due_for_service[0],
-          due_for_service_schedule:
-            response.data.due_for_service[0]?.free_service +
-            response.data.due_for_service[0]?.Scheduled_service,
-        });
         setTotalActiveVehicle(data?.total_active_vehicles);
-        setAdvanceChasis(data?.advance_chassis_count);
-        setInitialized(false);
       }
     } catch (error) {
       console.log(error);
@@ -87,12 +75,11 @@ function AdminKeyInsight() {
   };
 
   const FleetupTimehandler = async () => {
-    if (!arnValues && vasType.value !== "undefined") return;
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("ARN-Number", arnValues);
-      formData.append("Vas-type", vasType?.value);
+      formData.append("Vas-type", vasType.value);
       formData.append("Token", token);
       const response = await ApiInterface.getFleetUptime(formData);
       if (response.status === 200) {
@@ -105,40 +92,9 @@ function AdminKeyInsight() {
     setLoading(false);
   };
 
-  const getvasdataHandler = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("arn_no", arnValues);
-      const response = await ApiInterface.getvasData(formData);
-      if (response.status === 200) {
-        const vasOptionsData = response?.data?.map((item) => ({
-          label: item?.vas_type,
-          value: item?.vas_type,
-        }));
-
-        console.log("vasOptionsData:", vasOptionsData);
-
-        if (vasOptionsData && vasOptionsData.length > 0) {
-          dispatch(setVasOptions(vasOptionsData));
-          console.log("Dispatching setVasType:", vasOptionsData[0]);
-          dispatch(setVasType(vasOptionsData[0]));
-        } else {
-          console.log("vasOptionsData is empty");
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching VAS data:", error);
-    }
-  };
   useEffect(() => {
-    getvasdataHandler();
-  }, [arnValues]);
-
-  useEffect(() => {
-    if (vasType.value !== "undefined") {
-      FleetupTimehandler();
-      getkeyInsightsdataHandler();
-    }
+    FleetupTimehandler();
+    getkeyInsightsdataHandler();
   }, []);
 
   const searchBasedOnVas = () => {

@@ -30,9 +30,11 @@ import {
   setArnForCustomer,
   setArnListForCustomer,
   setArnValuesForCustomer,
+  setSelectVasType,
 } from "./store/Slices/customerSlice";
 import Loading from "./components/Loading/Loading";
 import IndexRoute from "./IndexRoute";
+import { setVasOptions } from "./store/Slices/homeAPISlice";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
@@ -138,48 +140,38 @@ function App() {
     setLoading(false);
   };
 
-  const updateLoginEntriesHandler = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("mobile_no", params.param1);
-      formData.append("Pan_no", params.param2);
-      const response = await ApiInterface.checkLoginEntries(formData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getLoginEntryCountHandler = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("mobile_no", params.param1);
-      formData.append("Pan_no", params.param2);
-      const response = await ApiInterface.getLoginEntryCount(formData);
-      if (response.status === 200) {
-        dispatch(setUserEntryCount(response?.data?.count ?? 0));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (params.param1 !== undefined && !pathname.includes("/admin")) {
       getDecryptedDataHandler();
     }
   }, []);
 
-  useEffect(() => {
-    if (token && userData && !pathname.includes("/admin")) {
-      getLoginEntryCountHandler();
+  const getvasdataHandler = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("arn_no", arnValuesForCustomer);
+      const response = await ApiInterface.getvasData(formData);
+      if (response.status === 200) {
+        const vasTypes = response.data.map((item) => ({
+          value: item.vas_type,
+          label: item.vas_type,
+        }));
+        setVasOptions(vasTypes ?? []);
+        dispatch(setSelectVasType(vasTypes[0]));
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error fetching VAS data:", error);
+      setLoading(false);
     }
-  }, [token]);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    if (userEntryCount <= 5 && !pathname.includes("/admin")) {
-      updateLoginEntriesHandler();
+    if (pathname.includes("/Home")) {
+      getvasdataHandler();
     }
-  }, []);
+  }, [arnValuesForCustomer]);
 
   useEffect(() => {
     if (arnForCustomer?.value === "all") {

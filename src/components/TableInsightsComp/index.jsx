@@ -55,50 +55,61 @@ function TableInSightsComp({
                   tabledata.map((row, rowIndex) => {
                     return (
                       <tr key={rowIndex}>
-                        {tableheader.map((header, cellIndex) => (
-                          <td
-                            key={cellIndex}
-                            onClick={() => {
-                              if (
+                        {tableheader.map((header, cellIndex) => {
+                          return (
+                            <td
+                              key={cellIndex}
+                              onClick={() => {
+                                if (
+                                  header.accessor === "Fleet_Mileage" ||
+                                  fleetTurn
+                                ) {
+                                  handleTdClick(
+                                    row[header.accessor],
+                                    cellIndex
+                                  );
+                                } else if (
+                                  header.accessor === "active_vehicles"
+                                )
+                                  setShowLink(!showLink);
+                              }}
+                              className={
                                 header.accessor === "Fleet_Mileage" ||
+                                header.accessor === "active_vehicles" ||
                                 fleetTurn
-                              ) {
-                                handleTdClick(row[header.accessor], cellIndex);
-                              } else if (header.accessor === "active_vehicles")
-                                setShowLink(!showLink);
-                            }}
-                            className={
-                              header.accessor === "Fleet_Mileage" ||
-                              header.accessor === "active_vehicles" ||
-                              fleetTurn
-                                ? "fleet_link position-relative"
-                                : "position-relative"
-                            }
-                          >
-                            {header.accessor === "active_vehicles" ? (
-                              <>
-                                <span
-                                  data-tooltip-id="fleetedge_link"
-                                  data-tooltip-content="Click here for Fleetedge"
-                                  data-tooltip-place="bottom"
-                                  onClick={() =>
-                                    window.open(
-                                      "https://fleetedge.home.tatamotors/auth/login"
-                                    )
-                                  }
-                                >
-                                  {row[header.accessor || 0]}
-                                </span>
-                                <Tooltip
-                                  id="fleetedge_link"
-                                  style={{ zIndex: "10" }}
-                                />
-                              </>
-                            ) : (
-                              row[header.accessor || 0]
-                            )}
-                          </td>
-                        ))}
+                                  ? "fleet_link position-relative"
+                                  : "position-relative"
+                              }
+                            >
+                              {header.accessor === "active_vehicles" ? (
+                                <>
+                                  <span
+                                    data-tooltip-id="fleetedge_link"
+                                    data-tooltip-content="Click here for Fleetedge"
+                                    data-tooltip-place="bottom"
+                                    onClick={() =>
+                                      window.open(
+                                        "https://fleetedge.home.tatamotors/auth/login"
+                                      )
+                                    }
+                                  >
+                                    {row[header.accessor] === null
+                                      ? 0
+                                      : row[header.accessor || 0]}
+                                  </span>
+                                  <Tooltip
+                                    id="fleetedge_link"
+                                    style={{ zIndex: "10" }}
+                                  />
+                                </>
+                              ) : row[header.accessor] === null ? (
+                                0
+                              ) : (
+                                row[header.accessor || 0]
+                              )}
+                            </td>
+                          );
+                        })}
                       </tr>
                     );
                   })

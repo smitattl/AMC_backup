@@ -18,10 +18,13 @@ import {
 import BarGraph from "../../components/graph/BarGraph";
 import TableInSightsComp from "../../components/TableInsightsComp";
 import { monthNames } from "../../StaticTableData";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
+import { setSelectVasType } from "../../store/Slices/customerSlice";
 
 const KeyInsights = () => {
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("Token");
   const {
     chasisNumber,
     arnValuesForCustomer,
@@ -29,16 +32,13 @@ const KeyInsights = () => {
     vehicleRegistrationNo,
     selectVasType,
   } = useSelector((state) => state.customer);
-  const token = localStorage.getItem("Token");
 
-  const [initialized, setInitialized] = useState(false);
-
-  const [VASOptions, setVASOptions] = useState([]);
+  const [vasOptions, setVasOptions] = useState([]);
   const [totalActiveVehicle, setTotalActiveVehicle] = useState([]);
-  const [tatDetails, setTatDetails] = useState([]);
-  const [servicedetails, setServiceDetails] = useState([]);
-  const [dueForService, setDueForService] = useState([]);
-  const [advanceChasis, setAdvanceChasis] = useState([]);
+  const [tatDetails, setTatDetails] = useState({});
+  const [servicedetails, setServiceDetails] = useState({});
+  const [dueForService, setDueForService] = useState({});
+  const [advanceChasis, setAdvanceChasis] = useState({});
   const [FleetUptimeX, setFleetUptimeX] = useState([]);
   const [FleetUptimeY, setFleetUptimeY] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,6 @@ const KeyInsights = () => {
     previousYear = currentYear;
   }
   const previousMonthName = monthNames[previousMonth - 1];
-
   const barGraphData = [
     {
       x: FleetUptimeX || [],
@@ -64,25 +63,8 @@ const KeyInsights = () => {
     },
   ];
 
-  const getvasdataHandler = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("arn_no", arnValuesForCustomer);
-      const response = await ApiInterface.getvasData(formData);
-      if (response.data === 200) {
-        setVASOptions(response?.data ?? []);
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Error fetching VAS data:", error);
-      setLoading(false);
-    }
-    setLoading(false);
-  };
-
   const getkeyInsightsdataHandler = async () => {
-    setInitialized(true);
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("arn_no", arnValuesForCustomer);
@@ -99,16 +81,17 @@ const KeyInsights = () => {
         setTatDetails(data.tat_details);
         setTotalActiveVehicle(data?.total_active_vehicles);
         setAdvanceChasis(data?.advance_chassis_count);
-        setInitialized(false);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
-    setInitialized(false);
+    setLoading(false);
   };
 
   const FleetupTimehandler = async () => {
-    setInitialized(true);
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("ARN-Number", arnValuesForCustomer);
@@ -118,11 +101,13 @@ const KeyInsights = () => {
       if (response.status === 200) {
         setFleetUptimeX(response?.data?.xlist);
         setFleetUptimeY(response?.data?.ylist);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
-    setInitialized(false);
+    setLoading(false);
   };
 
   const getChasisDatahandler = async () => {
@@ -153,25 +138,19 @@ const KeyInsights = () => {
         setDueForService(data.due_for_service);
         setTotalActiveVehicle(data?.total_active_vehicles);
         setAdvanceChasis(data?.advance_chassis_count);
-        setInitialized(false);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    getvasdataHandler();
-  }, []);
 
   useEffect(() => {
-    if (arnValuesForCustomer && selectVasType) {
-      FleetupTimehandler();
-      getkeyInsightsdataHandler();
-    }
+    FleetupTimehandler();
+    getkeyInsightsdataHandler();
   }, []);
 
   const searchData = () => {
-    getvasdataHandler();
     getkeyInsightsdataHandler();
     if (selectSearchType.value === "chassis_name" && chasisNumber !== "")
       getChasisDatahandler();
@@ -190,13 +169,16 @@ const KeyInsights = () => {
   return (
     <>
       <div className="main_content">
-        {initialized ? (
+        {loading ? (
           <Loading />
         ) : (
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-12">
-                <FilterSectionForCustomer searchData={searchData} />
+                <FilterSectionForCustomer
+                  searchData={searchData}
+                  vasOptions={vasOptions}
+                />
               </div>
             </div>
             <div className="row">
@@ -241,7 +223,7 @@ const KeyInsights = () => {
             <div className="my-4">
               <TableInSightsComp
                 image={ScheduleIcon}
-                tabledata={servicedetails}
+                tabledata={dueForService}
                 tableheader={tableheaderThree}
                 heading={`Service Details ${
                   (dueForService && dueForService[0]?.Jobcard_Created_Month) ||

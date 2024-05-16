@@ -127,10 +127,20 @@ function Header() {
       <div className="bottom_header">
         <div className="header_contaier py-2 d-flex justify-content-between align-items-center">
           <div className="d-flex gap-3">
-            <Link to="/">
-              <img src={BackIcon} alt="/back-arrow" className="home_icon" />
-              &nbsp; Online Sales Platform
-            </Link>
+            {pathname.includes("/Home") && (
+              <Link
+                to="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(
+                    "https://buytrucknbus-osp3dev.home.tatamotors/account/vas-dashboard"
+                  );
+                }}
+              >
+                <img src={BackIcon} alt="/back-arrow" className="home_icon" />
+                &nbsp; Online Sales Platform
+              </Link>
+            )}
             {!(
               pathname === "/admin/admin-fleet-details" ||
               pathname === "/admin/admin-key-insight" ||
