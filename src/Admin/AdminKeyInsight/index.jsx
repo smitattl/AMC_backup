@@ -17,7 +17,7 @@ import { ApiInterface } from "../../API";
 import Loading from "../../components/Loading/Loading";
 import FilterSection from "../AdminHome/FilterSection";
 
-function AdminKeyInsight() {
+function AdminKeyInsight({ getvasdataHandler }) {
   const token = localStorage.getItem("Token");
 
   const { arnValues, vasType } = useSelector((state) => state.homeApi);
@@ -27,7 +27,6 @@ function AdminKeyInsight() {
   const [indexTAT, setindexTAT] = useState([]);
   const [totalActiveVehicle, setTotalActiveVehicle] = useState([]);
   const [tatDetails, setTatDetails] = useState([]);
-  const [servicedetails, setServiceDetails] = useState([]);
   const [dueForService, setDueForService] = useState([]);
 
   const currentDate = new Date();
@@ -108,7 +107,10 @@ function AdminKeyInsight() {
         <Loading />
       ) : (
         <>
-          <FilterSection searchFilterhandler={searchBasedOnVas} />
+          <FilterSection
+            searchFilterhandler={searchBasedOnVas}
+            getvasdataHandler={getvasdataHandler}
+          />
           <div className="container_wrapper">
             <div className="row mt-3">
               <div className="col-md-6 ">

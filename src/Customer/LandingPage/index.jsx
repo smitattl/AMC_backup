@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { decodeToken } from "react-jwt";
-import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import { ApiInterface } from "../../API";
@@ -12,35 +10,86 @@ import product from "../../images/product.png";
 import "./HomePage.css";
 import Loading from "../../components/Loading/Loading";
 import { useDispatch, useSelector } from "react-redux";
-import { setFleetData, setParams } from "../../store/Slices/arnSlice";
+import { setFleetData } from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
 import {
   setActiveAccordionItem,
+  setArnForCustomer,
+  setArnListForCustomer,
+  setCustomerData,
   setIsOpen,
+  setParams,
   setShowTableForCustomerOne,
   setShowTableForCustomerTwo,
 } from "../../store/Slices/customerSlice";
-import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
+import FilterSectionForCustomer from "../FilterSectionForCustomer";
+import { decodeToken } from "react-jwt";
 
-const LandingPage = () => {
-  const { param1, param2 } = useParams();
+const LandingPage = ({ setWrongUser }) => {
+  const token = localStorage.getItem("Token");
+
   const dispatch = useDispatch();
+  const { param1, param2 } = useParams();
   const [loading, setLoading] = useState(false);
   const [Rowdata, setRowdata] = useState([]);
+  const [stopApi, setStopApi] = useState(false);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
 
-  const { userData, fleetData } = useSelector((state) => state.arn);
+  const { fleetData } = useSelector((state) => state.arn);
   const {
     arnValuesForCustomer,
     activeAccordionItem,
     showTableForCustomerTwo,
     showTableForCustomerOne,
-    arnForCustomer,
+    customerData,
   } = useSelector((state) => state.customer);
+
+  useEffect(() => {
+    localStorage.clear();
+  }, [param1, param2]);
 
   useEffect(() => {
     dispatch(setParams({ param1, param2 }));
   }, [param1, param2]);
+
+  const getDecryptedDataHandler = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("DataOne", param1);
+      formData.append("DataTwo", param2);
+      const response = await ApiInterface.getDecryptedData(formData);
+      if (response.status === 200) {
+        localStorage.setItem("Token", response.data.Token);
+        const { ARN, MobNo, email_id, userName } = decodeToken(
+          response.data.Token
+        );
+        const userData = { MobNo, email_id, userName };
+        dispatch(setCustomerData(userData));
+        const arnData = ARN.map((name) => ({
+          value: name,
+          label: name,
+        }));
+        let arnListWithAll;
+        const allOption = { value: "all", label: "All" };
+        if (arnData.length > 1) {
+          arnListWithAll = [allOption, ...arnData];
+        } else {
+          arnListWithAll = arnData;
+        }
+        dispatch(setArnListForCustomer(arnListWithAll));
+        dispatch(setArnForCustomer(arnListWithAll[0]));
+        setWrongUser(false);
+      } else if (response.status !== 200) setWrongUser(true);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (!token) getDecryptedDataHandler();
+  }, [token, param1, param2]);
 
   const getGenericInformationHandler = async () => {
     setLoading(true);
@@ -103,19 +152,19 @@ const LandingPage = () => {
     }
   };
 
-  const searchData = () => {
-    getDetailedViewHandler();
-    getRenewalDetailedViewHandler();
-    getGenericInformationHandler();
-  };
-
   useEffect(() => {
     if (arnValuesForCustomer) {
       getDetailedViewHandler();
       getRenewalDetailedViewHandler();
       getGenericInformationHandler();
     }
-  }, []);
+  }, [arnValuesForCustomer]);
+
+  const searchData = () => {
+    getDetailedViewHandler();
+    getRenewalDetailedViewHandler();
+    getGenericInformationHandler();
+  };
 
   return (
     <>
@@ -129,15 +178,17 @@ const LandingPage = () => {
               <p style={{ fontWeight: "bold" }}>
                 Customer Name:{" "}
                 <span style={{ fontFamily: "sans-serif" }}>
-                  {userData.userName}
+                  {customerData.userName}
                 </span>
               </p>
               <p style={{ fontWeight: "bold" }}>
                 Contact Details:
                 <span style={{ fontFamily: "sans-serif" }}>
-                  {userData?.MobNo &&
-                    userData?.MobNo?.substring(0, userData.MobNo.length - 6) +
-                      "******"}
+                  {customerData?.MobNo &&
+                    customerData?.MobNo?.substring(
+                      0,
+                      customerData.MobNo.length - 6
+                    ) + "******"}
                 </span>
               </p>
             </div>

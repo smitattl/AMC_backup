@@ -94,7 +94,7 @@ a {
 
 .intials {
   background: black;
-  color: white;
+  color: white !important;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -132,8 +132,8 @@ a {
   color: black;
 }
 .activeLink {
-  font-weight: 600;
-  color: #1f77b4;
+  font-weight: 600 !important;
+  color: #1f77b4 !important;
 }
 .home_img {
   width: 20px;

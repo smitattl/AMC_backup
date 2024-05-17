@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Accordion } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import DeatiledTable from "../../components/Table/Table";
 import Loading from "../../components/Loading/Loading";
 import PieChartGraph from "../../components/PieChart/PieChart";
 import { ApiInterface } from "../../API";
 import { fleetTableColumns } from "../../StaticTableData";
 import { useSelector } from "react-redux";
-import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
+import FilterSectionForCustomer from "../FilterSectionForCustomer";
 
 const FleetDetails = () => {
   const [Rowdata, setRowdata] = useState([]);
@@ -37,10 +34,8 @@ const FleetDetails = () => {
   };
 
   useEffect(() => {
-    if (arnForCustomer) {
-      getAmcdataHandler();
-      getDetailedViewHandler("VehicleCount");
-    }
+    getAmcdataHandler();
+    getDetailedViewHandler("VehicleCount");
   }, []);
 
   const searchData = () => {

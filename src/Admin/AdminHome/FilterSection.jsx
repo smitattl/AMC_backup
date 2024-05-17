@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import "./index.css";
 import Form from "react-bootstrap/Form";
 import Select from "react-select";
@@ -16,13 +17,16 @@ import {
   clearArnNumber,
   setArnValues,
   setVasType,
+  setVasOptions,
 } from "../../store/Slices/homeAPISlice";
 import { searchOptions } from "../../StaticTableData";
-import { useLocation } from "react-router-dom";
+import { setPreventApiCalling } from "../../store/Slices/customerSlice";
 
 function FilterSection({ searchFilterhandler = () => {} }) {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
+  const [searchUserName, setSearchUserName] = useState(null);
+  const [accountNameList, setAccountNameList] = useState([]);
   const {
     arnNumber,
     selectedUser,
@@ -36,18 +40,8 @@ function FilterSection({ searchFilterhandler = () => {} }) {
   } = useSelector((state) => state.homeApi);
 
   useEffect(() => {
-    if (arnNumber.value === "all") {
-      const values = arnListForAdmin
-        .filter((option) => option.value !== "all")
-        .map((option) => option.value);
-      dispatch(setArnValues(values));
-    } else {
-      dispatch(setArnValues(arnNumber.value));
-    }
-  }, [arnNumber, arnListForAdmin, dispatch]);
-
-  const [searchUserName, setSearchUserName] = useState(null);
-  const [accountNameList, setAccountNameList] = useState([]);
+    if (searchUserName) handleInputChange();
+  }, [searchUserName]);
 
   const handleInputChange = async () => {
     try {
@@ -67,14 +61,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     }
   };
 
-  let previousSelectedUser = null;
-
-  useEffect(() => {
-    previousSelectedUser = selectedUser;
-  }, [selectedUser]);
-
-  const getArnByuserHandler = async () => {
-    if (!selectedUser) return;
+  const getArnByuserHandler = async (selectedUser) => {
     try {
       const body = {
         account_name: selectedUser.value,
@@ -100,18 +87,10 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     }
   };
 
-  useEffect(() => {
-    if (selectedUser && searchType?.value === "account_name")
-      getArnByuserHandler(selectedUser);
-  }, [selectedUser]);
-
-  const getARNNumbersByVehicleHandler = async (e) => {
-    if (!vehicleNumber) {
-      return null;
-    }
+  const getARNNumbersByVehicleHandler = async (value) => {
     try {
       const body = {
-        vehicle_no: vehicleNumber,
+        vehicle_no: value,
       };
       const response = await ApiInterface.getARNbyVehicleNumber(body);
       if (response.status === 200) {
@@ -134,10 +113,10 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     }
   };
 
-  const getARNPanHandler = async () => {
+  const getARNPanHandler = async (value) => {
     try {
       const body = {
-        phone_no: mobileNo,
+        phone_no: value,
       };
       const response = await ApiInterface.getARNPanByMobileNo(body);
       if (response.status === 200) {
@@ -160,18 +139,6 @@ function FilterSection({ searchFilterhandler = () => {} }) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    if (vehicleNumber) getARNNumbersByVehicleHandler();
-  }, [vehicleNumber]);
-
-  useEffect(() => {
-    if (searchUserName) handleInputChange();
-  }, [searchUserName]);
-
-  useEffect(() => {
-    if (mobileNo) getARNPanHandler();
-  }, [mobileNo]);
 
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -213,6 +180,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
               value={selectedUser}
               onChange={(option) => {
                 dispatch(setSelectedUser(option));
+                getArnByuserHandler(option);
               }}
               onInputChange={setSearchUserName}
               inputValue={searchUserName}
@@ -232,6 +200,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
                   dispatch(setPanNumber(""));
                   dispatch(setArnListForAdmin([]));
                   dispatch(setArnNumber({ label: "", value: "" }));
+                  getARNPanHandler(e.target.value);
                 }}
                 value={mobileNo}
                 type="number"
@@ -265,7 +234,10 @@ function FilterSection({ searchFilterhandler = () => {} }) {
             <Form.Control
               value={vehicleNumber}
               placeholder="Add value here"
-              onChange={(e) => dispatch(setVehicleNumber(e.target.value))}
+              onChange={(e) => {
+                dispatch(setVehicleNumber(e.target.value));
+                getARNNumbersByVehicleHandler(e.target.value);
+              }}
             />
           </Form.Group>
         ) : null}
@@ -285,9 +257,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
             <Select
               value={arnNumber}
               options={arnListForAdmin}
-              onChange={(option) => {
-                dispatch(setArnNumber(option));
-              }}
+              onChange={(option) => dispatch(setArnNumber(option))}
               isSearchable={false}
               placeholder="Type to search..."
               noOptionsMessage={() => "No options found"}
@@ -303,7 +273,9 @@ function FilterSection({ searchFilterhandler = () => {} }) {
               <Select
                 options={vasOptions}
                 value={vasType}
-                onChange={(option) => dispatch(setVasType(option))}
+                onChange={(option) => {
+                  dispatch(setVasType(option));
+                }}
                 className="react-select"
                 isSearchable={false}
               />

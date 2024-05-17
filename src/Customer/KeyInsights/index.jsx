@@ -19,8 +19,7 @@ import BarGraph from "../../components/graph/BarGraph";
 import TableInSightsComp from "../../components/TableInsightsComp";
 import { monthNames } from "../../StaticTableData";
 import { useDispatch, useSelector } from "react-redux";
-import FilterSectionForCustomer from "../CommonComponents/FilterSectionForCustomer";
-import { setSelectVasType } from "../../store/Slices/customerSlice";
+import FilterSectionForCustomer from "../FilterSectionForCustomer";
 
 const KeyInsights = () => {
   const dispatch = useDispatch();
@@ -30,7 +29,7 @@ const KeyInsights = () => {
     arnValuesForCustomer,
     selectSearchType,
     vehicleRegistrationNo,
-    selectVasType,
+    customerVasType,
   } = useSelector((state) => state.customer);
 
   const [vasOptions, setVasOptions] = useState([]);
@@ -68,7 +67,7 @@ const KeyInsights = () => {
     try {
       const formData = new FormData();
       formData.append("arn_no", arnValuesForCustomer);
-      formData.append("vas", selectVasType.value);
+      formData.append("vas", customerVasType.value);
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
@@ -95,7 +94,7 @@ const KeyInsights = () => {
     try {
       const formData = new FormData();
       formData.append("ARN-Number", arnValuesForCustomer);
-      formData.append("Vas-type", selectVasType.value);
+      formData.append("Vas-type", customerVasType.value);
       formData.append("Token", token);
       const response = await ApiInterface.getFleetUptime(formData);
       if (response.status === 200) {
@@ -146,6 +145,7 @@ const KeyInsights = () => {
   };
 
   useEffect(() => {
+    console.log("nnn");
     FleetupTimehandler();
     getkeyInsightsdataHandler();
   }, []);

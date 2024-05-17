@@ -7,12 +7,12 @@ import { useLocation } from "react-router-dom";
 import {
   setArnForCustomer,
   setChasisNumber,
-  setSelectVasType,
+  setCustomerVasType,
   setShowFilterOptions,
-} from "../../../store/Slices/customerSlice";
-import downArrowIcon from "../../../images/down-arrow.png";
+} from "../../store/Slices/customerSlice";
+import downArrowIcon from "../../images/down-arrow.png";
 
-function FilterSectionForCustomer({ searchData, vasOptions }) {
+function FilterSectionForCustomer({ searchData }) {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const {
@@ -20,8 +20,9 @@ function FilterSectionForCustomer({ searchData, vasOptions }) {
     arnForCustomer,
     selectSearchType,
     chasisNumber,
-    selectVasType,
+    customerVasType,
     showFilterOptions,
+    customerVasList,
   } = useSelector((state) => state.customer);
 
   const [vehicleRegNo, setVehicleRegNo] = useState("");
@@ -77,23 +78,24 @@ function FilterSectionForCustomer({ searchData, vasOptions }) {
                   isSearchable={false}
                 />
               </Form.Group>
-              {vasOptions?.length > 0 && pathname === "/Home/Key-insights" && (
-                <Form.Group className="form_group">
-                  <Form.Label>Vas Type</Form.Label>
-                  <Select
-                    options={vasOptions}
-                    value={selectVasType}
-                    onChange={(selectedOption) => {
-                      dispatch(setSelectVasType(selectedOption));
-                    }}
-                    placeholder="Select or enter a value..."
-                    noOptionsMessage={() => "Type to create a new value"}
-                    className="react-select"
-                    classNamePrefix="mySelect"
-                    isSearchable={false}
-                  />
-                </Form.Group>
-              )}
+              {customerVasList?.length > 0 &&
+                pathname === "/Home/Key-insights" && (
+                  <Form.Group className="form_group">
+                    <Form.Label>Vas Type</Form.Label>
+                    <Select
+                      options={customerVasList}
+                      value={customerVasType}
+                      onChange={(selectedOption) => {
+                        dispatch(setCustomerVasType(selectedOption));
+                      }}
+                      placeholder="Select or enter a value..."
+                      noOptionsMessage={() => "Type to create a new value"}
+                      className="react-select"
+                      classNamePrefix="mySelect"
+                      isSearchable={false}
+                    />
+                  </Form.Group>
+                )}
             </React.Fragment>
           )}
           {selectSearchType?.value === "chassis_name" && (

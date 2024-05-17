@@ -4,16 +4,20 @@ const initialState = {
   arnListForCustomer: [],
   arnForCustomer: "",
   selectSearchType: customerSelectOptions[0],
-  arnValuesForCustomer: null,
+  arnValuesForCustomer: [],
   chasisNumber: "",
   vehicleRegistrationNo: "",
-  selectVasType: {},
+  customerVasType: {},
+  customerVasList: [],
   indexTAT: [],
   isOpen: true,
   showFilterOptions: false,
   activeAccordionItem: "",
   showTableForCustomerOne: false,
   showTableForCustomerTwo: false,
+  params: {},
+  customerData: [],
+  preventApiCalling: true,
 };
 
 const customerSlice = createSlice({
@@ -38,8 +42,8 @@ const customerSlice = createSlice({
     setVehicleRegistrationNo(state, action) {
       state.vehicleRegistrationNo = action.payload;
     },
-    setSelectVasType(state, action) {
-      state.selectVasType = action.payload;
+    setCustomerVasType(state, action) {
+      state.customerVasType = action.payload;
     },
     setIndexTAT(state, action) {
       state.indexTAT = action.payload;
@@ -59,6 +63,18 @@ const customerSlice = createSlice({
     setShowTableForCustomerTwo(state, action) {
       state.showTableForCustomerTwo = action.payload;
     },
+    setCustomerVasList(state, action) {
+      state.customerVasList = action.payload;
+    },
+    setParams(state, action) {
+      state.params = action.payload;
+    },
+    setCustomerData(state, action) {
+      state.customerData = action.payload;
+    },
+    setPreventApiCalling(state, action) {
+      state.preventApiCalling = action.payload;
+    },
   },
 });
 
@@ -68,7 +84,7 @@ export const {
   setSelectSearchType,
   setArnValuesForCustomer,
   setChasisNumber,
-  setSelectVasType,
+  setCustomerVasType,
   setIndexTAT,
   setIsOpen,
   setShowFilterOptions,
@@ -76,5 +92,9 @@ export const {
   setShowCustomerTable,
   setShowTableForCustomerTwo,
   setShowTableForCustomerOne,
+  setCustomerVasList,
+  setParams,
+  setCustomerData,
+  setPreventApiCalling,
 } = customerSlice.actions;
 export default customerSlice.reducer;

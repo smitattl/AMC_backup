@@ -57,5 +57,5 @@ export const NameInitials = ({ names }) => {
   const initials = firstTwoWords
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
-  return <React.Fragment>{initials}</React.Fragment>;
+  return <div>{initials}</div>;
 };

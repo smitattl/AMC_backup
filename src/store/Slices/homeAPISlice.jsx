@@ -58,7 +58,12 @@ const homeApiSlice = createSlice({
       state.arnValues = action.payload;
     },
     setVasType(state, action) {
-      state.vasType = action.payload;
+      if (action.payload) {
+        const { label, value } = action.payload;
+        if (label && value) {
+          state.vasType = { label, value };
+        }
+      }
     },
     setVasOptions(state, action) {
       state.vasOptions = action.payload;

@@ -5,7 +5,7 @@ import Logout from "../components/Logout/Logout";
 import Admin from "../Admin";
 import LandingPage from "../pages/LandingPage";
 import KeyInsights from "../pages/KeyInsights";
-import FleetDetails from "../pages/FleetDetails";
+import FleetDetails from "../Customer/FleetDetails";
 import Error from "../components/Error";
 
 const IndexRoute = ({ setWrongUser, userEntryCount }) => {

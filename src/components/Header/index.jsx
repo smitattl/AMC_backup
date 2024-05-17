@@ -18,9 +18,11 @@ function Header() {
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { arnList, userData, params } = useSelector((state) => state.arn);
+  const { arnList } = useSelector((state) => state.arn);
   const { fleetData, arnNumber } = useSelector((state) => state.homeApi);
-  const { arnForCustomer } = useSelector((state) => state.customer);
+  const { arnForCustomer, params, customerData } = useSelector(
+    (state) => state.customer
+  );
   const handleClickActiveForAdmin = useHandleClickActiveForAdmin();
   const [showDropdown, setShowDropDown] = useState(false);
 
@@ -100,18 +102,18 @@ function Header() {
             >
               <img src={HomeIcon} alt="HomeIcon" className="home_img" />
             </Link>
-            {userData?.NameList && !pathname.includes("/admin") && (
+            {customerData?.userName && !pathname.includes("/admin") && (
               <div className="position-relative" ref={dropdownRef}>
                 <div
                   onClick={() => setShowDropDown(!showDropdown)}
                   className="intials"
                 >
-                  <NameInitials names={userData.NameList} />
+                  <NameInitials names={customerData.userName} />
                 </div>
                 {showDropdown && (
                   <div className="menu_section">
                     <div className="p-3">
-                      <h6>Hi, {userData?.NameList}</h6>
+                      <h6>Hi, {customerData?.userName}</h6>
                       <p>Access your account and manage your orders</p>
                       <button onClick={LogoutSession}> Logout</button>
                     </div>
@@ -183,7 +185,7 @@ function Header() {
               {pathname?.includes("/Home") && arnForCustomer && (
                 <div>ARN Number </div>
               )}
-              {userData?.email_id && pathname.includes("/Home") && (
+              {customerData?.email_id && pathname.includes("/Home") && (
                 <div className="arn_no_text text-end">Email</div>
               )}
             </div>
@@ -194,9 +196,9 @@ function Header() {
               {pathname?.includes("/admin") && arnNumber && (
                 <div>{arnNumber?.label || arnList[0]} </div>
               )}
-              {userData?.email_id && pathname.includes("/Home") && (
+              {customerData?.email_id && pathname.includes("/Home") && (
                 <span className="scroll_link">
-                  : {maskEmail(userData?.email_id || "")}
+                  : {maskEmail(customerData?.email_id || "")}
                 </span>
               )}
             </div>

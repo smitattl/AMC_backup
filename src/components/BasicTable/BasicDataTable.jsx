@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 
 const BasicTable = ({ columns }) => {
   const { pathname } = useLocation();
-  const { arnValuesForCustomer, selectVasType, indexTAT } = useSelector(
+  const { arnValuesForCustomer, customerVasType, indexTAT } = useSelector(
     (state) => state.customer
   );
   const { arnValues, vasType } = useSelector((state) => state.homeApi);
@@ -25,7 +25,7 @@ const BasicTable = ({ columns }) => {
       } else if (pathname.includes("/admin")) {
         pathname.append("arn_no", arnValuesForCustomer);
       }
-      formData.append("vas_type", selectVasType.value);
+      formData.append("vas_type", customerVasType.value);
       const response = await ApiInterface.getTotalFleetDetailsData(formData);
       if (response.status === 200) {
         setFleetData(response.data.TotalData);
@@ -61,7 +61,7 @@ const BasicTable = ({ columns }) => {
       const FormData = require("form-data");
       const formData = new FormData();
       formData.append("arn_no", arnValuesForCustomer);
-      formData.append("vas_type", selectVasType.value);
+      formData.append("vas_type", customerVasType.value);
       formData.append("Clickindex", indexTAT);
       const response = await ApiInterface.getFleetTatDetails(formData);
       if (response.status === 200) {
