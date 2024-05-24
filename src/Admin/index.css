@@ -94,3 +94,8 @@ label {
 .css-1nmdiq5-menu {
   z-index: 10 !important;
 }
+@media screen and (max-width: 900px) {
+  .container_wrapper {
+    width: 98%;
+  }
+}

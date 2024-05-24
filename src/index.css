@@ -197,3 +197,12 @@ a:hover {
   flex-grow: 1;
   width: 50%;
 }
+@media screen and (max-width: 900px) {
+  .insight_tables_wrapper {
+    flex-direction: column;
+  }
+  .tables_insight,
+  .bar_graph_section {
+    width: 100%;
+  }
+}
