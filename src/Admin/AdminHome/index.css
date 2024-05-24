@@ -85,3 +85,13 @@
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   color: #042998;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

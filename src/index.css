@@ -175,10 +175,7 @@ a:hover {
 .box-body .js-plotly-plot {
   width: 100%;
   text-align: center;
-  display: flex;
   justify-content: center;
-  padding: 10px;
-  height: 65vh;
 }
 
 .insight_tables_wrapper {

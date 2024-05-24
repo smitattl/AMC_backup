@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -6,22 +6,28 @@ import {
 
 import "./index.css";
 const CommonTable = ({ columns = [], data = [] }) => {
+  const memoizedColumns = useMemo(() => columns, [columns]);
+  const memoizedData = useMemo(() => data, [data]);
+
   const table = useMaterialReactTable({
-    columns,
-    data,
+    columns: memoizedColumns,
+    data: memoizedData,
     enableColumnResizing: true,
     enableDensityToggle: false,
-    initialState: { density: "spacious" },
+    initialState: { density: "comfortable" },
     muiTableHeadCellProps: {
       sx: {
-        width: "300px",
-        textWrap: "nowrap",
+        width: 100,
+        textWrap: "wrap",
+        whiteSpace: "wrap",
+        border: "0.5px solid #dfe2ec8b",
       },
     },
     muiTableBodyCellProps: {
       sx: {
-        width: "300px",
-        textWrap: "nowrap",
+        width: 100,
+        textWrap: "wrap",
+        border: "0.5px solid #dfe2ec8b",
       },
     },
   });

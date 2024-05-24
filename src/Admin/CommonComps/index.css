@@ -13,3 +13,14 @@ a:not([href]):not([class]):hover {
 .css-1t48e2w-MuiTableCell-root {
   padding: 10px;
 }
+
+.css-lapokc {
+  text-overflow: inherit !important;
+  text-wrap: wrap !important;
+}
+.css-1clpn7n-MuiTableCell-root {
+  text-overflow: inherit !important;
+  text-wrap: wrap !important;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}
