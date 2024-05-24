@@ -1,0 +1,49 @@
+.modal_overlay {
+  background: rgba(0, 0, 0, 0.542);
+  backdrop-filter: blur(4px);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+}
+
+.table_modal {
+  position: fixed;
+  margin: auto;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 102;
+  display: flex;
+  justify-content: center;
+}
+
+.modal_section {
+  background: white;
+  width: 90%;
+  max-width: 1100px;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.modal_section .modal_title {
+  padding: 10px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.close_button {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.modal_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.27);
+}

@@ -15,12 +15,9 @@ import {
   setMobileNo,
   resetFields,
   clearArnNumber,
-  setArnValues,
   setVasType,
-  setVasOptions,
 } from "../../store/Slices/homeAPISlice";
 import { searchOptions } from "../../StaticTableData";
-import { setPreventApiCalling } from "../../store/Slices/customerSlice";
 
 function FilterSection({ searchFilterhandler = () => {} }) {
   const dispatch = useDispatch();
@@ -37,6 +34,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
     vasType,
     vasOptions,
     mobileNo,
+    arnValues,
   } = useSelector((state) => state.homeApi);
 
   useEffect(() => {
@@ -155,7 +153,7 @@ function FilterSection({ searchFilterhandler = () => {} }) {
 
   return (
     <Form className="filter_wrapper">
-      <div className="d-flex align-items-end  gap-3 filter">
+      <div className="filter">
         <Form.Group className="form_group">
           <Form.Label>Search Type</Form.Label>
           <Select
@@ -282,9 +280,14 @@ function FilterSection({ searchFilterhandler = () => {} }) {
             </Form.Group>
           )}
         <button
-          className="search_button"
+          className={
+            arnNumber?.value === ""
+              ? "search_button disabled_button"
+              : "search_button"
+          }
           type="button"
           onClick={searchFilterhandler}
+          disabled={arnNumber?.value === ""}
         >
           Search
         </button>

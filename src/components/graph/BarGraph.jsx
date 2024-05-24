@@ -20,7 +20,7 @@ const BarGraph = ({ data = null }) => {
   }));
   const layout = {
     xaxis: { title: "Month" },
-    yaxis: { title: "Value" },
+    yaxis: { title: "Percentage" },
     annotations: data[0]?.y.map((value, index) => ({
       x: data[0].x[index],
       y: value + annotationOffset,
@@ -36,12 +36,13 @@ const BarGraph = ({ data = null }) => {
     })),
     shapes: shapes,
     hovermode: "closest",
+    hoverinfo: "none",
     hoverlabel: {
       bgcolor: "#FAFAFA",
       font: { color: "#1f77b4" },
       bordercolor: "#1f77b4",
-      borderwidth: 2, // Add border width
-      borderpad: 4, // Add border padding
+      borderwidth: 2,
+      borderpad: 4,
       borderRadius: 4,
     },
     autosize: true,
@@ -54,8 +55,10 @@ const BarGraph = ({ data = null }) => {
     },
     responsive: true,
   };
-
-  return <Plot data={data} layout={layout} />;
+  const config = {
+    displayModeBar: false,
+  };
+  return <Plot data={data} layout={layout} config={config} />;
 };
 
 export default BarGraph;

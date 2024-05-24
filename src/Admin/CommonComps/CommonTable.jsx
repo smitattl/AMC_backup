@@ -1,35 +1,32 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 
+import "./index.css";
 const CommonTable = ({ columns = [], data = [] }) => {
   const table = useMaterialReactTable({
     columns,
     data,
     enableColumnResizing: true,
-    columnResizeMode: "onEnd",
     enableDensityToggle: false,
-    initialState: { density: "compact" },
+    initialState: { density: "spacious" },
     muiTableHeadCellProps: {
       sx: {
-        fontWeight: "Bold",
-        fontSize: "12px",
+        width: "300px",
+        textWrap: "nowrap",
       },
     },
     muiTableBodyCellProps: {
       sx: {
-        fontSize: "12px",
+        width: "300px",
+        textWrap: "nowrap",
       },
     },
   });
 
-  return (
-    <div className="custom-table">
-      <MaterialReactTable table={table} />
-    </div>
-  );
+  return <MaterialReactTable table={table} />;
 };
 
 export default CommonTable;

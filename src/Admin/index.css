@@ -7,6 +7,11 @@
   padding-top: 90px;
   overflow: hidden;
 }
+@media screen and (max-width: 700px) {
+  .layout_wrapper {
+    padding-top: 50px;
+  }
+}
 .filter_wrapper {
   border-bottom: 1px solid rgba(0, 0, 0, 0.142);
   padding: 10px;
@@ -15,7 +20,17 @@
 
 .filter {
   width: 90%;
+  display: flex;
+  align-items: end;
+  gap: 20px;
   margin: 0 auto;
+  flex-wrap: wrap;
+}
+@media screen and (max-width: 900px) {
+  .filter {
+    width: 100%;
+    gap: 10px;
+  }
 }
 .search_button {
   background: #27292f;
@@ -32,7 +47,11 @@
   background: transparent;
   color: #27292f;
 }
-
+.disabled_button:hover {
+  background: #27292f;
+  color: white;
+  cursor: not-allowed;
+}
 .form-control {
   height: 37px;
   font-size: 14px;

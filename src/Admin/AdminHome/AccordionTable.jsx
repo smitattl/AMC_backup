@@ -27,7 +27,9 @@ function AccordionTable({ serviceScheduleData = [], renewalData = [] }) {
         }}
       >
         <div className="left_line" />
-        <h3 className="m-0 title_second">Due for Schedule Service</h3>
+        <h3 className="m-0 title_second">
+          Vehicles Due For Scheduled Service In Next 30 Days
+        </h3>
       </div>
       {showTableForAdminOne && (
         <div className="box-body p-0">
@@ -48,7 +50,9 @@ function AccordionTable({ serviceScheduleData = [], renewalData = [] }) {
         }}
       >
         <div className="left_line" />
-        <h3 className="m-0 title_second">Due for Renewal</h3>
+        <h3 className="m-0 title_second">
+          Vehicles Due For Contract Renewal in Next 30 Days
+        </h3>
       </div>
       {showTableForAdminTwo && (
         <div className="box-body p-0">

@@ -53,7 +53,7 @@ export const tableheaderTwo = [
 ];
 export const tableheaderThree = [
   {
-    title: "All Jobs",
+    title: "Total Number of Job Cards",
     accessor: "all_jobs",
   },
   {

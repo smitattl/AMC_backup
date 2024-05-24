@@ -13,9 +13,11 @@ import {
   useHandleClickActiveForAdmin,
 } from "../../utils";
 import "./index.css";
+import MenuIcon from "../../images/svgs/menuIcon.svg";
 
 function Header() {
   const dropdownRef = useRef(null);
+  const menuRef = useRef();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { arnList } = useSelector((state) => state.arn);
@@ -25,11 +27,27 @@ function Header() {
   );
   const handleClickActiveForAdmin = useHandleClickActiveForAdmin();
   const [showDropdown, setShowDropDown] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
+
+  const email = customerData?.email_id;
+  const maskedEmail = maskEmail(email);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropDown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowDrawer(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -47,7 +65,7 @@ function Header() {
   return (
     <div className="header_wrapper">
       <div className="bg-white w-full">
-        <div className="header_contaier  d-flex justify-content-between align-items-center">
+        <div className="header_contaier d-flex justify-content-between align-items-center">
           <div className="d-flex gap-5 align-items-center">
             <Link
               to="/"
@@ -59,16 +77,16 @@ function Header() {
             >
               <img src={LogoIcon} alt="/" />
             </Link>
-            <div className="vas_title">VAS Digital Dashboard</div>
+            <div className="vas_title logo_second">VAS Digital Dashboard</div>
           </div>
           <div className="d-flex gap-4 align-items-center">
             <Link
-              className={
+              className={`link_wrapper ${
                 pathname === "/admin/admin-fleet-details" ||
                 pathname === "/Home/Fleet-details"
                   ? "activeLink"
                   : ""
-              }
+              }`}
               to={
                 pathname.includes("/admin")
                   ? "/admin/admin-fleet-details"
@@ -83,16 +101,15 @@ function Header() {
                   ? "/admin/admin-key-insight"
                   : "/Home/Key-insights"
               }
-              className={
+              className={`link_wrapper ${
                 pathname === "/admin/admin-key-insight" ||
                 pathname === "/Home/Key-insights"
                   ? "activeLink"
                   : ""
-              }
+              }`}
             >
               Key Insights
             </Link>
-
             <Link
               to={
                 pathname.includes("/admin")
@@ -115,13 +132,132 @@ function Header() {
                     <div className="p-3">
                       <h6>Hi, {customerData?.userName}</h6>
                       <p>Access your account and manage your orders</p>
+                      <div className="user_details">
+                        {pathname.includes("/Home") && (
+                          <p className="mb-0">
+                            Email:
+                            <span className="scroll_link">{maskedEmail}</span>
+                          </p>
+                        )}
+                        {customerData?.MobNo && (
+                          <p>
+                            Mobile Number :
+                            <span style={{ fontFamily: "sans-serif" }}>
+                              {customerData?.MobNo?.substring(
+                                0,
+                                customerData.MobNo.length - 6
+                              ) + "******"}
+                            </span>
+                          </p>
+                        )}
+                      </div>
                       <button onClick={LogoutSession}> Logout</button>
                     </div>
                   </div>
                 )}
               </div>
             )}
-            <img src={TataIcon} alt="/home" />
+            <div className="position-relative menuIcon" ref={menuRef}>
+              <span onClick={() => setShowDrawer(!showDrawer)}>
+                <img src={MenuIcon} alt="/menu" />
+              </span>
+              {showDrawer && (
+                <>
+                  <div className="mobile_menu">
+                    <div className="mobile_link_section">
+                      {pathname.includes("/Home") && (
+                        <Link
+                          to="/"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setShowDrawer(false);
+                            window.open(
+                              "https://buytrucknbus-osp3dev.home.tatamotors/account/vas-dashboard"
+                            );
+                          }}
+                        >
+                          Online Sales Platform
+                        </Link>
+                      )}
+                      {pathname === "/admin" && (
+                        <React.Fragment>
+                          <ScrollLink
+                            to="section1"
+                            smooth={true}
+                            duration={200}
+                            spy={true}
+                            exact="true"
+                            offset={-140}
+                            onClick={() => {
+                              setShowDrawer(false);
+                              handleClickActiveForAdmin("section1");
+                            }}
+                            className="scroll_link"
+                          >
+                            Vehicles Due For Scheduled Service In Next 30 Days{" "}
+                            <span className="text-white">
+                              ({fleetData.ServiceSchedule || "0"})
+                            </span>
+                          </ScrollLink>
+                          <ScrollLink
+                            to="section2"
+                            smooth={true}
+                            duration={200}
+                            spy={true}
+                            exact="true"
+                            offset={-100}
+                            onClick={() => {
+                              setShowDrawer(false);
+                              handleClickActiveForAdmin("section2");
+                            }}
+                            className="scroll_link"
+                          >
+                            Vehicles Due For Contract Renewal In Next 30 Days
+                            <span className="text-white">
+                              ({fleetData?.Renewal || 0})
+                            </span>
+                          </ScrollLink>
+                        </React.Fragment>
+                      )}
+                      <Link
+                        className={
+                          pathname === "/admin/admin-fleet-details" ||
+                          pathname === "/Home/Fleet-details"
+                            ? "activeLink"
+                            : ""
+                        }
+                        to={
+                          pathname.includes("/admin")
+                            ? "/admin/admin-fleet-details"
+                            : "/Home/Fleet-details"
+                        }
+                        onClick={() => setShowDrawer(false)}
+                      >
+                        Fleet Details
+                      </Link>
+                      <Link
+                        to={
+                          pathname.includes("/admin")
+                            ? "/admin/admin-key-insight"
+                            : "/Home/Key-insights"
+                        }
+                        className={
+                          pathname === "/admin/admin-key-insight" ||
+                          pathname === "/Home/Key-insights"
+                            ? "activeLink"
+                            : ""
+                        }
+                        onClick={() => setShowDrawer(false)}
+                      >
+                        Key Insights
+                      </Link>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <img src={TataIcon} alt="/home" className="logo_second" />
           </div>
         </div>
         <div className="border_bottom" />
@@ -143,49 +279,46 @@ function Header() {
                 &nbsp; Online Sales Platform
               </Link>
             )}
-            {!(
-              pathname === "/admin/admin-fleet-details" ||
-              pathname === "/admin/admin-key-insight" ||
-              pathname.includes("/Home")
-            ) && (
+            {pathname === "/admin" && (
               <React.Fragment>
                 <ScrollLink
                   to="section1"
                   smooth={true}
-                  duration={50}
+                  duration={200}
                   spy={true}
                   exact="true"
                   offset={-140}
                   onClick={() => handleClickActiveForAdmin("section1")}
                   className="scroll_link"
                 >
-                  Due for Schedule Service{" "}
+                  Vehicles Due For Scheduled Service In Next 30 Days{" "}
                   <span>({fleetData.ServiceSchedule || "0"})</span>
                 </ScrollLink>
                 <ScrollLink
                   to="section2"
                   smooth={true}
-                  duration={50}
+                  duration={200}
                   spy={true}
                   exact="true"
-                  offset={-450}
+                  offset={-100}
                   onClick={() => handleClickActiveForAdmin("section2")}
                   className="scroll_link"
                 >
-                  Due for Renewal <span>({fleetData?.Renewal || 0})</span>
+                  Vehicles Due For Contract Renewal In Next 30 Days
+                  <span>({fleetData?.Renewal || 0})</span>
                 </ScrollLink>
               </React.Fragment>
             )}
           </div>
           <div className="arn_no_text" style={{ fontFamily: "sans-serif" }}>
             <div>
-              {pathname?.includes("/admin") && arnNumber && (
+              {pathname.includes("/admin") && arnNumber?.value !== "" && (
                 <div>ARN Number </div>
               )}
               {pathname?.includes("/Home") && arnForCustomer && (
                 <div>ARN Number </div>
               )}
-              {customerData?.email_id && pathname.includes("/Home") && (
+              {email && pathname.includes("/Home") && (
                 <div className="arn_no_text text-end">Email</div>
               )}
             </div>
@@ -193,13 +326,11 @@ function Header() {
               {pathname?.includes("/Home") && arnForCustomer && (
                 <div> : {arnForCustomer?.label}</div>
               )}
-              {pathname?.includes("/admin") && arnNumber && (
-                <div>{arnNumber?.label || arnList[0]} </div>
+              {pathname?.includes("/admin") && arnNumber.value !== "" && (
+                <div> : {arnNumber?.label || arnList[0]} </div>
               )}
-              {customerData?.email_id && pathname.includes("/Home") && (
-                <span className="scroll_link">
-                  : {maskEmail(customerData?.email_id || "")}
-                </span>
+              {email && pathname.includes("/Home") && (
+                <span className="scroll_link">: {maskedEmail}</span>
               )}
             </div>
           </div>

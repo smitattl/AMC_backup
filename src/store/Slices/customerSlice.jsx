@@ -10,7 +10,7 @@ const initialState = {
   customerVasType: {},
   customerVasList: [],
   indexTAT: [],
-  isOpen: true,
+  isOpen: false,
   showFilterOptions: false,
   activeAccordionItem: "",
   showTableForCustomerOne: false,

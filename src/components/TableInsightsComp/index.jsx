@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import he from "he";
-import PopupModal from "../../components/PopupModal";
 import { Tooltip } from "react-tooltip";
 import { setIndexTAT } from "../../store/Slices/customerSlice";
 import { useDispatch } from "react-redux";
+import Modal from "../Modal";
+import "./index.css";
 
 function TableInSightsComp({
   heading = "",
@@ -21,11 +22,9 @@ function TableInSightsComp({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showLink, setShowLink] = useState(false);
   const [FleetTitle, setFleetTitel] = useState();
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   const handleTdClick = (headerresp, header) => {
+    if (headerresp === null) return;
     if (headerresp !== 0 && tableheader[0].title !== "All Jobs") {
       dispatch(setIndexTAT(header));
       setIsModalOpen(true);
@@ -36,11 +35,15 @@ function TableInSightsComp({
   return (
     <>
       <div className="insight_wrapper">
-        {heading && <div className="card_heading">{heading}</div>}
-        <div className="icon_and_table">
-          <div className="image_section">
-            <img src={image} alt="" />
+        {heading && (
+          <div className="card_heading gap-3">
+            <div className="image_section">
+              <img src={image} alt="" />
+            </div>
+            <h5 className="mb-0">{heading}</h5>
           </div>
+        )}
+        <div className="icon_and_table">
           <div className="insight_table_wrapper">
             <table className="insight_table">
               <thead>
@@ -245,12 +248,19 @@ function TableInSightsComp({
           )}
         </div>
       </div>
-      <PopupModal
+      {isModalOpen && (
+        <Modal
+          setIsModalOpen={setIsModalOpen}
+          FleetDetailsColumns={FleetDetailsColumns}
+          fleetTil={FleetTitle}
+        />
+      )}
+      {/* <PopupModal
         isOpen={isModalOpen}
         onClose={closeModal}
         FleetDetailsColumns={FleetDetailsColumns}
         fleetTil={FleetTitle}
-      />
+      /> */}
     </>
   );
 }

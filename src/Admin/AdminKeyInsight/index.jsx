@@ -16,6 +16,7 @@ import { monthNames } from "../../StaticTableData";
 import { ApiInterface } from "../../API";
 import Loading from "../../components/Loading/Loading";
 import FilterSection from "../AdminHome/FilterSection";
+import fleetuptimeIcon from "../../images/uptime.png";
 
 function AdminKeyInsight({ getvasdataHandler }) {
   const token = localStorage.getItem("Token");
@@ -112,12 +113,19 @@ function AdminKeyInsight({ getvasdataHandler }) {
             getvasdataHandler={getvasdataHandler}
           />
           <div className="container_wrapper">
-            <div className="row mt-3">
-              <div className="col-md-6 ">
+            <div className="insight_tables_wrapper  my-3">
+              <div className="bar_graph_section">
                 {barGraphData.length !== 0 && (
                   <div className="view-box">
-                    <div className="card_heading pt10">Fleet Up-Time</div>
-                    <div className="box-body p-0">
+                    <div className="card_heading">
+                      <img
+                        src={fleetuptimeIcon}
+                        alt="/"
+                        className="fleet_uptime_icon"
+                      />
+                      <h5 className="mb-0">Fleet Up-Time</h5>
+                    </div>
+                    <div className="box-body">
                       <div className="js-plotly-plot">
                         <BarGraph data={barGraphData} />
                       </div>
@@ -125,15 +133,7 @@ function AdminKeyInsight({ getvasdataHandler }) {
                   </div>
                 )}
               </div>
-              <div
-                className="col-md-6"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  marginTop: "2px",
-                }}
-              >
+              <div className="tables_insight">
                 <TableInSightsComp
                   image={Speedometer}
                   tabledata={totalActiveVehicle}

@@ -6,12 +6,17 @@
 .icon_and_table {
   display: flex;
   gap: 10px;
-  padding: 20px;
+  padding: 12px;
 }
+
 .card_heading {
   background: rgb(214, 229, 249);
   width: 100%;
   padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px 5px 0 0;
 }
 .insight_wrapper h4 {
   font-size: 21px;
@@ -23,17 +28,12 @@
   border-radius: 11px;
   overflow: hidden;
   border: 1px solid rgba(205, 205, 205, 0.471);
-  width: 70%;
+  /* width: 70%; */
 }
-.image_section {
-  width: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .image_section img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 }
 .insight_table_wrapper table {
   border-collapse: collapse;
@@ -47,20 +47,24 @@
 .insight_table th,
 .insight_table td {
   text-align: center;
-  padding: 21px 8px;
+  padding: 19px 8px;
   font-size: 14px;
   font-weight: 500;
   border: 1px solid rgba(205, 205, 205, 0.471);
 }
 
 .insight_table td {
+  font-family: monospace;
   background: rgb(255, 255, 255);
 }
 .insight_table th {
-  background-color: #ececec;
-  font-size: 15px;
-  font-weight: 800;
-  color: black;
+  background-color: #1f77b4;
+  font-size: 14px;
+  color: #faf8f8 !important;
+  border: 1px solid white;
+  text-wrap: wrap;
+  letter-spacing: 0.8px;
+  font-family: sans-serif;
 }
 
 /* Applying border-radius to specific cells */
@@ -76,4 +80,15 @@
 }
 .insight_table tbody tr:last-child td:last-child {
   border-bottom-right-radius: 10px;
+}
+
+@media screen and (max-width: 900px) {
+  .icon_and_table {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .insight_table_wrapper {
+    width: 100% !important;
+  }
 }

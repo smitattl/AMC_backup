@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import AdminHome from "./AdminHome";
-import AdminKeyInsight from "./AdminKeyInsight";
-import AdminFleetDetails from "./AdminFleetDetails";
-import "./index.css";
 import { useDispatch, useSelector } from "react-redux";
+import { Route, Routes } from "react-router-dom";
 import { ApiInterface } from "../API";
 import {
   setArnValues,
   setVasOptions,
   setVasType,
 } from "../store/Slices/homeAPISlice";
+import AdminFleetDetails from "./AdminFleetDetails";
+import AdminHome from "./AdminHome";
+import AdminKeyInsight from "./AdminKeyInsight";
+import "./index.css";
 
 function Admin() {
   const dispatch = useDispatch();
-  const {
-    arnNumber,
-    selectedUser,
-    arnListForAdmin,
-    searchType,
-    vehicleNumber,
-    panNumber,
-    vasType,
-    vasOptions,
-    mobileNo,
-  } = useSelector((state) => state.homeApi);
-  console.log(arnNumber);
+  const { arnNumber, arnListForAdmin } = useSelector((state) => state.homeApi);
+
   const [loading, setLoading] = useState(false);
   const getvasdataHandler = async (arnValues) => {
     try {

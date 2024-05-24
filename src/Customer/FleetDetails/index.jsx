@@ -6,6 +6,7 @@ import { ApiInterface } from "../../API";
 import { fleetTableColumns } from "../../StaticTableData";
 import { useSelector } from "react-redux";
 import FilterSectionForCustomer from "../FilterSectionForCustomer";
+import CommonTable from "../../Admin/CommonComps/CommonTable";
 
 const FleetDetails = () => {
   const [Rowdata, setRowdata] = useState([]);
@@ -42,9 +43,6 @@ const FleetDetails = () => {
     getAmcdataHandler();
     getDetailedViewHandler("VehicleCount");
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
 
   const getAmcdataHandler = async () => {
     setLoading(true);
@@ -78,59 +76,43 @@ const FleetDetails = () => {
         <Loading />
       ) : (
         <>
-          <div className="main_content">
-            <div className="container-fluid pb-4">
-              <div className="row">
-                <div className="col-md-12">
-                  <FilterSectionForCustomer searchData={searchData} />
-                  <div className="row d-flex flex-wrap">
-                    <div className="col-md-5">
-                      {amcChartData.length > 0 && (
-                        <div className="view-box">
-                          <div className="card_heading pt10">
-                            AMC Type Count
-                          </div>
-                          <PieChartGraph
-                            data={amcChartData}
-                            increaseHeight={
-                              fmsChartData.length === 0 ? true : false
-                            }
-                          />
-                        </div>
-                      )}
-                      {fmsChartData?.length > 0 && (
-                        <div className="view-box">
-                          <div className="card_heading pt10">
-                            FMS Type Count
-                          </div>
-                          <div className="box-body p-0">
-                            <div className="js-plotly-plot">
-                              <PieChartGraph
-                                data={fmsChartData}
-                                increaseHeight={
-                                  amcChartData.length === 0 ? true : false
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-md-7">
-                      <div className="view-box">
-                        <div className="card_heading pt10">Fleet Details</div>
-                        <div className="box-body p-0">
-                          <div className="js-plotly-plot">
-                            <DeatiledTable
-                              ColData={fleetTableColumns}
-                              Tbldata={Rowdata}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+          <div className="container_wrapper_customer">
+            <FilterSectionForCustomer searchData={searchData} />
+            <div className="d-flex justify-content-between flex-wrap mt-2">
+              <div
+                className={
+                  amcChartData.length === 0 && fmsChartData.length === 0
+                    ? "d-none"
+                    : "graph_wrapper"
+                }
+              >
+                {amcChartData.length !== 0 && (
+                  <div className="view-box mb-2">
+                    <div className="card_heading pt10">AMC Type Count</div>
+                    <PieChartGraph
+                      data={amcChartData}
+                      increaseHeight={fmsChartData.length === 0 ? true : false}
+                    />
                   </div>
-                </div>
+                )}
+                {fmsChartData.length !== 0 && (
+                  <div className="view-box">
+                    <div className="card_heading pt10">FMS Type Count</div>
+                    <PieChartGraph
+                      data={fmsChartData}
+                      increaseHeight={fmsChartData.length === 0 ? true : false}
+                    />
+                  </div>
+                )}
+              </div>
+              <div
+                className={
+                  amcChartData.length === 0 && fmsChartData.length === 0
+                    ? "table_full_wrapper"
+                    : "graph_wrapper"
+                }
+              >
+                <CommonTable data={Rowdata} columns={fleetTableColumns} />
               </div>
             </div>
           </div>

@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { ApiInterface } from "../API";
 import WarningModal from "../components/WarningModal";
-import Watermark from "../components/WaterMark/WaterMark";
+import Watermark from "../components/WaterMark";
 import {
   setArnValuesForCustomer,
   setCustomerVasList,
   setCustomerVasType,
-  setPreventApiCalling,
 } from "../store/Slices/customerSlice";
 import FleetDetails from "./FleetDetails";
 import KeyInsights from "./KeyInsights";
 import LandingPage from "./LandingPage";
 import QuickActionModal from "./LandingPage/QuickActionModal";
+import "./index.css";
 
-const Customer = () => {
+const Customer = ({ wrongUser, setWrongUser }) => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { isOpen, arnForCustomer, arnListForCustomer } = useSelector(
     (state) => state.customer
   );
-  const [wrongUser, setWrongUser] = useState(false);
 
   const getvasdataHandler = async (values) => {
     try {

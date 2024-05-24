@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import "./BasicDataTable.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.bundle.js";
 import { ApiInterface } from "../../API";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import "./index.css";
+import moment from "moment/moment";
 
-const BasicTable = ({ columns }) => {
+const BasicDataTable = ({ columns }) => {
   const { pathname } = useLocation();
   const { arnValuesForCustomer, customerVasType, indexTAT } = useSelector(
     (state) => state.customer
@@ -112,34 +111,32 @@ const BasicTable = ({ columns }) => {
   }, [pathname, columns]);
 
   return (
-    <div>
-      <div
-        className="table-responsive"
-        style={{ overflow: "scroll", height: "370px" }}
-      >
-        <table
-          id="fleet-table"
-          className="fleet-table table table-striped table-bordered no-footer dataTable table-responsive"
-        >
-          <thead>
-            <tr>
-              {columns.map((column) => (
-                <th key={column.title}>{column.title}</th>
+    <div className="responsive-table">
+      <table className="table">
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.title}>{column.title}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {fleetData.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((column, colIndex) => (
+                <td key={colIndex}>
+                  {column.field === "Jobcard_Created_Date" ||
+                  column.field === "Jobcard_Close_Date" ||
+                  column.field === "amc_end_Date"
+                    ? moment(row[column.field]).format("YYYY-MM-DD")
+                    : row[column.field]}
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {fleetData.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {columns.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column.field]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
-export default BasicTable;
+export default BasicDataTable;

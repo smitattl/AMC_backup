@@ -7,6 +7,7 @@ import ScheduleIcon from "../../images/shipping-schedule.png";
 import HoursIcon from "../../images/working-hours.png";
 import { ApiInterface } from "../../API";
 import Loading from "../../components/Loading/Loading";
+import fleetuptimeIcon from "../../images/uptime.png";
 
 import {
   FleetDetailsColumns,
@@ -20,6 +21,7 @@ import TableInSightsComp from "../../components/TableInsightsComp";
 import { monthNames } from "../../StaticTableData";
 import { useDispatch, useSelector } from "react-redux";
 import FilterSectionForCustomer from "../FilterSectionForCustomer";
+import "./index.css";
 
 const KeyInsights = () => {
   const dispatch = useDispatch();
@@ -145,7 +147,6 @@ const KeyInsights = () => {
   };
 
   useEffect(() => {
-    console.log("nnn");
     FleetupTimehandler();
     getkeyInsightsdataHandler();
   }, []);
@@ -168,25 +169,28 @@ const KeyInsights = () => {
 
   return (
     <>
-      <div className="main_content">
-        {loading ? (
-          <Loading />
-        ) : (
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-12">
-                <FilterSectionForCustomer
-                  searchData={searchData}
-                  vasOptions={vasOptions}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6 ">
-                {barGraphData.length > 0 && (
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div className="container_wrapper_customer">
+            <FilterSectionForCustomer
+              searchData={searchData}
+              vasOptions={vasOptions}
+            />
+            <div className="insight_tables_wrapper my-3">
+              <div className="bar_graph_section">
+                {barGraphData.length !== 0 && (
                   <div className="view-box">
-                    <div className="card_heading pt10">Fleet Up-Time</div>
-                    <div className="box-body p-0">
+                    <div className="card_heading p-3">
+                      <img
+                        src={fleetuptimeIcon}
+                        alt="/"
+                        className="fleet_uptime_icon"
+                      />
+                      <h5 className="mb-0">Fleet Up-Time</h5>
+                    </div>
+                    <div className="box-body p-0 d-flex flex-column  gap-2 p-2">
                       <div className="js-plotly-plot">
                         <BarGraph data={barGraphData} />
                       </div>
@@ -194,15 +198,7 @@ const KeyInsights = () => {
                   </div>
                 )}
               </div>
-              <div
-                className="col-md-6"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                  marginTop: "2px",
-                }}
-              >
+              <div className="tables_insight">
                 <TableInSightsComp
                   image={Speedometer}
                   tabledata={totalActiveVehicle}
@@ -226,14 +222,14 @@ const KeyInsights = () => {
                 tabledata={dueForService}
                 tableheader={tableheaderThree}
                 heading={`Service Details ${
-                  (dueForService && dueForService[0]?.Jobcard_Created_Month) ||
+                  dueForService[0]?.Jobcard_Created_Month ||
                   `${previousMonthName} - ${previousYear}`
                 }`}
               />
             </div>
           </div>
-        )}
-      </div>
+        </>
+      )}
     </>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { decodeToken } from "react-jwt";
-import styles from "./WaterMark.module.css";
+import "./index.css";
 
 function Watermark() {
   const [username, setusername] = useState(null);
@@ -19,10 +19,10 @@ function Watermark() {
   }, [TokenData]);
 
   return (
-    <div className={styles.watermarkcontainer}>
-      <p className={styles.watermark}>{username}</p>
-      <p className={styles.watermarkmid}>{ip_address}</p>
-      <p className={styles.watermarkbottom}>{login_time}</p>
+    <div className="watermarkcontainer">
+      <p className="watermark">{username}</p>
+      <p className="watermarkmid">{ip_address}</p>
+      <p className="watermarkbottom">{login_time}</p>
     </div>
   );
 }

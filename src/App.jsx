@@ -11,19 +11,95 @@ import {
 import {
   Route,
   Routes,
+  matchPath,
   useLocation,
   useNavigate,
   useParams,
 } from "react-router-dom";
-import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Toaster } from "react-hot-toast";
 import Admin from "./Admin";
 import Customer from "./Customer";
+import Logout from "./components/Logout/Logout";
+import Error from "./components/Error";
+import FooterSection from "./components/FooterSection";
+import { ApiInterface } from "./API";
+import { decodeToken } from "react-jwt";
+import {
+  setArnForCustomer,
+  setArnListForCustomer,
+  setCustomerData,
+  setIsOpen,
+} from "./store/Slices/customerSlice";
+import { useDispatch } from "react-redux";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
 function App() {
+  const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [isErrorPage, setIsErrorPage] = useState(false);
+  const [wrongUser, setWrongUser] = useState(false);
+  const token = localStorage.getItem("token");
+  const param1 = localStorage.getItem("param1");
+  const param2 = localStorage.getItem("param2");
+
+  const routes = [
+    "/admin",
+    "/admin/admin-fleet-details",
+    "admin/admin-key-insight",
+    "/Home/:param1/:param2",
+    "/Home/Fleet-details",
+    "/Home/Key-insights",
+  ];
+  useEffect(() => {
+    const isValidRoute = routes.some((route) => matchPath(route, pathname));
+    setIsErrorPage(!isValidRoute);
+  }, [pathname, routes]);
+
+  const getDecryptedDataHandler = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("DataOne", param1);
+      formData.append("DataTwo", param2);
+      const response = await ApiInterface.getDecryptedData(formData);
+      if (response.status === 200) {
+        localStorage.setItem("Token", response.data.Token);
+        const { ARN, MobNo, email_id, userName } = decodeToken(
+          response.data.Token
+        );
+        const userData = { MobNo, email_id, userName };
+        dispatch(setCustomerData(userData));
+        const arnData = ARN.map((name) => ({
+          value: name,
+          label: name,
+        }));
+        let arnListWithAll;
+        const allOption = { value: "all", label: "All" };
+        if (arnData.length > 1) {
+          arnListWithAll = [allOption, ...arnData];
+        } else {
+          arnListWithAll = arnData;
+        }
+        dispatch(setArnListForCustomer(arnListWithAll));
+        dispatch(setArnForCustomer(arnListWithAll[0]));
+        dispatch(setIsOpen(true));
+        setWrongUser(false);
+      } else if (response.status !== 200) setWrongUser(true);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (!token && pathname === `/Home/${param1}/${param2}`) {
+      getDecryptedDataHandler();
+    }
+  }, []);
+
   return (
     <div>
       <React.Fragment>
@@ -50,12 +126,19 @@ function App() {
           }}
         />
         <React.Fragment>
-          <Header />
+          {!isErrorPage && <Header />}
           <Routes>
             <Route path="admin/*" element={<Admin />} />
-            <Route path="Home/*" element={<Customer />} />
+            <Route
+              path="Home/*"
+              element={
+                <Customer wrongUser={wrongUser} setWrongUser={setWrongUser} />
+              }
+            />
+            <Route path="/thank-you" element={<Logout />} />
+            <Route path="*" element={<Error />} />
           </Routes>
-          <Footer />
+          {!isErrorPage && <FooterSection />}
         </React.Fragment>
       </React.Fragment>
     </div>

@@ -23,10 +23,7 @@ function PieChartGraph({ data = [], increaseHeight = false }) {
   ];
 
   return (
-    <PieChart
-      width={increaseHeight ? 400 : 250}
-      height={increaseHeight ? 400 : 250}
-    >
+    <PieChart width={400} height={400}>
       <Pie
         data={data}
         dataKey="value"
@@ -35,14 +32,29 @@ function PieChartGraph({ data = [], increaseHeight = false }) {
         cy="50%"
         outerRadius={70}
         fill="#8884d8"
-        label
+        labelLine={true}
+        label={({ cx, cy, midAngle, outerRadius, value, index }) => {
+          const RADIAN = Math.PI / 180;
+          const radius = 25 + outerRadius;
+          const x = cx + radius * Math.cos(-midAngle * RADIAN);
+          const y = cy + radius * Math.sin(-midAngle * RADIAN);
+          return (
+            <text
+              x={x}
+              y={y}
+              fill={COLORS[index % COLORS.length]}
+              fontSize={8}
+              fontFamily="sans-serif"
+              textAnchor={x > cx ? "start" : "end"}
+              dominantBaseline="central"
+            >
+              {value}
+            </text>
+          );
+        }}
       >
         {data.map((entry, index) => (
-          <Cell
-            key={`cell-${index}`}
-            // fill={`#${Math.floor(Math.random() * 16777215).toString(16)}`}
-            fill={COLORS[index % COLORS.length]}
-          />
+          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>
       <Tooltip />

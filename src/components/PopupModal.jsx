@@ -1,7 +1,7 @@
 import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Button, Modal } from "react-bootstrap";
-import BasicDataTable from "./BasicTable/BasicDataTable";
+import BasicDataTable from "./BasicTable";
 
 const PopupModal = ({
   isOpen,

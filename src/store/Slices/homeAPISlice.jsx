@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { searchOptions } from "../../StaticTableData";
 
 const initialState = {
-  arnNumber: {},
+  arnNumber: { label: "", value: "" },
   fleetData: {},
   selectedUser: {},
   arnListForAdmin: [],

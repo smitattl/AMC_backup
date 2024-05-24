@@ -44,11 +44,14 @@ export const useHandleClickActiveForAdmin = () => {
   return handleClickActiveForAdmin;
 };
 export const maskEmail = (email) => {
-  const atIndex = email.indexOf("@");
-  if (atIndex === -1) return email;
-  const maskedPart = email.slice(0, atIndex).replace(/./g, "*");
-  const domainPart = email.slice(atIndex);
-  return email.slice(0, 2) + maskedPart + domainPart;
+  if (email === null) return "No Email Registered";
+  else {
+    const atIndex = email?.indexOf("@");
+    if (atIndex === -1) return email;
+    const maskedPart = email?.slice(0, atIndex)?.replace(/./g, "*");
+    const domainPart = email?.slice(atIndex);
+    return email?.slice(0, 2) + maskedPart + domainPart;
+  }
 };
 
 export const NameInitials = ({ names }) => {

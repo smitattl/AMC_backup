@@ -80,12 +80,6 @@ export const ApiInterface = {
       url: "/AMC-count-details",
       data: body,
     }),
-  getFleetUpTime: (body) =>
-    apiCall({
-      method: "POST",
-      url: "/Fleet-uptime",
-      data: body,
-    }),
 
   getuserNameData: (body) =>
     apiCall({

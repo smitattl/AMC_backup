@@ -1,5 +1,11 @@
 .graph_wrapper {
   width: 49%;
+  /* display: flex; */
+  gap: 10px;
+  height: max-content;
+}
+.table_full_wrapper {
+  width: 100%;
 }
 @media screen and (max-width: 700px) {
   .graph_wrapper {

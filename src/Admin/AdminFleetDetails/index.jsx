@@ -75,9 +75,15 @@ function AdminFleetDetails() {
           <FilterSection searchFilterhandler={searchFilterhandler} />
           <div className="container_wrapper">
             <div className="d-flex justify-content-between flex-wrap mt-2">
-              <div className="graph_wrapper">
+              <div
+                className={
+                  amcChartData.length === 0 && fmsChartData.length === 0
+                    ? "d-none"
+                    : "graph_wrapper"
+                }
+              >
                 {amcChartData.length !== 0 && (
-                  <div className="view-box mb-2">
+                  <div className="view-box pb-5 mb-2">
                     <div className="card_heading pt10">AMC Type Count</div>
                     <PieChartGraph
                       data={amcChartData}
@@ -86,7 +92,7 @@ function AdminFleetDetails() {
                   </div>
                 )}
                 {fmsChartData.length !== 0 && (
-                  <div className="view-box">
+                  <div className="view-box pb-5">
                     <div className="card_heading pt10">FMS Type Count</div>
                     <PieChartGraph
                       data={fmsChartData}
@@ -95,7 +101,13 @@ function AdminFleetDetails() {
                   </div>
                 )}
               </div>
-              <div className="graph_wrapper">
+              <div
+                className={
+                  amcChartData.length === 0 && fmsChartData.length === 0
+                    ? "table_full_wrapper"
+                    : "graph_wrapper"
+                }
+              >
                 <CommonTable data={tableData} columns={fleetTableColumns} />
               </div>
             </div>
