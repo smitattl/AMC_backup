@@ -23,7 +23,6 @@ import {
   setShowTableForCustomerTwo,
 } from "../../store/Slices/customerSlice";
 import FilterSectionForCustomer from "../FilterSectionForCustomer";
-import { decodeToken } from "react-jwt";
 
 const LandingPage = () => {
   const token = localStorage.getItem("Token");

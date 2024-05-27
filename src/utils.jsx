@@ -9,6 +9,7 @@ import {
   setShowTableForCustomerOne,
   setShowTableForCustomerTwo,
 } from "./store/Slices/customerSlice";
+import CryptoJS from "crypto-js";
 
 export const LogoutSession = () => {
   const navigate = useLocation();
@@ -61,4 +62,13 @@ export const NameInitials = ({ names }) => {
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
   return <div>{initials}</div>;
+};
+
+const key = "1234958500595005500i40";
+export const encryptData = (data) => {
+  const encryptedData = CryptoJS.AES.encrypt(
+    JSON.stringify(data),
+    key
+  ).toString();
+  return encryptedData;
 };

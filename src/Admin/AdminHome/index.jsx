@@ -11,6 +11,7 @@ import {
   setServiceScheduleData,
 } from "../../store/Slices/homeAPISlice";
 import Loading from "../../components/Loading/Loading";
+import { encryptData } from "../../utils";
 
 function AdminHome() {
   const dispatch = useDispatch();
@@ -49,8 +50,13 @@ function AdminHome() {
       const formData = new FormData();
       formData.append("Section", "ServiceScheduled");
       if (arnNumber.value === "all") {
-        formData.append("ARN-Number", arnValues);
-      } else formData.append("ARN-Number", arnNumber.value);
+        const encryptArn = encryptData(arnValues);
+        formData.append("ARN-Number", encryptArn);
+      } else {
+        const encryptArn = encryptData(arnNumber.value);
+        console.log(encryptArn);
+        formData.append("ARN-Number", encryptArn);
+      }
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         dispatch(setServiceScheduleData(response?.data?.RowData ?? []));
