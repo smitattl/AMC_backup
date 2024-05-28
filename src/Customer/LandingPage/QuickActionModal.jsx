@@ -5,30 +5,30 @@ import { useHandleClickActive } from "../../utils";
 import { Link as ScrollLink } from "react-scroll";
 import { useDispatch, useSelector } from "react-redux";
 import { setIsOpen } from "../../store/Slices/customerSlice";
+import closeIcon from "../../images/close.svg";
 
 import renewable from "../../images/renewalTwo.png";
 
 function QuickActionModal() {
   const dispatch = useDispatch();
   const { fleetData } = useSelector((state) => state.arn);
-
   const handleClickActive = useHandleClickActive();
 
   return (
     <>
       <div className="overlay" />
       <div className="modal_wrapper_for_quick_action">
-        <div className="quick_action_modal">
-          <div className="d-flex justify-content-between align-items-center mb-3">
+        <div className="quick_action_modal ">
+          <div className="d-flex justify-content-center position-relative  align-items-center mb-3">
             <div className="title_qa mb-0 text-center">
               Quick Actions Required
             </div>
-            <button
-              type="button"
-              className="btn-close"
-              aria-label="Close"
+            <div
+              className="close_button"
               onClick={() => dispatch(setIsOpen(false))}
-            />
+            >
+              <img src={closeIcon} alt="close" />
+            </div>
           </div>
           <div className="tile_wrapper d-flex ">
             <div className="quick_action quick_action_modal" id="section1">

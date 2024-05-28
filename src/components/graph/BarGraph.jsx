@@ -18,9 +18,10 @@ const BarGraph = ({ data = null }) => {
       width: lineWidth,
     },
   }));
+
   const layout = {
     xaxis: { title: "Month" },
-    yaxis: { title: "Percentage" },
+    yaxis: { title: "Percentage", titlestandoff: 100 },
     annotations: data[0]?.y.map((value, index) => ({
       x: data[0].x[index],
       y: value + annotationOffset,
@@ -47,7 +48,7 @@ const BarGraph = ({ data = null }) => {
     },
     autosize: true,
     margin: {
-      l: 40,
+      l: 80,
       r: 40,
       b: 80,
       t: 80,

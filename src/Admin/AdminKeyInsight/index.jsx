@@ -123,7 +123,7 @@ function AdminKeyInsight({ getvasdataHandler }) {
                         alt="/"
                         className="fleet_uptime_icon"
                       />
-                      <h5 className="mb-0">Fleet Up-Time</h5>
+                      <h5 className="key_insight_table_title">Fleet Up-Time</h5>
                     </div>
                     <div className="box-body">
                       <div className="js-plotly-plot">

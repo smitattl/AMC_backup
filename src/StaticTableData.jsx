@@ -137,7 +137,7 @@ export const fleetTableColumns = [
   },
   {
     accessorKey: "contract_start_Date",
-    header: "Contract start date ",
+    header: "Contract Start Date ",
     Header: ({ column }) => (
       <a>
         {column.columnDef.header}&nbsp;
@@ -151,9 +151,9 @@ export const fleetTableColumns = [
   },
   {
     accessorKey: "contract_end_Date",
-    header: "Contract end date ",
+    header: "Contract End Date ",
     Header: ({ column }) => (
-      <a className="columnHeader">
+      <a>
         {column.columnDef.header}&nbsp;
         <span className="text-sm">(YYYY-MM-DD)</span>
       </a>
@@ -170,7 +170,7 @@ export const fleetTableColumns = [
   },
   {
     accessorKey: "contract_end_kms",
-    header: "Contract End KMs ",
+    header: "Contract End KMs",
     Header: ({ column }) => <a>{column.columnDef.header}</a>,
   },
   {

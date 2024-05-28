@@ -17,7 +17,7 @@ function TableAccordion({ serviceScheduleData = [], renewalData }) {
   );
 
   return (
-    <div className="container_wrapper_customer mb-5">
+    <div className="mb-5">
       <div
         name="section1"
         className="d-flex gap-3 align-items-center my-4 accordion_title"

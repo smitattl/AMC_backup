@@ -1,8 +1,3 @@
-.columnHeader {
-  white-space: nowrap;
-  width: auto;
-}
-
 a:not([href]):not([class]),
 a:not([href]):not([class]):hover {
   color: rgb(2, 19, 126) !important;

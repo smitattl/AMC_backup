@@ -80,6 +80,9 @@ a {
 .scroll_link:hover {
   color: #1f77b4 !important;
 }
+.scroll_link:hover span {
+  color: #1f77b4;
+}
 
 .bottom_header {
   backdrop-filter: blur(4px);
@@ -114,12 +117,11 @@ a {
   cursor: pointer;
   border: 1px solid black;
   font-weight: 500;
-  transition: all 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
 }
 
 .intials:hover {
   transform: scale(1.1);
-  transition: transform 0.3s ease-in-out;
   background: transparent;
   color: black;
 }

@@ -12,21 +12,19 @@ const CommonTable = ({ columns = [], data = [] }) => {
   const table = useMaterialReactTable({
     columns: memoizedColumns,
     data: memoizedData,
-    enableColumnResizing: true,
     enableDensityToggle: false,
-    initialState: { density: "comfortable" },
+    initialState: { density: "compact" },
     muiTableHeadCellProps: {
       sx: {
-        width: 100,
-        textWrap: "wrap",
-        whiteSpace: "wrap",
+        textWrap: "nowrap",
+        whiteSpace: "nowrap",
         border: "0.5px solid #dfe2ec8b",
+        background: " #dfe2ec8b",
       },
     },
     muiTableBodyCellProps: {
       sx: {
-        width: 100,
-        textWrap: "wrap",
+        paddingRight: "10px",
         border: "0.5px solid #dfe2ec8b",
       },
     },

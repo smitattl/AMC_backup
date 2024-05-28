@@ -17,12 +17,11 @@ function Modal({
         <div className="modal_section">
           <div className="modal_header">
             <div className="modal_title">Fleet Data</div>
-            <div onClick={() => setIsModalOpen(false)}>
-              <img
-                src={closeIcon}
-                alt="close_button"
-                className="close_button"
-              />
+            <div
+              onClick={() => setIsModalOpen(false)}
+              className="close_button_modal"
+            >
+              <img src={closeIcon} alt="close_button" />
             </div>
           </div>
           <div className="mt-3">

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import DeatiledTable from "../../components/Table/Table";
 import Loading from "../../components/Loading/Loading";
-import PieChartGraph from "../../components/PieChart/PieChart";
 import { ApiInterface } from "../../API";
 import { fleetTableColumns } from "../../StaticTableData";
 import { useSelector } from "react-redux";
 import FilterSectionForCustomer from "../FilterSectionForCustomer";
 import CommonTable from "../../Admin/CommonComps/CommonTable";
+import PieChartGraph from "../../components/PieChart";
 
 const FleetDetails = () => {
   const [Rowdata, setRowdata] = useState([]);

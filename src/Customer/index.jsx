@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ApiInterface } from "../API";
-import WarningModal from "../components/WarningModal";
 import Watermark from "../components/WaterMark";
 import {
   setArnValuesForCustomer,
@@ -14,14 +13,16 @@ import KeyInsights from "./KeyInsights";
 import LandingPage from "./LandingPage";
 import QuickActionModal from "./LandingPage/QuickActionModal";
 import "./index.css";
+import Loading from "../components/Loading/Loading";
+import jwtEncode from "jwt-encode";
+import { SECRET_KEY } from "../Config";
 
-const Customer = ({ wrongUser, setWrongUser }) => {
+const Customer = ({ setWrongUser, loading = false }) => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { isOpen, arnForCustomer, arnListForCustomer } = useSelector(
     (state) => state.customer
   );
-
   const getvasdataHandler = async (values) => {
     try {
       const formData = new FormData();
@@ -57,20 +58,23 @@ const Customer = ({ wrongUser, setWrongUser }) => {
 
   return (
     <>
-      <React.Fragment>
-        <Watermark />
-        <Routes>
-          <Route
-            exact
-            path="/:param1/:param2"
-            element={<LandingPage setWrongUser={setWrongUser} />}
-          />
-          <Route path="/Fleet-details" element={<FleetDetails />} />
-          <Route path="/Key-insights" element={<KeyInsights />} />
-        </Routes>
-      </React.Fragment>
+      {loading ? (
+        <Loading />
+      ) : (
+        <React.Fragment>
+          <Watermark />
+          <Routes>
+            <Route
+              exact
+              path="/:param1/:param2"
+              element={<LandingPage setWrongUser={setWrongUser} />}
+            />
+            <Route path="/Fleet-details" element={<FleetDetails />} />
+            <Route path="/Key-insights" element={<KeyInsights />} />
+          </Routes>
+        </React.Fragment>
+      )}
       {isOpen && !pathname.includes("/admin") && <QuickActionModal />}
-      {wrongUser && <WarningModal />}
     </>
   );
 };

@@ -64,7 +64,7 @@ const BasicDataTable = ({ columns }) => {
       formData.append("Clickindex", indexTAT);
       const response = await ApiInterface.getFleetTatDetails(formData);
       if (response.status === 200) {
-        setFleetData(response.data.TotalData);
+        setFleetData(response.data.RowData);
         setLoading(false);
       }
     } catch (error) {
@@ -84,7 +84,7 @@ const BasicDataTable = ({ columns }) => {
       formData.append("Clickindex", indexTAT);
       const response = await ApiInterface.getFleetTatDetails(formData);
       if (response.status === 200) {
-        setFleetData(response.data.TotalData);
+        setFleetData(response.data.RowData);
         setLoading(false);
       }
     } catch (error) {
@@ -115,15 +115,15 @@ const BasicDataTable = ({ columns }) => {
       <table className="table">
         <thead>
           <tr>
-            {columns.map((column) => (
+            {columns?.map((column) => (
               <th key={column.title}>{column.title}</th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {fleetData.map((row, rowIndex) => (
+          {fleetData?.map((row, rowIndex) => (
             <tr key={rowIndex}>
-              {columns.map((column, colIndex) => (
+              {columns?.map((column, colIndex) => (
                 <td key={colIndex}>
                   {column.field === "Jobcard_Created_Date" ||
                   column.field === "Jobcard_Close_Date" ||

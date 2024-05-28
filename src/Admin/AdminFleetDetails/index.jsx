@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
-import PieChartGraph from "../../components/PieChart/PieChart";
 import CommonTable from "../CommonComps/CommonTable";
 import { useSelector } from "react-redux";
 import { ApiInterface } from "../../API";
 import { fleetTableColumns } from "../../StaticTableData";
 import FilterSection from "../AdminHome/FilterSection";
 import Loading from "../../components/Loading/Loading";
+import PieChartGraph from "../../components/PieChart";
 
 function AdminFleetDetails() {
   const { arnValues } = useSelector((state) => state.homeApi);

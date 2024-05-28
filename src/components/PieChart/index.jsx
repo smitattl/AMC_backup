@@ -1,7 +1,8 @@
 import React from "react";
 import { Cell, Legend, Pie, PieChart, Tooltip } from "recharts";
+import "./index.css";
 
-function PieChartGraph({ data = [], increaseHeight = false }) {
+function PieChartGraph({ data = [] }) {
   const COLORS = [
     "#a2a2a3",
     "#ffd700",
@@ -23,14 +24,14 @@ function PieChartGraph({ data = [], increaseHeight = false }) {
   ];
 
   return (
-    <PieChart width={400} height={400}>
+    <PieChart height={500} width={500}>
       <Pie
         data={data}
         dataKey="value"
         nameKey="name"
         cx="50%"
         cy="50%"
-        outerRadius={70}
+        outerRadius={150}
         fill="#8884d8"
         labelLine={true}
         label={({ cx, cy, midAngle, outerRadius, value, index }) => {
@@ -43,7 +44,7 @@ function PieChartGraph({ data = [], increaseHeight = false }) {
               x={x}
               y={y}
               fill={COLORS[index % COLORS.length]}
-              fontSize={8}
+              fontSize={15}
               fontFamily="sans-serif"
               textAnchor={x > cx ? "start" : "end"}
               dominantBaseline="central"
@@ -54,7 +55,11 @@ function PieChartGraph({ data = [], increaseHeight = false }) {
         }}
       >
         {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          <Cell
+            key={`cell-${index}`}
+            fill={COLORS[index % COLORS.length]}
+            stroke={COLORS[index % COLORS.length]}
+          />
         ))}
       </Pie>
       <Tooltip />

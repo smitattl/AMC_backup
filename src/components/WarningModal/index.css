@@ -1,9 +1,14 @@
 .warning_modal_wrapper {
-  background: #fafafa98;
-  height: 100vh;
+  background: #fafafa;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
 }
 .warning_modal {
   width: 100%;

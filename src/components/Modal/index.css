@@ -35,10 +35,11 @@
   font-size: 20px;
   font-weight: 600;
 }
-.close_button {
+
+.close_button_modal img {
+  cursor: pointer;
   width: 20px;
   height: 20px;
-  cursor: pointer;
 }
 .modal_header {
   display: flex;

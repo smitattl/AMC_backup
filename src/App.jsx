@@ -13,7 +13,6 @@ import {
   Routes,
   matchPath,
   useLocation,
-  useNavigate,
   useParams,
 } from "react-router-dom";
 import Header from "./components/Header";
@@ -32,16 +31,18 @@ import {
   setIsOpen,
 } from "./store/Slices/customerSlice";
 import { useDispatch } from "react-redux";
+import WarningModal from "./components/WarningModal";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
 function App() {
-  const { pathname } = useLocation();
+  const location = useLocation();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [wrongUser, setWrongUser] = useState(false);
   const token = localStorage.getItem("token");
+
   const param1 = localStorage.getItem("param1");
   const param2 = localStorage.getItem("param2");
 
@@ -49,16 +50,19 @@ function App() {
     "/admin",
     "/admin/admin-fleet-details",
     "admin/admin-key-insight",
-    "/Home/:param1/:param2",
+    `/Home/${param1}/${param2}`,
     "/Home/Fleet-details",
     "/Home/Key-insights",
   ];
-  useEffect(() => {
-    const isValidRoute = routes.some((route) => matchPath(route, pathname));
-    setIsErrorPage(!isValidRoute);
-  }, [pathname, routes]);
 
-  const getDecryptedDataHandler = async () => {
+  useEffect(() => {
+    const isValidRoute = routes.some((route) =>
+      matchPath(route, location.pathname)
+    );
+    setIsErrorPage(!isValidRoute);
+  }, [location.pathname, routes]);
+
+  const getDecryptedDataHandler = async (param1, param2) => {
     setLoading(true);
     try {
       const formData = new FormData();
@@ -87,18 +91,34 @@ function App() {
         dispatch(setArnForCustomer(arnListWithAll[0]));
         dispatch(setIsOpen(true));
         setWrongUser(false);
-      } else if (response.status !== 200) setWrongUser(true);
+      } else if (response.status !== 200) {
+        setWrongUser(true);
+        setLoading(false);
+        dispatch(setIsOpen(false));
+      } else if (response.status === 500) {
+        setWrongUser(true);
+        dispatch(setIsOpen(false));
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    if (!token && pathname === `/Home/${param1}/${param2}`) {
-      getDecryptedDataHandler();
+    if (token === null && location.pathname.startsWith("/Home/")) {
+      const params = location.pathname.split("/").filter(Boolean);
+      if (params.length >= 3) {
+        const param1 = params[1];
+        const param2 = params[2];
+        localStorage.setItem("param1", param1);
+        localStorage.setItem("param2", param2);
+        getDecryptedDataHandler(param1, param2);
+      }
     }
-  }, []);
+  }, [param1]);
 
   return (
     <div>
@@ -110,7 +130,6 @@ function App() {
           containerClassName=""
           containerStyle={{}}
           toastOptions={{
-            className: "",
             duration: 5000,
             style: {
               background: "#363636",
@@ -132,13 +151,19 @@ function App() {
             <Route
               path="Home/*"
               element={
-                <Customer wrongUser={wrongUser} setWrongUser={setWrongUser} />
+                <Customer
+                  wrongUser={wrongUser}
+                  setWrongUser={setWrongUser}
+                  loading={loading}
+                  setLoading={setLoading}
+                />
               }
             />
             <Route path="/thank-you" element={<Logout />} />
             <Route path="*" element={<Error />} />
           </Routes>
           {!isErrorPage && <FooterSection />}
+          {wrongUser && <WarningModal />}
         </React.Fragment>
       </React.Fragment>
     </div>

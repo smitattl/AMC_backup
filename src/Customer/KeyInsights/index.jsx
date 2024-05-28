@@ -182,13 +182,13 @@ const KeyInsights = () => {
               <div className="bar_graph_section">
                 {barGraphData.length !== 0 && (
                   <div className="view-box">
-                    <div className="card_heading p-3">
+                    <div className="card_heading">
                       <img
                         src={fleetuptimeIcon}
                         alt="/"
                         className="fleet_uptime_icon"
                       />
-                      <h5 className="mb-0">Fleet Up-Time</h5>
+                      <h5 className="key_insight_table_title">Fleet Up-Time</h5>
                     </div>
                     <div className="box-body p-0 d-flex flex-column  gap-2 p-2">
                       <div className="js-plotly-plot">

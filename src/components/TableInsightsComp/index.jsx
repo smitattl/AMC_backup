@@ -33,14 +33,14 @@ function TableInSightsComp({
   };
 
   return (
-    <>
+    <React.Fragment>
       <div className="insight_wrapper">
         {heading && (
           <div className="card_heading gap-3">
             <div className="image_section">
               <img src={image} alt="" />
             </div>
-            <h5 className="mb-0">{heading}</h5>
+            <h5 className="key_insight_table_title">{heading}</h5>
           </div>
         )}
         <div className="icon_and_table">
@@ -261,7 +261,7 @@ function TableInSightsComp({
         FleetDetailsColumns={FleetDetailsColumns}
         fleetTil={FleetTitle}
       /> */}
-    </>
+    </React.Fragment>
   );
 }
 

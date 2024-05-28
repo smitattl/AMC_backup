@@ -14,25 +14,20 @@ import { setFleetData } from "../../store/Slices/arnSlice";
 import TableAccordion from "./TableAccordion";
 import {
   setActiveAccordionItem,
-  setArnForCustomer,
-  setArnListForCustomer,
-  setCustomerData,
   setIsOpen,
   setParams,
   setShowTableForCustomerOne,
   setShowTableForCustomerTwo,
 } from "../../store/Slices/customerSlice";
 import FilterSectionForCustomer from "../FilterSectionForCustomer";
-import { decodeToken } from "react-jwt";
 
 const LandingPage = () => {
   const token = localStorage.getItem("Token");
 
   const dispatch = useDispatch();
   const { param1, param2 } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [Rowdata, setRowdata] = useState([]);
-  const [stopApi, setStopApi] = useState(false);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
 
   const { fleetData } = useSelector((state) => state.arn);
@@ -46,13 +41,11 @@ const LandingPage = () => {
 
   useEffect(() => {
     dispatch(setParams({ param1, param2 }));
-    localStorage.setItem("param1", param1);
-    localStorage.setItem("param2", param2);
   }, [param1, param2]);
 
   const getGenericInformationHandler = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append("ARN-Number", arnValuesForCustomer);
       const response = await ApiInterface.getGenericInformation(formData);
@@ -64,7 +57,6 @@ const LandingPage = () => {
       console.log(error);
       setLoading(false);
     }
-    setLoading(false);
   };
 
   const getDetailedViewHandler = async (element) => {
@@ -200,7 +192,7 @@ const LandingPage = () => {
             <h6 className="tileHeading mt-4 text-center">
               Quick Actions Required
             </h6>
-            <div className="tile_wrapper mx-auto">
+            <div className="tile_wrapper mx-auto mb-5">
               <div className="quick_action" id="section1">
                 <ScrollLink
                   to="section1"
@@ -245,13 +237,13 @@ const LandingPage = () => {
                 </ScrollLink>
               </div>
             </div>
+            <TableAccordion
+              activeAccordionItem={activeAccordionItem}
+              setActiveAccordionItem={setActiveAccordionItem}
+              serviceScheduleData={serviceScheduleData}
+              Rowdata={Rowdata}
+            />
           </div>
-          <TableAccordion
-            activeAccordionItem={activeAccordionItem}
-            setActiveAccordionItem={setActiveAccordionItem}
-            serviceScheduleData={serviceScheduleData}
-            Rowdata={Rowdata}
-          />
         </div>
       )}
     </>

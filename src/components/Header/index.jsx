@@ -194,7 +194,7 @@ function Header() {
                             }}
                             className="scroll_link"
                           >
-                            Vehicles Due For Scheduled Service In Next 30 Days{" "}
+                            Vehicles Due For Scheduled Service{" "}
                             <span className="text-white">
                               ({fleetData.ServiceSchedule || "0"})
                             </span>
@@ -212,7 +212,7 @@ function Header() {
                             }}
                             className="scroll_link"
                           >
-                            Vehicles Due For Contract Renewal In Next 30 Days
+                            Vehicles Due For Contract
                             <span className="text-white">
                               ({fleetData?.Renewal || 0})
                             </span>
@@ -291,7 +291,7 @@ function Header() {
                   onClick={() => handleClickActiveForAdmin("section1")}
                   className="scroll_link"
                 >
-                  Vehicles Due For Scheduled Service In Next 30 Days{" "}
+                  Vehicles Due For Scheduled Service
                   <span>({fleetData.ServiceSchedule || "0"})</span>
                 </ScrollLink>
                 <ScrollLink
@@ -304,7 +304,7 @@ function Header() {
                   onClick={() => handleClickActiveForAdmin("section2")}
                   className="scroll_link"
                 >
-                  Vehicles Due For Contract Renewal In Next 30 Days
+                  Vehicles Due For Contract Renewal
                   <span>({fleetData?.Renewal || 0})</span>
                 </ScrollLink>
               </React.Fragment>

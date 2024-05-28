@@ -167,7 +167,7 @@ export const FleetTATColumns = [
   {
     width: 130,
     title: "AMC/FMS Type",
-    field: "amc_type",
+    field: "contract_type",
     enableSearch: true,
     enableFilter: true,
   },
