@@ -2,13 +2,13 @@ import React from "react";
 import "./index.css";
 
 function RestrictedModal({
-  title = "Sorry, access to this URL is prohibited!",
-  text = " You do not have access to this URL. Please ensure that you are logged in to the OSP platform in order to proceed.",
+  title = "Too Many Login Attempts",
+  text = "You have attempted to log in multiple times in a short period. Please wait a few minutes before trying again.",
 }) {
   return (
     <div className="restricted_modal">
-      <div className="modal_section">
-        <h5>{title}</h5>
+      <div className="restricted_modal_section">
+        <h5 className="title_restricted">{title}</h5>
         <div className="redirection_section">
           <p>{text}</p>
           <div className="d-flex justify-content-end">
@@ -16,6 +16,7 @@ function RestrictedModal({
               onClick={() =>
                 window.open("https://buytrucknbus-osp3qa.home.tatamotors/login")
               }
+              className="restricted_button"
             >
               Go to OSP Platform
             </button>

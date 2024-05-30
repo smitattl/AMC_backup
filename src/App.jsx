@@ -73,10 +73,9 @@ function App() {
       const response = await ApiInterface.getDecryptedData(formData);
       if (response.status === 200) {
         localStorage.setItem("Token", response.data.Token);
-        const { ARN, MobNo, email_id, userName } = decodeToken(
-          response.data.Token
-        );
-        const userData = { MobNo, email_id, userName };
+        const { ARN, MobNo, email_id, userName, IpAddress, loginTime } =
+          decodeToken(response.data.Token);
+        const userData = { MobNo, email_id, userName, IpAddress, loginTime };
         dispatch(setCustomerData(userData));
         const arnData = ARN.map((name) => ({
           value: name,

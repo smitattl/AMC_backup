@@ -1,3 +1,15 @@
 .error_page {
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+.lottie_animation {
+  width: 90%;
+  max-width: 450px;
+}
+.error_title {
+  font-weight: 700;
 }

@@ -1,28 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { decodeToken } from "react-jwt";
+import React from "react";
 import "./index.css";
+import { useSelector } from "react-redux";
+import moment from "moment";
 
 function Watermark() {
-  const [username, setusername] = useState(null);
-  const [ip_address, setip_address] = useState(null);
-  const [login_time, setlogin_time] = useState(null);
+  const { customerData } = useSelector((state) => state.customer);
 
-  const TokenData = localStorage.getItem("Token");
-
-  useEffect(() => {
-    if (TokenData !== null) {
-      const myDecodedToken = decodeToken(localStorage.getItem("Token"));
-      setusername(myDecodedToken.ARNName);
-      setip_address(myDecodedToken.IpAddress);
-      setlogin_time(myDecodedToken.loginTime);
-    }
-  }, [TokenData]);
+  const timestamp = customerData.loginTime;
+  const truncatedTimestamp = timestamp.substring(0, 23);
+  const formattedDate = moment(
+    truncatedTimestamp,
+    "YYYY-MM-DDTHH:mm:ss.SSS"
+  ).format("YYYY-MM-DD");
 
   return (
     <div className="watermarkcontainer">
-      <p className="watermark">{username}</p>
-      <p className="watermarkmid">{ip_address}</p>
-      <p className="watermarkbottom">{login_time}</p>
+      <div className="watermark_user_name">{customerData.userName}</div>
+      <div>{customerData.IpAddress}</div>
+      <div>{formattedDate}</div>
     </div>
   );
 }

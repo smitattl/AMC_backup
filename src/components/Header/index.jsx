@@ -330,7 +330,7 @@ function Header() {
                 <div> : {arnNumber?.label || arnList[0]} </div>
               )}
               {maskedEmail && pathname.includes("/Home") && (
-                <span className="scroll_link">: {maskedEmail}</span>
+                <span>: {maskedEmail}</span>
               )}
             </div>
           </div>

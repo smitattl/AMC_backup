@@ -7,7 +7,7 @@
   align-items: center;
 }
 
-.modal_section {
+.restricted_modal_section {
   width: 90%;
   max-width: 480px;
   margin: 100px auto;
@@ -36,7 +36,7 @@
   }
 }
 
-h5 {
+.title_restricted {
   font-family: sans-serif;
   padding: 15px;
   background: black;
@@ -47,16 +47,6 @@ h5 {
 }
 .redirection_section {
   padding: 10px;
-}
-
-button {
-  background: black;
-  color: white;
-  border: 1px solid black;
-  padding: 8px 15px;
-  font-weight: 500;
-  margin: 10px 0;
-  border-radius: 5px;
 }
 button:hover {
   color: black !important;
