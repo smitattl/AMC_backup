@@ -184,23 +184,19 @@ export const ApiInterface = {
       url: "/get-chasis-bar-graph-data",
       data: formData,
     }),
-  // getVehicledataforCustomer: (formData) =>
-  //   apiCall({
-  //     method: "POST",
-  //     url: "/",
-  //     data: formData,
-  //   }),
+
   checkLoginEntries: (formData) =>
     apiCall({
       method: "POST",
-      url: "/LoginEntry",
+      url: "/checkLoginUserCountData",
       data: formData,
       content_type: "multipart/form-data",
     }),
+
   getLoginEntryCount: (formData) =>
     apiCall({
       method: "POST",
-      url: "/checkLoginUserCountData",
+      url: "/LoginEntry",
       data: formData,
       content_type: "multipart/form-data",
     }),

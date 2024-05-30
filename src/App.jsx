@@ -32,6 +32,8 @@ import {
 } from "./store/Slices/customerSlice";
 import { useDispatch } from "react-redux";
 import WarningModal from "./components/WarningModal";
+import Loading from "./components/Loading/Loading";
+import RestrictedModal from "./components/RestrictedModal";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
@@ -41,7 +43,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [wrongUser, setWrongUser] = useState(false);
-  const token = localStorage.getItem("token");
+  const [loginEntries, setLoginEntries] = useState(null);
 
   const param1 = localStorage.getItem("param1");
   const param2 = localStorage.getItem("param2");
@@ -116,56 +118,85 @@ function App() {
         localStorage.setItem("param1", param1);
         localStorage.setItem("param2", param2);
         getDecryptedDataHandler(param1, param2);
+        checkLoginEntries();
+        getLoginEntries();
       }
     }
   }, [param1]);
 
+  const checkLoginEntries = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("mobile_no", param1);
+      formData.append("Pan_no", param1);
+      const response = await ApiInterface.checkLoginEntries(formData);
+      if (response.status === 200) {
+        setLoginEntries(response?.data?.count);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getLoginEntries = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("mobile_no", param1);
+      formData.append("Pan_no", param1);
+      const response = await ApiInterface.getLoginEntryCount(formData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
-      <React.Fragment>
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-          gutter={8}
-          containerClassName=""
-          containerStyle={{}}
-          toastOptions={{
-            duration: 5000,
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-            success: {
-              duration: 3000,
-              theme: {
-                primary: "green",
-                secondary: "black",
-              },
-            },
-          }}
-        />
+      {loginEntries > 6 ? (
+        <RestrictedModal />
+      ) : (
         <React.Fragment>
-          {!isErrorPage && <Header />}
-          <Routes>
-            <Route path="admin/*" element={<Admin />} />
-            <Route
-              path="Home/*"
-              element={
-                <Customer
-                  wrongUser={wrongUser}
-                  setWrongUser={setWrongUser}
-                  loading={loading}
-                  setLoading={setLoading}
-                />
-              }
-            />
-            <Route path="/thank-you" element={<Logout />} />
-            <Route path="*" element={<Error />} />
-          </Routes>
-          {!isErrorPage && <FooterSection />}
-          {wrongUser && <WarningModal />}
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+            gutter={8}
+            containerClassName=""
+            containerStyle={{}}
+            toastOptions={{
+              duration: 5000,
+              style: {
+                background: "#363636",
+                color: "#fff",
+              },
+              success: {
+                duration: 3000,
+                theme: {
+                  primary: "green",
+                  secondary: "black",
+                },
+              },
+            }}
+          />
+          <React.Fragment>
+            {!isErrorPage && <Header />}
+            <Routes>
+              <Route path="admin/*" element={<Admin />} />
+              <Route
+                path="Home/*"
+                element={
+                  <Customer
+                    wrongUser={wrongUser}
+                    setWrongUser={setWrongUser}
+                    loading={loading}
+                    setLoading={setLoading}
+                  />
+                }
+              />
+              <Route path="/thank-you" element={<Logout />} />
+              <Route path="*" element={<Error />} />
+            </Routes>
+            {!isErrorPage && <FooterSection />}
+            {wrongUser && <WarningModal />}
+          </React.Fragment>
         </React.Fragment>
-      </React.Fragment>
+      )}
     </div>
   );
 }
