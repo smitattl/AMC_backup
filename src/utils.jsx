@@ -57,15 +57,15 @@ export const maskEmail = (email) => {
 };
 
 export const NameInitials = ({ names }) => {
-  const words = names?.split(" ");
+  const trimmedNames = names?.trimStart();
+  const words = trimmedNames.split(" ");
   const firstTwoWords = words.slice(0, 2);
   const initials = firstTwoWords
     .map((word) => word.charAt(0).toUpperCase())
     .join("");
+
   return <div>{initials}</div>;
 };
-
-// utils/localStorageWithExpiry.js
 
 export const setWithExpiry = (key, value, ttl) => {
   const now = new Date();

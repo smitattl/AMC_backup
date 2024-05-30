@@ -135,6 +135,7 @@ const LandingPage = () => {
             <p style={{ fontWeight: "bold" }} className="mb-0">
               Contact Details:
               <span style={{ fontFamily: "sans-serif" }}>
+                {" "}
                 {customerData?.MobNo &&
                   customerData?.MobNo?.substring(
                     0,

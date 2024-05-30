@@ -135,14 +135,14 @@ function Header() {
                       <div className="user_details">
                         {pathname.includes("/Home") && (
                           <p className="mb-0">
-                            Email:
-                            <span className="scroll_link">{maskedEmail}</span>
+                            Email :<span> &nbsp;{maskedEmail}</span>
                           </p>
                         )}
                         {customerData?.MobNo && (
                           <p>
                             Mobile Number :
                             <span style={{ fontFamily: "sans-serif" }}>
+                              &nbsp;
                               {customerData?.MobNo?.substring(
                                 0,
                                 customerData.MobNo.length - 6
@@ -318,7 +318,7 @@ function Header() {
               {pathname?.includes("/Home") && arnForCustomer && (
                 <div>ARN Number </div>
               )}
-              {email && pathname.includes("/Home") && (
+              {pathname.includes("/Home") && (
                 <div className="arn_no_text text-end">Email</div>
               )}
             </div>
@@ -329,7 +329,7 @@ function Header() {
               {pathname?.includes("/admin") && arnNumber.value !== "" && (
                 <div> : {arnNumber?.label || arnList[0]} </div>
               )}
-              {email && pathname.includes("/Home") && (
+              {maskedEmail && pathname.includes("/Home") && (
                 <span className="scroll_link">: {maskedEmail}</span>
               )}
             </div>
