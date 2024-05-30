@@ -20,9 +20,9 @@ const BasicDataTable = ({ columns }) => {
       const FormData = require("form-data");
       const formData = new FormData();
       if (pathname.includes("/Home")) {
-        formData.append("arn_no", arnValuesForCustomer);
+        formData.append("encrypted_arn", arnValuesForCustomer);
       } else if (pathname.includes("/admin")) {
-        pathname.append("arn_no", arnValuesForCustomer);
+        pathname.append("encrypted_arn", arnValuesForCustomer);
       }
       formData.append("vas_type", customerVasType.value);
       const response = await ApiInterface.getTotalFleetDetailsData(formData);
@@ -41,7 +41,7 @@ const BasicDataTable = ({ columns }) => {
     try {
       const FormData = require("form-data");
       const formData = new FormData();
-      formData.append("arn_no", arnValues);
+      formData.append("encrypted_arn", arnValues);
       formData.append("vas_type", vasType.value);
       const response = await ApiInterface.getTotalFleetDetailsData(formData);
       if (response.status === 200) {
@@ -59,7 +59,7 @@ const BasicDataTable = ({ columns }) => {
     try {
       const FormData = require("form-data");
       const formData = new FormData();
-      formData.append("arn_no", arnValuesForCustomer);
+      formData.append("encrypted_arn", arnValuesForCustomer);
       formData.append("vas_type", customerVasType.value);
       formData.append("Clickindex", indexTAT);
       const response = await ApiInterface.getFleetTatDetails(formData);
@@ -79,7 +79,7 @@ const BasicDataTable = ({ columns }) => {
     try {
       const FormData = require("form-data");
       const formData = new FormData();
-      formData.append("arn_no", arnValues);
+      formData.append("encrypted_arn", arnValues);
       formData.append("vas_type", vasType.value);
       formData.append("Clickindex", indexTAT);
       const response = await ApiInterface.getFleetTatDetails(formData);

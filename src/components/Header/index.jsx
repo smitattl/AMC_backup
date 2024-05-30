@@ -284,7 +284,7 @@ function Header() {
                 <ScrollLink
                   to="section1"
                   smooth={true}
-                  duration={200}
+                  duration={50}
                   spy={true}
                   exact="true"
                   offset={-140}
@@ -292,12 +292,12 @@ function Header() {
                   className="scroll_link"
                 >
                   Vehicles Due For Scheduled Service
-                  <span>({fleetData.ServiceSchedule || "0"})</span>
+                  <span>({fleetData.ServiceSchedule || 0})</span>
                 </ScrollLink>
                 <ScrollLink
                   to="section2"
                   smooth={true}
-                  duration={200}
+                  duration={50}
                   spy={true}
                   exact="true"
                   offset={-100}

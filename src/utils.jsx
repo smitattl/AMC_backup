@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import jwtEncode from "jwt-encode";
 import {
   setShowTableForAdminOne,
   setShowTableForAdminTwo,
@@ -9,6 +10,7 @@ import {
   setShowTableForCustomerOne,
   setShowTableForCustomerTwo,
 } from "./store/Slices/customerSlice";
+import { SECRET_KEY } from "./Config";
 
 export const LogoutSession = () => {
   const navigate = useLocation();
@@ -86,4 +88,14 @@ export const getWithExpiry = (key) => {
     return null;
   }
   return item.value;
+};
+
+export const generateToken = (arn_no) => {
+  const payload = {
+    arn_no,
+    exp: Math.floor(Date.now() / 1000) + 60 * 60,
+    iat: Math.floor(Date.now() / 1000),
+  };
+  const token = jwtEncode(payload, SECRET_KEY);
+  return token;
 };

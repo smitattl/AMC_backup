@@ -14,8 +14,7 @@ import LandingPage from "./LandingPage";
 import QuickActionModal from "./LandingPage/QuickActionModal";
 import "./index.css";
 import Loading from "../components/Loading/Loading";
-import jwtEncode from "jwt-encode";
-import { SECRET_KEY } from "../Config";
+import { generateToken } from "../utils";
 
 const Customer = ({ setWrongUser, loading = false }) => {
   const { pathname } = useLocation();
@@ -25,9 +24,11 @@ const Customer = ({ setWrongUser, loading = false }) => {
   );
   const getvasdataHandler = async (values) => {
     try {
-      const formData = new FormData();
-      formData.append("arn_no", values);
-      const response = await ApiInterface.getvasData(formData);
+      const encryptedArn = generateToken(values);
+      const body = {
+        encrypted_arn: encryptedArn,
+      };
+      const response = await ApiInterface.getvasData(body);
       if (response.status === 200) {
         const vasTypes = response.data.map((item) => ({
           value: item.vas_type,
@@ -46,11 +47,13 @@ const Customer = ({ setWrongUser, loading = false }) => {
         const values = arnListForCustomer
           ?.filter((option) => option.value !== "all")
           ?.map((option) => option.value);
-        dispatch(setArnValuesForCustomer(values));
+        const encryptedArn = generateToken(values);
+        dispatch(setArnValuesForCustomer(encryptedArn));
         getvasdataHandler(values);
       } else {
         const singleValueArray = [arnForCustomer?.value];
-        dispatch(setArnValuesForCustomer(singleValueArray));
+        const encryptedArn = generateToken(singleValueArray);
+        dispatch(setArnValuesForCustomer(encryptedArn));
         getvasdataHandler(singleValueArray);
       }
     }

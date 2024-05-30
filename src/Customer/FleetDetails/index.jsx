@@ -21,7 +21,7 @@ const FleetDetails = () => {
     try {
       const formData = new FormData();
       formData.append("Section", element);
-      formData.append("ARN-Number", arnValuesForCustomer);
+      formData.append("encrypted_arn", arnValuesForCustomer);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         setRowdata(response?.data?.RowData ?? []);
@@ -47,7 +47,7 @@ const FleetDetails = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnValuesForCustomer);
+      formData.append("encrypted_arn", arnValuesForCustomer);
       const response = await ApiInterface.getAmcCountData(formData);
       if (response.status === 200) {
         setAmcCount(response?.data?.amc_count ?? []);

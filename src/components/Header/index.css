@@ -68,15 +68,15 @@ a {
   font-weight: 600;
   font-size: 13px;
   font-family: sans-serif;
-  color: #1a1b1fa4 !important;
+  color: #1a1b1f !important;
   cursor: pointer;
 }
 .scroll_link span {
-  color: #1a1b1f;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
 }
+
 .scroll_link:hover {
   color: #1f77b4 !important;
 }

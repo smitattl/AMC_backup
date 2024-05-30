@@ -26,7 +26,6 @@ function FilterSectionForCustomer({ searchData }) {
   } = useSelector((state) => state.customer);
 
   const [vehicleRegNo, setVehicleRegNo] = useState("");
-  const [loading, setLoading] = useState(false);
 
   return (
     <div className="filter_Section_accordion my-3">

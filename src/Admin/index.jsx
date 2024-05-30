@@ -11,16 +11,38 @@ import AdminFleetDetails from "./AdminFleetDetails";
 import AdminHome from "./AdminHome";
 import AdminKeyInsight from "./AdminKeyInsight";
 import "./index.css";
+import { generateToken } from "../utils";
 
 function Admin() {
   const dispatch = useDispatch();
-  const { arnNumber, arnListForAdmin } = useSelector((state) => state.homeApi);
+  const { arnNumber, arnListForAdmin, arnValues } = useSelector(
+    (state) => state.homeApi
+  );
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (arnNumber) {
+      if (arnNumber?.value === "all") {
+        const values = arnListForAdmin
+          ?.filter((option) => option.value !== "all")
+          ?.map((option) => option.value);
+        const encryptedArn = generateToken(values);
+        dispatch(setArnValues(encryptedArn));
+        getvasdataHandler(encryptedArn);
+      } else {
+        const singleValueArray = arnNumber?.value;
+        const encryptedArn = generateToken(singleValueArray);
+        dispatch(setArnValues(encryptedArn));
+        getvasdataHandler(encryptedArn);
+      }
+    }
+  }, [arnNumber]);
+
   const getvasdataHandler = async (arnValues) => {
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnValues);
+      formData.append("encrypted_arn", arnValues);
       const response = await ApiInterface.getvasData(formData);
       if (response.status === 200) {
         const data = response.data;
@@ -36,19 +58,6 @@ function Admin() {
       console.error("Error fetching VAS data:", error);
     }
   };
-
-  useEffect(() => {
-    if (arnNumber.value === "all") {
-      const values = arnListForAdmin
-        .filter((option) => option.value !== "all")
-        .map((option) => option.value);
-      dispatch(setArnValues(values));
-      getvasdataHandler(values);
-    } else {
-      dispatch(setArnValues(arnNumber.value));
-      getvasdataHandler(arnNumber.value);
-    }
-  }, [arnNumber]);
 
   return (
     <div className="layout_wrapper">

@@ -19,7 +19,7 @@ function AdminFleetDetails() {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnValues);
+      formData.append("encrypted_arn", arnValues);
       const response = await ApiInterface.getAmcCountData(formData);
       if (response.status === 200) {
         const amcData = response?.data?.amc_count?.map((item) => ({
@@ -44,7 +44,7 @@ function AdminFleetDetails() {
     try {
       const formData = new FormData();
       formData.append("Section", element);
-      formData.append("ARN-Number", arnValues);
+      formData.append("encrypted_arn", arnValues);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         setTableData(response?.data?.RowData ?? []);

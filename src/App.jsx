@@ -108,7 +108,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (token === null && location.pathname.startsWith("/Home/")) {
+    if (location.pathname.startsWith("/Home/")) {
       const params = location.pathname.split("/").filter(Boolean);
       if (params.length >= 3) {
         const param1 = params[1];

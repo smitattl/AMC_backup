@@ -20,20 +20,15 @@ function AdminHome() {
     arnListForAdmin,
     renewalData,
     serviceScheduleData,
+    arnValues,
   } = useSelector((state) => state.homeApi);
 
   const [loading, setLoading] = useState(false);
 
-  const arnValues = arnListForAdmin
-    ?.filter((item) => item.value !== "all")
-    ?.map((item) => item.value);
-
   const getGenericInformationHandler = async () => {
     try {
       const formData = new FormData();
-      if (arnNumber.value === "all") {
-        formData.append("ARN-Number", arnValues);
-      } else formData.append("ARN-Number", arnNumber.value);
+      formData.append("encrypted_arn", arnValues);
       const response = await ApiInterface.getGenericInformation(formData);
       if (response.status === 200) {
         dispatch(setFleetData(response.data));
@@ -48,9 +43,7 @@ function AdminHome() {
     try {
       const formData = new FormData();
       formData.append("Section", "ServiceScheduled");
-      if (arnNumber.value === "all") {
-        formData.append("ARN-Number", arnValues);
-      } else formData.append("ARN-Number", arnNumber.value);
+      formData.append("encrypted_arn", arnValues);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         dispatch(setServiceScheduleData(response?.data?.RowData ?? []));
@@ -67,9 +60,7 @@ function AdminHome() {
     try {
       const formData = new FormData();
       formData.append("Section", "Renewals");
-      if (arnNumber.value === "all") {
-        formData.append("ARN-Number", arnValues);
-      } else formData.append("ARN-Number", arnNumber.value);
+      formData.append("encrypted_arn", arnValues);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         dispatch(setRenewalData(response?.data?.RowData ?? []));
@@ -94,7 +85,7 @@ function AdminHome() {
     getDetailedViewHandlerForRenwal();
   };
   useEffect(() => {
-    if (arnNumber) {
+    if (arnValues) {
       getGenericInformationHandler();
       getDetailedViewHandler();
       getDetailedViewHandlerForRenwal();

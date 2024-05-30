@@ -59,7 +59,7 @@ function AdminKeyInsight({ getvasdataHandler }) {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnValues);
+      formData.append("encrypted_arn", arnValues);
       formData.append("vas", vasType.value);
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
@@ -78,7 +78,7 @@ function AdminKeyInsight({ getvasdataHandler }) {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("ARN-Number", arnValues);
+      formData.append("encrypted_arn", arnValues);
       formData.append("Vas-type", vasType.value);
       formData.append("Token", token);
       const response = await ApiInterface.getFleetUptime(formData);

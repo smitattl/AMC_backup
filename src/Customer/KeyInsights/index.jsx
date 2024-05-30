@@ -68,8 +68,8 @@ const KeyInsights = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("arn_no", arnValuesForCustomer);
-      formData.append("vas", customerVasType.value);
+      formData.append("encrypted_arn", arnValuesForCustomer);
+      formData.append("vas", customerVasType?.value);
       const response = await ApiInterface.getKeyInsightsData(formData);
       if (response.status === 200) {
         const data = response.data;
@@ -95,8 +95,8 @@ const KeyInsights = () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("ARN-Number", arnValuesForCustomer);
-      formData.append("Vas-type", customerVasType.value);
+      formData.append("encrypted_arn", arnValuesForCustomer);
+      formData.append("Vas-type", customerVasType?.value);
       formData.append("Token", token);
       const response = await ApiInterface.getFleetUptime(formData);
       if (response.status === 200) {

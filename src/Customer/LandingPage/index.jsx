@@ -47,7 +47,7 @@ const LandingPage = () => {
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append("ARN-Number", arnValuesForCustomer);
+      formData.append("encrypted_arn", arnValuesForCustomer);
       const response = await ApiInterface.getGenericInformation(formData);
       if (response.status === 200) {
         dispatch(setFleetData(response.data));
@@ -64,7 +64,7 @@ const LandingPage = () => {
     try {
       const formData = new FormData();
       formData.append("Section", "ServiceScheduled");
-      formData.append("ARN-Number", arnValuesForCustomer);
+      formData.append("encrypted_arn", arnValuesForCustomer);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         setServiceScheduleData(response?.data?.RowData ?? []);
@@ -81,7 +81,7 @@ const LandingPage = () => {
     try {
       const formData = new FormData();
       formData.append("Section", "Reneawls");
-      formData.append("ARN-Number", arnValuesForCustomer);
+      formData.append("encrypted_arn", arnValuesForCustomer);
       const response = await ApiInterface.getVehicleDetails(formData);
       if (response.status === 200) {
         setRowdata(response?.data?.RowData ?? []);

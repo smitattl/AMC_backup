@@ -86,3 +86,9 @@
     width: 100% !important;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .insight_table th {
+    font-size: 12px;
+  }
+}
