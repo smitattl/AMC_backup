@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./index.css";
 import Lottie from "lottie-react";
 import errorLottie from "../../images/404.json";
 
 function Error() {
+  const lottieRef = useRef(null);
+
+  useEffect(() => {
+    if (lottieRef.current) {
+      lottieRef.current.setSpeed(4);
+    }
+  }, []);
+
   return (
     <div className="error_page">
       <Lottie
         animationData={errorLottie}
         loop={true}
+        lottieRef={lottieRef}
         className="lottie_animation"
       />
       <h1 className="error_title">Oops! Page Not Found</h1>
