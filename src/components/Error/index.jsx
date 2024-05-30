@@ -21,7 +21,7 @@ function Error() {
           window.open("https://buytrucknbus-osp3dev.home.tatamotors/")
         }
       >
-        Go back to the homepage
+        Go to OSP Platform
       </button>
     </div>
   );
