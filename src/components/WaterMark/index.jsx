@@ -6,7 +6,7 @@ import moment from "moment";
 function Watermark() {
   const { customerData } = useSelector((state) => state.customer);
 
-  const timestamp = customerData.loginTime;
+  const timestamp = customerData?.loginTime;
   const truncatedTimestamp = timestamp.substring(0, 23);
   const formattedDate = moment(
     truncatedTimestamp,
@@ -15,8 +15,8 @@ function Watermark() {
 
   return (
     <div className="watermarkcontainer">
-      <div className="watermark_user_name">{customerData.userName}</div>
-      <div>{customerData.IpAddress}</div>
+      <div className="watermark_user_name">{customerData?.userName}</div>
+      <div>{customerData?.IpAddress}</div>
       <div>{formattedDate}</div>
     </div>
   );

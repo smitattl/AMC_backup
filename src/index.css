@@ -138,8 +138,16 @@ body {
 
 .recharts-legend-wrapper {
   width: 200px !important;
-  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
 }
+.recharts-legend-wrapper ul {
+  text-align: left !important;
+}
+.recharts-legend-wrapper ul li {
+  width: max-content !important;
+}
+
 @media (min-width: 768px) {
   .recharts-legend-wrapper {
     width: 280px !important;

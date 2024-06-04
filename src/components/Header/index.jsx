@@ -114,7 +114,7 @@ function Header() {
               to={
                 pathname.includes("/admin")
                   ? "/admin"
-                  : `/Home/${params.param1}/${params.param2}`
+                  : `/Home/${params?.param1}/${params.param2}`
               }
             >
               <img src={HomeIcon} alt="HomeIcon" className="home_img" />

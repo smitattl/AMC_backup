@@ -146,6 +146,30 @@ function App() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const referrer = document.referrer;
+    const currentPath = location.pathname;
+    const routes = [
+      /^\/Home\/[^\/]+\/[^\/]+$/,
+      "/Home/Fleet-details",
+      "/Home/Key-insights",
+    ];
+
+    const isProtectedRoute = routes.some((route) =>
+      typeof route === "string"
+        ? route === currentPath
+        : route.test(currentPath)
+    );
+
+    if (
+      isProtectedRoute &&
+      referrer !== "https://buytrucknbus-osp3dev.home.tatamotors/"
+    ) {
+      window.location.replace("https://buytrucknbus-osp3dev.home.tatamotors/");
+    }
+  }, [location]);
+
   return (
     <div>
       {loginEntries > 6 ? (

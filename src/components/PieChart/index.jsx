@@ -65,13 +65,15 @@ function PieChartGraph({ data = [] }) {
       <Tooltip />
       <Legend
         formatter={(value, entry, index) => {
+          const currentItem = data.find((item) => item.name === value);
+          const displayValue = currentItem ? currentItem.value : "";
           return (
             <span
               style={{
                 color: COLORS[index],
               }}
             >
-              {value}
+              {value} [{displayValue}]
             </span>
           );
         }}
