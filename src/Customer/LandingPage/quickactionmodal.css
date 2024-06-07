@@ -48,8 +48,8 @@
 }
 .close_button {
   position: absolute;
-  right: -20px;
-  top: -15px;
+  right: -14px;
+  top: -20px;
   cursor: pointer;
 }
 .close_button img {

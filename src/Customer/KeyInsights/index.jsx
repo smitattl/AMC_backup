@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Accordion } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.css";
 import Speedometer from "../../images/speedometer.png";
 import ScheduleIcon from "../../images/shipping-schedule.png";
@@ -24,7 +22,6 @@ import FilterSectionForCustomer from "../FilterSectionForCustomer";
 import "./index.css";
 
 const KeyInsights = () => {
-  const dispatch = useDispatch();
   const token = localStorage.getItem("Token");
   const {
     chasisNumber,
@@ -210,7 +207,7 @@ const KeyInsights = () => {
                   image={HoursIcon}
                   tabledata={tatDetails}
                   tableheader={tableheaderFour}
-                  heading="Fleet Turn Around Time"
+                  heading="Fleet Turn Around Time (Number of Job Cards)"
                   FleetDetailsColumns={FleetTATColumns}
                   fleetTurn
                 />

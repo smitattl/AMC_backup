@@ -15,7 +15,6 @@ const initialState = {
   activeAccordionItem: "",
   showTableForCustomerOne: false,
   showTableForCustomerTwo: false,
-  params: {},
   customerData: [],
   preventApiCalling: true,
 };
@@ -66,9 +65,6 @@ const customerSlice = createSlice({
     setCustomerVasList(state, action) {
       state.customerVasList = action.payload;
     },
-    setParams(state, action) {
-      state.params = action.payload;
-    },
     setCustomerData(state, action) {
       state.customerData = action.payload;
     },
@@ -93,7 +89,6 @@ export const {
   setShowTableForCustomerTwo,
   setShowTableForCustomerOne,
   setCustomerVasList,
-  setParams,
   setCustomerData,
   setPreventApiCalling,
 } = customerSlice.actions;

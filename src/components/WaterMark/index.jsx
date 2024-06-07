@@ -7,7 +7,7 @@ function Watermark() {
   const { customerData } = useSelector((state) => state.customer);
 
   const timestamp = customerData?.loginTime;
-  const truncatedTimestamp = timestamp.substring(0, 23);
+  const truncatedTimestamp = timestamp?.substring(0, 23);
   const formattedDate = moment(
     truncatedTimestamp,
     "YYYY-MM-DDTHH:mm:ss.SSS"

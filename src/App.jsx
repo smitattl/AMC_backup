@@ -13,7 +13,7 @@ import {
   Routes,
   matchPath,
   useLocation,
-  useParams,
+  useNavigate,
 } from "react-router-dom";
 import Header from "./components/Header";
 import { Toaster } from "react-hot-toast";
@@ -32,47 +32,71 @@ import {
 } from "./store/Slices/customerSlice";
 import { useDispatch } from "react-redux";
 import WarningModal from "./components/WarningModal";
-import Loading from "./components/Loading/Loading";
 import RestrictedModal from "./components/RestrictedModal";
 
 library.add(faCaretSquareUp, faCaretSquareDown, faClose);
 
 function App() {
-  const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { pathname, search } = useLocation();
+  const queryString = search;
+  const urlParams = new URLSearchParams(queryString);
+  let encryptedToken = urlParams.get("token");
+
   const [loading, setLoading] = useState(true);
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [wrongUser, setWrongUser] = useState(false);
   const [loginEntries, setLoginEntries] = useState(null);
 
-  const param1 = localStorage.getItem("param1");
-  const param2 = localStorage.getItem("param2");
+  const storedToken = sessionStorage.getItem("encryptedToken");
+  if (!encryptedToken && storedToken) {
+    encryptedToken = storedToken;
+  }
 
   const routes = [
     "/admin",
     "/admin/admin-fleet-details",
     "admin/admin-key-insight",
-    `/Home/${param1}/${param2}`,
+    `/Home`,
     "/Home/Fleet-details",
     "/Home/Key-insights",
   ];
 
   useEffect(() => {
-    const isValidRoute = routes.some((route) =>
-      matchPath(route, location.pathname)
-    );
-    setIsErrorPage(!isValidRoute);
-  }, [location.pathname, routes]);
+    if (pathname.startsWith("/Home/")) {
+      getDecryptedDataHandler();
+      checkLoginEntries();
+      getLoginEntries();
+      urlParams.delete("token");
+      sessionStorage.setItem("encryptedToken", encryptedToken);
+      navigate(pathname, { replace: true });
+    }
+  }, []);
 
-  const getDecryptedDataHandler = async (param1, param2) => {
+  useEffect(() => {
+    if (wrongUser) {
+      setTimeout(() => {
+        window.location.href = "https://buytrucknbus-osp3dev.home.tatamotors/";
+      }, 5000);
+    }
+  }, [wrongUser]);
+
+  useEffect(() => {
+    const isValidRoute = routes.some((route) => matchPath(route, pathname));
+    setIsErrorPage(!isValidRoute);
+  }, [pathname, routes]);
+
+  const getDecryptedDataHandler = async () => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("DataOne", param1);
-      formData.append("DataTwo", param2);
+      formData.append("encryptedToken", encryptedToken);
       const response = await ApiInterface.getDecryptedData(formData);
       if (response.status === 200) {
         localStorage.setItem("Token", response.data.Token);
+        localStorage.setItem("encryptedToken", encryptedToken);
         const { ARN, MobNo, email_id, userName, IpAddress, loginTime } =
           decodeToken(response.data.Token);
         const userData = { MobNo, email_id, userName, IpAddress, loginTime };
@@ -108,26 +132,10 @@ function App() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (location.pathname.startsWith("/Home/")) {
-      const params = location.pathname.split("/").filter(Boolean);
-      if (params.length >= 3) {
-        const param1 = params[1];
-        const param2 = params[2];
-        localStorage.setItem("param1", param1);
-        localStorage.setItem("param2", param2);
-        getDecryptedDataHandler(param1, param2);
-        checkLoginEntries();
-        getLoginEntries();
-      }
-    }
-  }, [param1]);
-
   const checkLoginEntries = async () => {
     try {
       const formData = new FormData();
-      formData.append("mobile_no", param1);
-      formData.append("Pan_no", param1);
+      formData.append("encryptedToken", encryptedToken);
       const response = await ApiInterface.checkLoginEntries(formData);
       if (response.status === 200) {
         setLoginEntries(response?.data?.count);
@@ -136,39 +144,16 @@ function App() {
       console.log(error);
     }
   };
+
   const getLoginEntries = async () => {
     try {
       const formData = new FormData();
-      formData.append("mobile_no", param1);
-      formData.append("Pan_no", param1);
+      formData.append("encryptedToken", encryptedToken);
       const response = await ApiInterface.getLoginEntryCount(formData);
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const referrer = document.referrer;
-    const currentPath = location.pathname;
-    const routes = [
-      /^\/Home\/[^\/]+\/[^\/]+$/,
-      "/Home/Fleet-details",
-      "/Home/Key-insights",
-    ];
-
-    const isProtectedRoute = routes.some((route) =>
-      typeof route === "string"
-        ? route === currentPath
-        : route.test(currentPath)
-    );
-
-    if (
-      isProtectedRoute &&
-      referrer !== "https://buytrucknbus-osp3dev.home.tatamotors/"
-    ) {
-      window.location.replace("https://buytrucknbus-osp3dev.home.tatamotors/");
-    }
-  }, [location]);
 
   return (
     <div>

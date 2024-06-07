@@ -6,6 +6,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import BackIcon from "../../images/backarrow.png";
 import LogoIcon from "../../images/svgs/Logo.svg";
 import HomeIcon from "../../images/download.png";
+
 import TataIcon from "../../images/svgs/TataLogo.svg";
 import {
   NameInitials,
@@ -22,7 +23,7 @@ function Header() {
   const { pathname } = useLocation();
   const { arnList } = useSelector((state) => state.arn);
   const { fleetData, arnNumber } = useSelector((state) => state.homeApi);
-  const { arnForCustomer, params, customerData } = useSelector(
+  const { arnForCustomer, customerData } = useSelector(
     (state) => state.customer
   );
   const handleClickActiveForAdmin = useHandleClickActiveForAdmin();
@@ -110,13 +111,7 @@ function Header() {
             >
               Key Insights
             </Link>
-            <Link
-              to={
-                pathname.includes("/admin")
-                  ? "/admin"
-                  : `/Home/${params?.param1}/${params.param2}`
-              }
-            >
+            <Link to={pathname.includes("/admin") ? "/admin" : "/Home"}>
               <img src={HomeIcon} alt="HomeIcon" className="home_img" />
             </Link>
             {customerData?.userName && !pathname.includes("/admin") && (

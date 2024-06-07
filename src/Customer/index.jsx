@@ -69,7 +69,7 @@ const Customer = ({ setWrongUser, loading = false }) => {
           <Routes>
             <Route
               exact
-              path="/:param1/:param2"
+              path="/"
               element={<LandingPage setWrongUser={setWrongUser} />}
             />
             <Route path="/Fleet-details" element={<FleetDetails />} />
@@ -83,27 +83,3 @@ const Customer = ({ setWrongUser, loading = false }) => {
 };
 
 export default Customer;
-
-// <Routes>
-//   <Route
-//     path="/Home/:param1/:param2"
-//     element={
-//       <LandingPage
-//         setWrongUser={setWrongUser}
-//         userEntryCount={userEntryCount}
-//       />
-//     }
-//   />
-//     <Routes>
-//     <Route exact path="/" element={<AdminHome />} />
-//     <Route path="/admin-fleet-details" element={<AdminFleetDetails />} />
-//     <Route path="/admin-key-insight" element={<AdminKeyInsight />} />
-//   </Routes>
-
-//   <Route path="/" element={<PrivateRoute />}>
-//     <Route path="/Home/Fleet-details" element={<FleetDetails />} />
-//     <Route path="/Home/Key-insights" element={<KeyInsights />} />
-//     <Route path="/thank-you" element={<Logout />} />
-//   </Route>
-//   <Route path="*" element={<Error />} />
-// </Routes>

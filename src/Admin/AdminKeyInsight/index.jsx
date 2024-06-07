@@ -145,7 +145,7 @@ function AdminKeyInsight({ getvasdataHandler }) {
                   image={HoursIcon}
                   tabledata={tatDetails}
                   tableheader={tableheaderFour}
-                  heading="Fleet Turn Around Time"
+                  heading="Fleet Turn Around Time (Number of Job Cards)"
                   FleetDetailsColumns={FleetTATColumns}
                   fleetTurn
                   onItemClick={handleItemClick}

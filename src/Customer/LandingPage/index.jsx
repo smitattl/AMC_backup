@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { Link as ScrollLink } from "react-scroll";
 import { ApiInterface } from "../../API";
 import transportIcon from "../../images/transportation.png";
@@ -15,7 +14,6 @@ import TableAccordion from "./TableAccordion";
 import {
   setActiveAccordionItem,
   setIsOpen,
-  setParams,
   setShowTableForCustomerOne,
   setShowTableForCustomerTwo,
 } from "../../store/Slices/customerSlice";
@@ -25,7 +23,6 @@ const LandingPage = () => {
   const token = localStorage.getItem("Token");
 
   const dispatch = useDispatch();
-  const { param1, param2 } = useParams();
   const [loading, setLoading] = useState(true);
   const [Rowdata, setRowdata] = useState([]);
   const [serviceScheduleData, setServiceScheduleData] = useState([]);
@@ -38,10 +35,6 @@ const LandingPage = () => {
     showTableForCustomerOne,
     customerData,
   } = useSelector((state) => state.customer);
-
-  useEffect(() => {
-    dispatch(setParams({ param1, param2 }));
-  }, [param1, param2]);
 
   const getGenericInformationHandler = async () => {
     try {

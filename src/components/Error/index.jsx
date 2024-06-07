@@ -6,12 +6,6 @@ import errorLottie from "../../images/404.json";
 function Error() {
   const lottieRef = useRef(null);
 
-  useEffect(() => {
-    if (lottieRef.current) {
-      lottieRef.current.setSpeed(4);
-    }
-  }, []);
-
   return (
     <div className="error_page">
       <Lottie
