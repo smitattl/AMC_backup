@@ -143,7 +143,6 @@ a {
   color: black;
 }
 .activeLink {
-  font-weight: 600 !important;
   color: #1f77b4 !important;
 }
 .home_img {

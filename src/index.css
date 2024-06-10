@@ -174,7 +174,6 @@ a {
 }
 a:hover {
   color: #1f77b4 !important;
-  font-weight: 600 !important;
 }
 .fleet_uptime_icon {
   width: 50px;
