@@ -81,7 +81,7 @@ function App() {
     if (wrongUser) {
       setTimeout(() => {
         window.location.href = "https://buytrucknbus-osp3dev.home.tatamotors/";
-      }, 3000);
+      }, 4000);
     }
   }, [wrongUser]);
 
