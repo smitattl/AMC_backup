@@ -17,6 +17,7 @@ import Loading from "../components/Loading/Loading";
 import { generateToken } from "../utils";
 
 const Customer = ({ setWrongUser }) => {
+  const token = sessionStorage.getItem("encryptedToken");
   const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const Customer = ({ setWrongUser }) => {
   };
 
   useEffect(() => {
-    if (arnForCustomer) {
+    if (arnForCustomer && token !== null) {
       if (arnForCustomer?.value === "all") {
         const values = arnListForCustomer
           ?.filter((option) => option.value !== "all")
