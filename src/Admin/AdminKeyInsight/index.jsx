@@ -19,8 +19,6 @@ import FilterSection from "../AdminHome/FilterSection";
 import fleetuptimeIcon from "../../images/uptime.png";
 
 function AdminKeyInsight({ getvasdataHandler }) {
-  const token = localStorage.getItem("Token");
-
   const { arnValues, vasType } = useSelector((state) => state.homeApi);
   const [FleetUptimeX, setFleetUptimeX] = useState([]);
   const [FleetUptimeY, setFleetUptimeY] = useState([]);
@@ -80,7 +78,7 @@ function AdminKeyInsight({ getvasdataHandler }) {
       const formData = new FormData();
       formData.append("encrypted_arn", arnValues);
       formData.append("Vas-type", vasType.value);
-      formData.append("Token", token);
+      formData.append("Token", null);
       const response = await ApiInterface.getFleetUptime(formData);
       if (response.status === 200) {
         setFleetUptimeX(response?.data?.xlist);

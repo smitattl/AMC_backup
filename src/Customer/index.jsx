@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ApiInterface } from "../API";
@@ -16,13 +16,15 @@ import "./index.css";
 import Loading from "../components/Loading/Loading";
 import { generateToken } from "../utils";
 
-const Customer = ({ setWrongUser, loading = false }) => {
+const Customer = ({ setWrongUser }) => {
+  const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { isOpen, arnForCustomer, arnListForCustomer } = useSelector(
     (state) => state.customer
   );
   const getvasdataHandler = async (values) => {
+    setLoading(true);
     try {
       const encryptedArn = generateToken(values);
       const body = {
@@ -36,11 +38,15 @@ const Customer = ({ setWrongUser, loading = false }) => {
         }));
         dispatch(setCustomerVasList(vasTypes ?? []));
         dispatch(setCustomerVasType(vasTypes[0]));
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error fetching VAS data:", error);
+      setLoading(false);
     }
+    setLoading(false);
   };
+
   useEffect(() => {
     if (arnForCustomer) {
       if (arnForCustomer?.value === "all") {

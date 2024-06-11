@@ -45,15 +45,17 @@ function App() {
   const urlParams = new URLSearchParams(queryString);
   let encryptedToken = urlParams.get("token");
 
-  const [loading, setLoading] = useState(true);
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [wrongUser, setWrongUser] = useState(false);
   const [loginEntries, setLoginEntries] = useState(null);
 
   const storedToken = sessionStorage.getItem("encryptedToken");
-  if (!encryptedToken && storedToken) {
-    encryptedToken = storedToken;
-  }
+
+  useEffect(() => {
+    if (!encryptedToken && storedToken) {
+      encryptedToken = storedToken;
+    }
+  }, [encryptedToken, storedToken]);
 
   const routes = [
     "/admin",
@@ -65,21 +67,21 @@ function App() {
   ];
 
   useEffect(() => {
-    if (pathname.startsWith("/Home/")) {
+    if (pathname.includes("/Home/") && !storedToken) {
       getDecryptedDataHandler();
       checkLoginEntries();
       getLoginEntries();
       urlParams.delete("token");
       sessionStorage.setItem("encryptedToken", encryptedToken);
       navigate(pathname, { replace: true });
-    }
+    } else return;
   }, []);
 
   useEffect(() => {
     if (wrongUser) {
       setTimeout(() => {
         window.location.href = "https://buytrucknbus-osp3dev.home.tatamotors/";
-      }, 5000);
+      }, 3000);
     }
   }, [wrongUser]);
 
@@ -89,13 +91,11 @@ function App() {
   }, [pathname, routes]);
 
   const getDecryptedDataHandler = async () => {
-    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("encryptedToken", encryptedToken);
       const response = await ApiInterface.getDecryptedData(formData);
       if (response.status === 200) {
-        localStorage.setItem("Token", response.data.Token);
         localStorage.setItem("encryptedToken", encryptedToken);
         const { ARN, MobNo, email_id, userName, IpAddress, loginTime } =
           decodeToken(response.data.Token);
@@ -118,18 +118,14 @@ function App() {
         setWrongUser(false);
       } else if (response.status !== 200) {
         setWrongUser(true);
-        setLoading(false);
         dispatch(setIsOpen(false));
       } else if (response.status === 500) {
         setWrongUser(true);
         dispatch(setIsOpen(false));
-        setLoading(false);
       }
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
-    setLoading(false);
   };
 
   const checkLoginEntries = async () => {
@@ -154,6 +150,12 @@ function App() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (storedToken && !pathname.includes("Home")) {
+      navigate("/Home");
+    }
+  }, [pathname]);
 
   return (
     <div>
@@ -192,8 +194,8 @@ function App() {
                   <Customer
                     wrongUser={wrongUser}
                     setWrongUser={setWrongUser}
-                    loading={loading}
-                    setLoading={setLoading}
+                    // loading={loading}
+                    // setLoading={setLoading}
                   />
                 }
               />

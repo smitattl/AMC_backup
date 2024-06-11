@@ -19,8 +19,8 @@ import {
 } from "../../store/Slices/customerSlice";
 import FilterSectionForCustomer from "../FilterSectionForCustomer";
 
-const LandingPage = () => {
-  const token = localStorage.getItem("Token");
+const LandingPage = ({ setWrongUser }) => {
+  const token = sessionStorage.getItem("encryptedToken");
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
@@ -97,8 +97,7 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    if (!token) return;
-    else if (arnValuesForCustomer && token) {
+    if (arnValuesForCustomer) {
       getDetailedViewHandler();
       getRenewalDetailedViewHandler();
       getGenericInformationHandler();

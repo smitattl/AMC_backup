@@ -22,7 +22,7 @@ import FilterSectionForCustomer from "../FilterSectionForCustomer";
 import "./index.css";
 
 const KeyInsights = () => {
-  const token = localStorage.getItem("Token");
+  const token = sessionStorage.getItem("encryptedToken");
   const {
     chasisNumber,
     arnValuesForCustomer,

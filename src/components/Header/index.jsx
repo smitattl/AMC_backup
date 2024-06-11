@@ -30,7 +30,7 @@ function Header() {
   const [showDropdown, setShowDropDown] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
 
-  const email = customerData?.email_id;
+  const email = customerData?.email_id || "";
   const maskedEmail = maskEmail(email);
 
   useEffect(() => {
@@ -324,7 +324,7 @@ function Header() {
               {pathname?.includes("/admin") && arnNumber.value !== "" && (
                 <div> : {arnNumber?.label || arnList[0]} </div>
               )}
-              {maskedEmail && pathname.includes("/Home") && (
+              {maskedEmail && pathname?.includes("/Home") && (
                 <span>: {maskedEmail}</span>
               )}
             </div>
